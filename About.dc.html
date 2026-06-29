@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#e5e4db; }
+  a{ color:inherit; text-decoration:none; }
+  ::selection{ background:#3b5b47; color:#e5e4db; }
+</style>
+</helmet>
+
+<div style="--ground:#e5e4db; --surface:#dbd9ce; --line:#ccc9bb; --ink:#171e1a; --laurel:#3b5b47; --ocean:#3b5669; --falu:#801818; --granite:#716f65; --tile:#6e7d87; --serif:'Spectral',serif; --sans:'IBM Plex Sans',sans-serif; --mono:'IBM Plex Mono',monospace; background:var(--ground); color:var(--ink); font-family:var(--sans); min-height:100vh;">
+
+  <svg width="0" height="0" style="position:absolute;"><defs>
+    <pattern id="rosette" width="48" height="48" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="#6e7d87" stroke-width="1">
+        <circle cx="0" cy="0" r="24"/><circle cx="48" cy="0" r="24"/><circle cx="0" cy="48" r="24"/><circle cx="48" cy="48" r="24"/>
+        <circle cx="24" cy="24" r="24"/>
+        <circle cx="24" cy="0" r="24"/><circle cx="24" cy="48" r="24"/><circle cx="0" cy="24" r="24"/><circle cx="48" cy="24" r="24"/>
+      </g>
+    </pattern>
+  </defs></svg>
+
+  <!-- NAV -->
+  <nav style="position:sticky; top:0; z-index:10; display:flex; align-items:center; justify-content:space-between; padding:18px 40px; background:rgba(229,228,219,.86); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);">
+    <a href="index.html" style="font-family:var(--serif); font-weight:600; font-size:19px; letter-spacing:-.01em; color:var(--ink); white-space:nowrap;">Noah Hyden<span style="color:var(--falu);">.</span></a>
+    <div style="display:flex; align-items:center; gap:30px;">
+      <a href="About.dc.html" style="font-family:var(--sans); font-size:14px; color:var(--ink); font-weight:500;">About</a>
+      <a href="Projects.dc.html" style="font-family:var(--sans); font-size:14px; color:var(--granite);">Projects</a>
+      <a href="Writing.dc.html" style="font-family:var(--sans); font-size:14px; color:var(--granite);">Writing</a>
+      <span style="width:1px; height:18px; background:var(--line);"></span>
+      <a href="https://github.com/noahhyden" target="_blank" rel="noopener" aria-label="GitHub" style="display:inline-flex; color:var(--granite);"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.55-1.14-4.55-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg></a>
+      <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" aria-label="LinkedIn" style="display:inline-flex; color:var(--granite);"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.2 8.04h4.6V23H.2V8.04zM8.34 8.04h4.41v2.04h.06c.61-1.16 2.11-2.39 4.35-2.39 4.65 0 5.51 3.06 5.51 7.05V23h-4.6v-6.36c0-1.52-.03-3.47-2.11-3.47-2.12 0-2.44 1.65-2.44 3.36V23h-4.6V8.04z"/></svg></a>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header style="max-width:1080px; margin:0 auto; padding:80px 40px 56px;">
+    <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 22px;">About &mdash; the long version</div>
+    <h1 style="font-family:var(--serif); font-weight:500; font-size:52px; line-height:1.05; letter-spacing:-.022em; margin:0; max-width:20ch;">I build things that have to hold.</h1>
+  </header>
+
+  <!-- BODY: prose + aside -->
+  <main style="max-width:1080px; margin:0 auto; padding:0 40px 40px; display:grid; grid-template-columns:1fr 296px; gap:64px; align-items:start;">
+
+    <article>
+      <p style="font-family:var(--sans); font-size:20px; line-height:1.6; color:var(--ink); margin:0 0 28px;">I trained as an aerospace engineer, which is a long way of saying I learned to be honest about loads. A wing doesn&rsquo;t care how clever your drawing is &mdash; it cares whether the structure underneath can carry the day it&rsquo;s asked to.</p>
+
+      <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">That idea has followed me everywhere since. I came up sketching airframes and stress paths, and somewhere along the way I realised the part I loved wasn&rsquo;t the aircraft specifically &mdash; it was the discipline. Decide what carries the load. Make everything else defer to it. Don&rsquo;t decorate a joint you haven&rsquo;t justified.</p>
+
+      <h2 style="font-family:var(--serif); font-weight:600; font-size:25px; letter-spacing:-.012em; margin:44px 0 16px;">Where I&rsquo;m from</h2>
+      <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">My roots run between two places that, on paper, have nothing in common: the volcanic rock and laurel forests of <span style="font-style:italic;">Madeira</span>, and the long, low winter light of <span style="font-style:italic;">Sweden</span>. One gave me basalt and the Atlantic; the other gave me snow, timber, and a particular fondness for things made plainly and made to last. If you&rsquo;ve noticed the colours and the tilework on this site &mdash; that&rsquo;s where they come from.</p>
+
+      <h2 style="font-family:var(--serif); font-weight:600; font-size:25px; letter-spacing:-.012em; margin:44px 0 16px;">What I&rsquo;m doing now</h2>
+      <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">These days I&rsquo;m heads-down on a company I&rsquo;m not quite ready to talk about. It&rsquo;s early, it&rsquo;s technical, and it has the same bones as everything else I care about: get the structure right and the rest gets easier. When there&rsquo;s something to show, you&rsquo;ll find it under <a href="Projects.dc.html" style="color:var(--falu); border-bottom:1px solid var(--falu);">Projects</a> and <a href="Writing.dc.html" style="color:var(--falu); border-bottom:1px solid var(--falu);">Writing</a> first.</p>
+
+      <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">In the meantime I keep a handful of things open on GitHub, write the occasional note when I figure something out, and am always glad to compare notes with people building hard things. The fastest way to reach me is LinkedIn.</p>
+
+      <div style="display:flex; flex-wrap:wrap; gap:14px; margin-top:36px;">
+        <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:var(--falu); color:var(--ground);"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.2 8.04h4.6V23H.2V8.04zM8.34 8.04h4.41v2.04h.06c.61-1.16 2.11-2.39 4.35-2.39 4.65 0 5.51 3.06 5.51 7.05V23h-4.6v-6.36c0-1.52-.03-3.47-2.11-3.47-2.12 0-2.44 1.65-2.44 3.36V23h-4.6V8.04z"/></svg>Connect on LinkedIn</a>
+        <a href="Projects.dc.html" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:transparent; color:var(--ink); border:1px solid var(--granite);">See the work <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13,6 20,12 13,18"/></svg></a>
+      </div>
+    </article>
+
+    <!-- ASIDE / facts -->
+    <aside style="position:sticky; top:96px; border:1px solid var(--line); border-radius:3px; background:var(--ground); overflow:hidden;">
+      <div style="height:84px; background:var(--surface); position:relative; overflow:hidden; border-bottom:1px solid var(--line);">
+        <svg width="100%" height="84" preserveAspectRatio="xMidYMid slice" style="position:absolute; inset:0; opacity:.42;"><rect width="100%" height="84" fill="url(#rosette)"/></svg>
+      </div>
+      <div style="padding:22px 24px 24px;">
+        <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:0 0 16px;">At a glance</div>
+        <dl style="margin:0; font-size:14px;">
+          <div style="display:flex; justify-content:space-between; padding:10px 0; border-top:1px solid var(--line);"><dt style="font-family:var(--mono); font-size:12px; color:var(--granite);">field</dt><dd style="margin:0; font-family:var(--sans); color:var(--ink);">Aerospace eng.</dd></div>
+          <div style="display:flex; justify-content:space-between; padding:10px 0; border-top:1px solid var(--line);"><dt style="font-family:var(--mono); font-size:12px; color:var(--granite);">now</dt><dd style="margin:0; font-family:var(--sans); color:var(--falu);">Stealth</dd></div>
+          <div style="display:flex; justify-content:space-between; padding:10px 0; border-top:1px solid var(--line);"><dt style="font-family:var(--mono); font-size:12px; color:var(--granite);">roots</dt><dd style="margin:0; font-family:var(--sans); color:var(--ink);">Madeira &middot; Sweden</dd></div>
+          <div style="display:flex; justify-content:space-between; padding:10px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);"><dt style="font-family:var(--mono); font-size:12px; color:var(--granite);">writes</dt><dd style="margin:0; font-family:var(--sans); color:var(--ink);">Sometimes</dd></div>
+        </dl>
+        <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:22px 0 12px;">Find me</div>
+        <div style="display:flex; flex-direction:column; gap:9px;">
+          <a href="https://github.com/noahhyden" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:13px; color:var(--ink);"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:var(--granite);"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.55-1.14-4.55-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg>github.com/noahhyden</a>
+          <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:13px; color:var(--ink);"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:var(--granite);"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.2 8.04h4.6V23H.2V8.04zM8.34 8.04h4.41v2.04h.06c.61-1.16 2.11-2.39 4.35-2.39 4.65 0 5.51 3.06 5.51 7.05V23h-4.6v-6.36c0-1.52-.03-3.47-2.11-3.47-2.12 0-2.44 1.65-2.44 3.36V23h-4.6V8.04z"/></svg>in/noah-hyden</a>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer style="position:relative; overflow:hidden; border-top:1px solid var(--line); background:var(--surface); margin-top:40px;">
+    <svg width="100%" height="120" preserveAspectRatio="xMidYMid slice" style="position:absolute; inset:0; opacity:.28; pointer-events:none;"><rect width="100%" height="120" fill="url(#rosette)"/></svg>
+    <div style="position:relative; max-width:1080px; margin:0 auto; padding:56px 40px; display:flex; flex-wrap:wrap; gap:32px; justify-content:space-between; align-items:flex-end;">
+      <div>
+        <div style="font-family:var(--serif); font-weight:600; font-size:21px; letter-spacing:-.01em; margin-bottom:10px;">Noah Hyden<span style="color:var(--falu);">.</span></div>
+        <p style="font-family:var(--sans); font-size:14px; line-height:1.55; color:var(--granite); margin:0; max-width:42ch;">Aerospace engineer. Building quietly. Happy to talk shop &mdash; reach me on LinkedIn.</p>
+      </div>
+      <div style="display:flex; gap:14px;">
+        <a href="https://github.com/noahhyden" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:14px; padding:11px 18px; border-radius:2px; border:1px solid var(--granite); color:var(--ink);"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.55-1.14-4.55-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg>GitHub</a>
+        <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:14px; padding:11px 18px; border-radius:2px; background:var(--falu); color:var(--ground);"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.2 8.04h4.6V23H.2V8.04zM8.34 8.04h4.41v2.04h.06c.61-1.16 2.11-2.39 4.35-2.39 4.65 0 5.51 3.06 5.51 7.05V23h-4.6v-6.36c0-1.52-.03-3.47-2.11-3.47-2.12 0-2.44 1.65-2.44 3.36V23h-4.6V8.04z"/></svg>LinkedIn</a>
+      </div>
+    </div>
+    <div style="position:relative; border-top:1px solid var(--line);">
+      <div style="max-width:1080px; margin:0 auto; padding:16px 40px; display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; color:var(--granite);">
+        <span>&copy; 2026 Noah Hyden</span>
+        <span>lat 32.7&deg; N &middot; lon 16.9&deg; W</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+</body>
+</html>
