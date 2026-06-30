@@ -1,0 +1,17 @@
+{
+  "name": "noahhyden-site",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "noahhyden.com — authored in pimas, prerendered to static HTML.",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "node --watch-path=src build.mjs"
+  },
+  "dependencies": {
+    "pimas": "file:../../pimas"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.2"
+  }
+}

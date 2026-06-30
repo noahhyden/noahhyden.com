@@ -2,3 +2,7 @@
 *.swp
 .idea/
 .vscode/
+
+# Phase 4: pimas build output — not yet wired to deployment (live site still
+# served from the hand-built root files). Tracked once the deploy model is set.
+dist/
