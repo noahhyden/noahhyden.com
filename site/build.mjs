@@ -161,7 +161,8 @@ async function main() {
     const body = renderToString(() => Page(data));
     const renderMs = (performance.now() - t0).toFixed(2);
 
-    let html = `<!doctype html>\n<html lang="en">\n<head>\n${FONT_HEAD}\n${headHTML(meta)}\n</head>\n<body>\n${body}\n</body>\n</html>\n`;
+    // charset MUST be first (within the first 1024 bytes) — before the font block.
+    let html = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n${FONT_HEAD}\n${headHTML(meta)}\n</head>\n<body>\n${body}\n</body>\n</html>\n`;
 
     // Inject the honest build metrics. JS shipped is literally 0 (no <script>).
     const htmlKb = (gzipSync(Buffer.from(html)).length / 1024).toFixed(1);

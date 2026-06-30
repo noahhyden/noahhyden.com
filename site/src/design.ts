@@ -50,9 +50,11 @@ export function headHTML(meta: PageMeta): string {
   const url = SITE + meta.path;
   // Home is just the name; inner pages get the suffix.
   const title = meta.path === "/" ? meta.title : `${meta.title} — Noah Hyden`;
+  // NOTE: <meta charset> is emitted first by build.mjs, ahead of the font block,
+  // so it stays within the first 1024 bytes. Don't add it here.
   return [
-    `<meta charset="utf-8">`,
     `<meta name="viewport" content="width=device-width, initial-scale=1">`,
+    `<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%233b5b47'/%3E%3Ccircle%20cx='16'%20cy='16'%20r='5'%20fill='%23801818'/%3E%3C/svg%3E">`,
     `<title>${title}</title>`,
     `<meta name="description" content="${esc(meta.description)}">`,
     `<link rel="canonical" href="${url}">`,
