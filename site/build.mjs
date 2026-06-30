@@ -26,6 +26,7 @@ const ROUTES = [
   { url: "/about/", page: "about" },
   { url: "/projects/", page: "projects" },
   { url: "/writing/", page: "writing" },
+  { url: "/design-language/", page: "design-language" },
 ];
 
 const pimasVersion = require("pimas/package.json").version || "0.0.0";
