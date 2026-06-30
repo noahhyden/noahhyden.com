@@ -47,12 +47,13 @@ export function Footer() {
           <div style="display:flex; flex-wrap:wrap; gap:6px 18px;">
             <span><strong style="color:var(--ink); font-weight:500;">{TOKENS.jsBytes} KB</strong> JavaScript shipped</span>
             <span><strong style="color:var(--ink); font-weight:500;">{TOKENS.htmlKb} KB</strong> HTML (gzip)</span>
+            <span><strong style="color:var(--ink); font-weight:500;">0</strong> external requests</span>
             <span>prerendered in <strong style="color:var(--ink); font-weight:500;">{TOKENS.renderMs} ms</strong></span>
             <span>0 wasted re-renders <span style="color:var(--granite);">(fine-grained &mdash; no diff pass)</span></span>
             <span>pimas <strong style="color:var(--ink); font-weight:500;">v{TOKENS.pimasVer}</strong></span>
           </div>
           <div style="margin-top:6px; color:var(--granite);">
-            External requests: <strong style="color:var(--ink); font-weight:500;">fonts only</strong> (Google Fonts) &mdash; everything else is inlined &amp; static. Self-hosting planned to reach a true zero.
+            Everything is inlined, static, and same-origin &mdash; HTML, CSS, SVG, and self-hosted fonts (Spectral &amp; IBM Plex, OFL). No CDN, no third party, nothing to phone home.
           </div>
         </div>
       </div>

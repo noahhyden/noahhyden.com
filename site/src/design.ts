@@ -20,7 +20,9 @@ const BASE_CSS = `
 :root{
   --ground:#e5e4db; --surface:#dbd9ce; --line:#ccc9bb; --ink:#171e1a;
   --laurel:#3b5b47; --ocean:#3b5669; --falu:#801818; --granite:#716f65; --tile:#6e7d87;
-  --serif:'Spectral',serif; --sans:'IBM Plex Sans',sans-serif; --mono:'IBM Plex Mono',monospace;
+  --serif:'Spectral', Georgia, 'Times New Roman', serif;
+  --sans:'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -40,8 +42,9 @@ export interface PageMeta {
 
 /**
  * The full <head> for a page. Title/description/canonical/OG from `meta`; the
- * shared reset + tokens inline (zero extra requests); fonts from Google Fonts
- * (the one external origin — slated for self-hosting to reach a true zero).
+ * shared reset + tokens inline (zero extra requests). Fonts are self-hosted,
+ * same-origin — `build.mjs` injects the preloads + @font-face block ahead of
+ * this, so there are zero external requests.
  */
 export function headHTML(meta: PageMeta): string {
   const url = SITE + meta.path;
@@ -58,9 +61,6 @@ export function headHTML(meta: PageMeta): string {
     `<meta property="og:description" content="${esc(meta.description)}">`,
     `<meta property="og:url" content="${url}">`,
     `<meta name="twitter:card" content="summary">`,
-    `<link rel="preconnect" href="https://fonts.googleapis.com">`,
-    `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`,
-    `<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">`,
     `<style>${BASE_CSS}</style>`,
   ].join("\n");
 }
