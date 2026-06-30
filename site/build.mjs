@@ -21,7 +21,12 @@ const CACHE = resolve(ROOT, ".cache/pages");
 const require = createRequire(import.meta.url);
 
 // The route table is just data — sitemap, etc. fall out of it.
-const ROUTES = [{ url: "/", page: "index" }];
+const ROUTES = [
+  { url: "/", page: "index" },
+  { url: "/about/", page: "about" },
+  { url: "/projects/", page: "projects" },
+  { url: "/writing/", page: "writing" },
+];
 
 const pimasVersion = require("pimas/package.json").version || "0.0.0";
 
@@ -76,8 +81,12 @@ async function main() {
     const Page = mod.default;
     const meta = mod.meta;
 
+    // A page may prerender data at build time (e.g. projects fetches GitHub),
+    // so the shipped page makes zero runtime requests.
+    const data = mod.getData ? await mod.getData() : {};
+
     const t0 = performance.now();
-    const body = renderToString(Page);
+    const body = renderToString(() => Page(data));
     const renderMs = (performance.now() - t0).toFixed(2);
 
     let html = `<!doctype html>\n<html lang="en">\n<head>\n${headHTML(meta)}\n</head>\n<body>\n${body}\n</body>\n</html>\n`;
