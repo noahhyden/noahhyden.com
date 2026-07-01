@@ -9,7 +9,7 @@
  */
 import { build as esbuild } from "esbuild";
 import { gzipSync } from "node:zlib";
-import { mkdir, writeFile, rm, readFile, cp, access } from "node:fs/promises";
+import { mkdir, writeFile, rm, readFile, readdir, cp, access } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import { createRequire } from "node:module";
@@ -30,6 +30,44 @@ const ROUTES = [
 ];
 
 const pimasVersion = require("pimas/package.json").version || "0.0.0";
+
+// ── Islands ───────────────────────────────────────────────────────────────
+// Interactive components shipped as their own lazy-loaded client bundles. The
+// static shell stays 0 KB JS; only pages that mount an island load any script.
+// Keep each slug in sync with the `<Island slug=...>` used in a page.
+const ISLAND_BOOT = "src/islands/boot.ts";
+const ISLANDS = [
+  { slug: "accordion", entry: "src/islands/accordion.tsx" },
+];
+
+// Build every island + the boot entry into one client bundle set. `splitting`
+// factors the shared pimas kernel into a single chunk — so boot and all islands
+// share ONE kernel instance in the browser (no dual-kernel hazard). Unlike the
+// SSR page build, pimas is NOT external here: the browser needs it bundled.
+// Returns the total gzipped JS an island page ships (all files in dist/islands).
+async function buildIslands() {
+  const outdir = join(OUT, "islands");
+  await esbuild({
+    entryPoints: [
+      { in: resolve(ROOT, ISLAND_BOOT), out: "boot" },
+      ...ISLANDS.map((i) => ({ in: resolve(ROOT, i.entry), out: i.slug })),
+    ],
+    outdir,
+    bundle: true,
+    splitting: true,
+    format: "esm",
+    platform: "browser",
+    jsx: "automatic",
+    jsxImportSource: "pimas",
+    minify: true,
+    logLevel: "warning",
+  });
+  let bytes = 0;
+  for (const f of await readdir(outdir)) {
+    if (f.endsWith(".js")) bytes += gzipSync(await readFile(join(outdir, f))).length;
+  }
+  return (bytes / 1024).toFixed(1); // KB gz shipped by any island page
+}
 
 // ── Self-hosted fonts ───────────────────────────────────────────────────────
 // Vendored from Fontsource (OFL), woff2 only, latin + latin-ext subsets. All
@@ -146,6 +184,9 @@ async function main() {
 
   await rm(OUT, { recursive: true, force: true });
 
+  // Client island bundles first, so pages can report the JS they actually ship.
+  const islandKb = await buildIslands();
+
   const FONT_HEAD = fontHead(); // same for every page
 
   for (const route of ROUTES) {
@@ -161,14 +202,22 @@ async function main() {
     const body = renderToString(() => Page(data));
     const renderMs = (performance.now() - t0).toFixed(2);
 
-    // charset MUST be first (within the first 1024 bytes) — before the font block.
-    let html = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n${FONT_HEAD}\n${headHTML(meta)}\n</head>\n<body>\n${body}\n</body>\n</html>\n`;
+    // Pages with an island lazy-load the boot script (the only JS any page ships).
+    const hasIsland = body.includes("<is-land");
+    const bootScript = hasIsland
+      ? `\n<script type="module" src="/islands/boot.js"></script>`
+      : "";
 
-    // Inject the honest build metrics. JS shipped is literally 0 (no <script>).
+    // charset MUST be first (within the first 1024 bytes) — before the font block.
+    let html = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n${FONT_HEAD}\n${headHTML(meta)}\n</head>\n<body>\n${body}${bootScript}\n</body>\n</html>\n`;
+
+    // Inject the honest build metrics. JS shipped is 0 for the static shell, or
+    // the island bundle's real gzipped weight on pages that mount one.
+    const jsKb = hasIsland ? islandKb : "0";
     const htmlKb = (gzipSync(Buffer.from(html)).length / 1024).toFixed(1);
     html = html
       .replaceAll(TOKENS.renderMs, renderMs)
-      .replaceAll(TOKENS.jsBytes, "0")
+      .replaceAll(TOKENS.jsBytes, jsKb)
       .replaceAll(TOKENS.htmlKb, htmlKb)
       .replaceAll(TOKENS.pimasVer, pimasVersion)
       .replaceAll(TOKENS.builtAt, new Date().toISOString().slice(0, 10));
@@ -176,7 +225,7 @@ async function main() {
     const file = join(OUT, route.url === "/" ? "index.html" : `${route.url}index.html`);
     await mkdir(dirname(file), { recursive: true });
     await writeFile(file, html);
-    console.log(`  ${route.url.padEnd(18)} ${htmlKb} KB gz · ${renderMs} ms · 0 KB JS`);
+    console.log(`  ${route.url.padEnd(18)} ${htmlKb} KB gz · ${renderMs} ms · ${jsKb} KB JS`);
   }
 
   // Self-hosted fonts + generated/passthrough files.

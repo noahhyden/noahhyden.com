@@ -6,6 +6,9 @@
  */
 import type { Child } from "pimas/dom";
 import type { PageMeta } from "../design.js";
+import { TOKENS } from "../design.js";
+import { Island } from "../components/Island.js";
+import Accordion from "../islands/accordion.js";
 
 export const meta: PageMeta = {
   path: "/design-language/",
@@ -394,9 +397,22 @@ export default function DesignLanguage() {
           </div>
         </section>
 
+        {/* INTERACTIVE — the first island. Everything above is static HTML; this
+            one box is a lazy-loaded, client-rendered pimas component. */}
+        <section style="padding:52px 0; border-top:1px solid var(--line);">
+          <div style="display:flex; align-items:baseline; justify-content:space-between; margin:0 0 8px;">
+            <h2 style="font-family:var(--serif); font-weight:600; font-size:25px; letter-spacing:-.01em; margin:0; color:var(--ink);">Interactive</h2>
+            <span style={`${mono} font-size:11px; letter-spacing:.06em; color:var(--granite);`}>one island &middot; client-rendered &middot; lazy</span>
+          </div>
+          <p style="font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--granite); margin:0 0 24px; max-width:64ch;">
+            The rest of this page is static HTML that ships no JavaScript. The panel below is a single <span style="color:var(--ink);">island</span> &mdash; prerendered here for free, then bundled on its own and mounted live by pimas only once it scrolls into view.
+          </p>
+          <Island slug="accordion" component={Accordion} client="visible" />
+        </section>
+
         <footer style="margin-top:56px; padding-top:24px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
           <span style={`${mono} font-size:11px; letter-spacing:.06em; color:var(--granite);`}>Foundations &middot; palette, type, tile, buttons, icons, components.</span>
-          <span style={`${mono} font-size:11px; letter-spacing:.06em; color:var(--laurel);`}>built with pimas &rarr; zero JS &rarr; this is the system</span>
+          <span style={`${mono} font-size:11px; letter-spacing:.06em; color:var(--laurel);`}>built with pimas &rarr; static shell + one {TOKENS.jsBytes}&thinsp;KB island &rarr; this is the system</span>
         </footer>
       </div>
     </div>
