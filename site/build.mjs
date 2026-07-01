@@ -38,6 +38,7 @@ const pimasVersion = require("pimas/package.json").version || "0.0.0";
 const ISLAND_BOOT = "src/islands/boot.ts";
 const ISLANDS = [
   { slug: "accordion", entry: "src/islands/accordion.tsx" },
+  { slug: "primitives-demo", entry: "src/islands/primitives-demo.tsx" },
 ];
 
 // Build every island + the boot entry into one client bundle set. `splitting`

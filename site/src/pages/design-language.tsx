@@ -9,6 +9,7 @@ import type { PageMeta } from "../design.js";
 import { TOKENS } from "../design.js";
 import { Island } from "../components/Island.js";
 import Accordion from "../islands/accordion.js";
+import PrimitivesDemo from "../islands/primitives-demo.js";
 
 export const meta: PageMeta = {
   path: "/design-language/",
@@ -408,6 +409,15 @@ export default function DesignLanguage() {
             The rest of this page is static HTML that ships no JavaScript. The panel below is a single <span style="color:var(--ink);">island</span> &mdash; prerendered here for free, then bundled on its own and mounted live by pimas only once it scrolls into view.
           </p>
           <Island slug="accordion" component={Accordion} client="visible" />
+
+          <div style="display:flex; align-items:baseline; justify-content:space-between; margin:36px 0 8px;">
+            <h3 style="font-family:var(--serif); font-weight:600; font-size:20px; letter-spacing:-.01em; margin:0; color:var(--ink);">Primitives &mdash; onMount &amp; ErrorBoundary</h3>
+            <span style={`${mono} font-size:11px; letter-spacing:.06em; color:var(--granite);`}>two new pimas primitives &middot; dogfooded live</span>
+          </div>
+          <p style="font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--granite); margin:0 0 24px; max-width:64ch;">
+            Two more pieces of the framework, exercised in one island. On the left, <span style="color:var(--ink);">onMount</span> focuses a field once it&rsquo;s in the live DOM. On the right, an <span style="color:var(--ink);">ErrorBoundary</span> catches a child that throws during render &mdash; and recovers on reset.
+          </p>
+          <Island slug="primitives-demo" component={PrimitivesDemo} client="load" />
         </section>
 
         <footer style="margin-top:56px; padding-top:24px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
