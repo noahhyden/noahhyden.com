@@ -4,13 +4,14 @@
  * It walks the `<is-land>` markers the SSR build emitted, and for each one:
  *   1. schedules by its `data-client` strategy (load / idle / visible),
  *   2. dynamically imports the island's component bundle,
- *   3. CLIENT-RENDERS it — drops the server markup and mounts the live pimas
- *      component in its place (DECISIONS #29: client-render first, not hydrate).
+ *   3. CLAIMS it — adopts the server markup in place (reuses the nodes, wires
+ *      reactivity + listeners onto them) instead of discarding and re-rendering.
+ *      Falls back to a client render on any structural desync (pimas claim, #6).
  *
  * esbuild code-splitting factors the pimas kernel into one shared chunk, so boot
  * and every island share a SINGLE kernel instance (no dual-kernel hazard, #26).
  */
-import { render } from "pimas/dom";
+import { claim } from "pimas/hydrate";
 
 type IslandModule = { default: (props: unknown) => unknown };
 
@@ -18,8 +19,7 @@ function mountInto(el: HTMLElement): void {
   const src = `/islands/${el.dataset.island}.js`;
   const props = el.dataset.props ? JSON.parse(el.dataset.props) : {};
   import(src).then((mod: IslandModule) => {
-    el.textContent = ""; // discard the server HTML; take over live
-    render(() => mod.default(props) as never, el);
+    claim(() => mod.default(props) as never, el);
   });
 }
 
