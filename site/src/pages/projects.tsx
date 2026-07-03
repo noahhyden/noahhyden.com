@@ -1,5 +1,5 @@
 /**
- * Projects — the repo list. The original fetched GitHub live in the browser
+ * Projects - the repo list. The original fetched GitHub live in the browser
  * (a runtime external request + a loading/skeleton state). Here `getData` runs
  * at BUILD time, so the shipped page is static HTML with the repos baked in and
  * makes zero runtime requests. If the build-time fetch fails, we prerender the
@@ -11,7 +11,7 @@ import { Shell } from "../components/Shell.js";
 export const meta: PageMeta = {
   path: "/projects/",
   title: "Projects",
-  description: "Open-source work, pulled from GitHub — tools, experiments, and the occasional rabbit hole.",
+  description: "Open-source work, pulled from GitHub - tools, experiments, and the occasional rabbit hole.",
 };
 
 interface Repo {
@@ -68,7 +68,8 @@ export async function getData(): Promise<{ repos: Repo[]; error: boolean }> {
       })
       .map((r) => ({
         name: r.name,
-        desc: r.description || "No description provided.",
+        // Sanitize upstream copy to the repo's typography rules (no em-dashes).
+        desc: (r.description || "No description provided.").replace(/\u2014/g, "-"),
         lang: r.language || "",
         langColor: LANG_COLOR[r.language] || "#716f65",
         stars: r.stargazers_count,
@@ -140,7 +141,7 @@ export default function Projects(props: { repos?: Repo[]; error?: boolean }) {
       <header style="max-width:1080px; margin:0 auto; padding:80px 40px 40px;">
         <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <div>
-            <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 22px;">Projects &mdash; baked in from GitHub</div>
+            <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 22px;">Projects - baked in from GitHub</div>
             <h1 style="font-family:var(--serif); font-weight:500; font-size:52px; line-height:1.05; letter-spacing:-.022em; margin:0; max-width:18ch;">What I&rsquo;ve been building.</h1>
           </div>
           <a href="https://github.com/noahhyden" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px; color:var(--falu); border-bottom:1px solid var(--falu); padding-bottom:2px;">@noahhyden on GitHub &rarr;</a>
@@ -162,7 +163,7 @@ export default function Projects(props: { repos?: Repo[]; error?: boolean }) {
         ) : null}
         {isEmpty ? (
           <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:40px; text-align:center;">
-            <p style="font-family:var(--sans); font-size:16px; color:var(--granite); margin:0;">No public repositories to show yet &mdash; check back soon.</p>
+            <p style="font-family:var(--sans); font-size:16px; color:var(--granite); margin:0;">No public repositories to show yet - check back soon.</p>
           </div>
         ) : null}
       </main>

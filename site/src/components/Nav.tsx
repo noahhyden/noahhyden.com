@@ -24,9 +24,8 @@ export function Nav(props: { active?: Section } = {}) {
         Noah Hyden<span style="color:var(--falu);">.</span>
       </a>
       <div style="display:flex; align-items:center; gap:30px;">
-        {link("/about/", "About", active === "about")}
+        {link("/#about", "About", false)}
         {link("/projects/", "Projects", active === "projects")}
-        {link("/writing/", "Writing", active === "writing")}
         <span style="width:1px; height:18px; background:var(--line);" />
         <a href="https://github.com/noahhyden" target="_blank" rel="noopener" aria-label="GitHub" style="display:inline-flex; color:var(--granite);">
           <GitHubIcon />

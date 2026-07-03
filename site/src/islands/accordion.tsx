@@ -1,9 +1,9 @@
 /**
- * The site's first interactive ISLAND — an accordion, built with pimas.
+ * The site's first interactive ISLAND - an accordion, built with pimas.
  *
  * This module is PURE: it only default-exports a component and imports the
  * headless core (`pimas`) + control flow (`pimas/flow`). No DOM code, no
- * side effects at import — so the SSR build imports it to bake the collapsed
+ * side effects at import - so the SSR build imports it to bake the collapsed
  * markup (0 KB JS), and the client build bundles it to be lazy-mounted live by
  * the island boot script. The whole point: proof that fine-grained interactivity
  * works, shipped only on the page that uses it.
@@ -15,15 +15,15 @@ import type { Child } from "pimas/dom";
 const ITEMS: Array<{ q: string; a: string }> = [
   {
     q: "Is this page running a framework?",
-    a: "Only this box is. The rest of the site is static HTML with zero JavaScript — this accordion is a single lazy-loaded island, mounted live by pimas when it scrolls into view.",
+    a: "Only this box is. The rest of the site is static HTML with zero JavaScript - this accordion is a single lazy-loaded island, mounted live by pimas when it scrolls into view.",
   },
   {
     q: "What does “fine-grained” buy me here?",
-    a: "Opening a panel writes one signal. Only the two nodes that read it — this row's “+/–” glyph and its panel height — re-run. There is no virtual DOM and no diff pass, so nothing else on the page is touched.",
+    a: "Opening a panel writes one signal. Only the two nodes that read it - this row's “+/–” glyph and its panel height - re-run. There is no virtual DOM and no diff pass, so nothing else on the page is touched.",
   },
   {
     q: "Why build the framework at all?",
-    a: "To own the whole stack end to end — the same reason this site dropped Claude's design-canvas runtime. pimas renders this island in the browser and prerenders every other page to static HTML from the exact same component code.",
+    a: "To own the whole stack end to end - the same reason this site dropped Claude's design-canvas runtime. pimas renders this island in the browser and prerenders every other page to static HTML from the exact same component code.",
   },
 ];
 

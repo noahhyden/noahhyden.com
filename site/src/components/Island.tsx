@@ -1,6 +1,6 @@
 /**
  * The SSR-side island marker. Renders the island's component INLINE (so the page
- * ships real, styled, static HTML — 0 KB JS if the JS never loads) wrapped in an
+ * ships real, styled, static HTML - 0 KB JS if the JS never loads) wrapped in an
  * `<is-land>` element carrying the client contract the boot script reads:
  *   data-island → which bundle to lazy-load (/islands/<slug>.js)
  *   data-client → the load strategy (load | idle | visible)

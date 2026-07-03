@@ -1,10 +1,10 @@
 /**
- * Island boot — the ONLY client entry, and the only JavaScript any page ships.
+ * Island boot - the ONLY client entry, and the only JavaScript any page ships.
  *
  * It walks the `<is-land>` markers the SSR build emitted, and for each one:
  *   1. schedules by its `data-client` strategy (load / idle / visible),
  *   2. dynamically imports the island's component bundle,
- *   3. CLAIMS it — adopts the server markup in place (reuses the nodes, wires
+ *   3. CLAIMS it - adopts the server markup in place (reuses the nodes, wires
  *      reactivity + listeners onto them) instead of discarding and re-rendering.
  *      Falls back to a client render on any structural desync (pimas claim, #6).
  *

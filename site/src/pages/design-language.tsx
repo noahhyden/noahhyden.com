@@ -1,5 +1,5 @@
 /**
- * Design language — the foundations doc (palette, type scale, azulejo tilework,
+ * Design language - the foundations doc (palette, type scale, azulejo tilework,
  * buttons, icons, components). A standalone showcase: it keeps its own masthead
  * and footer rather than the site Shell, and defines its own three azulejo
  * patterns. Not in the nav. Ported faithfully from the hand-built page.
@@ -14,7 +14,7 @@ import PrimitivesDemo from "../islands/primitives-demo.js";
 export const meta: PageMeta = {
   path: "/design-language/",
   title: "Design language",
-  description: "The reconciled system — palette, type scale, azulejo tracery, buttons, icons, and components.",
+  description: "The reconciled system - palette, type scale, azulejo tracery, buttons, icons, and components.",
 };
 
 const mono = "font-family:var(--mono);";
@@ -81,7 +81,7 @@ export default function DesignLanguage() {
         <header>
           <div style={`${mono} font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--granite); margin:0 0 18px;`}>Design language &nbsp;/&nbsp; Noah Hyden &nbsp;/&nbsp; foundations &nbsp;/&nbsp; v5</div>
           <h1 style="font-family:var(--serif); font-weight:500; font-size:49px; line-height:1.04; letter-spacing:-.022em; color:var(--ink); margin:0 0 18px; max-width:17ch;">Basalt, laurel, and one <span style="color:var(--falu);">Falun red</span>.</h1>
-          <p style="font-family:var(--sans); font-size:16px; line-height:1.6; color:var(--granite); margin:0; max-width:64ch;">A single reconciled system. Madeira&rsquo;s rock and laurisilva, the cold North Atlantic, and one Swedish red mixed from Falun copper &mdash; set in a humanist serif over a precise grotesque, every measure on an 8&nbsp;px grid.</p>
+          <p style="font-family:var(--sans); font-size:16px; line-height:1.6; color:var(--granite); margin:0; max-width:64ch;">A single reconciled system. Madeira&rsquo;s rock and laurisilva, the cold North Atlantic, and one Swedish red mixed from Falun copper - set in a humanist serif over a precise grotesque, every measure on an 8&nbsp;px grid.</p>
         </header>
 
         {/* PALETTE */}
@@ -99,7 +99,7 @@ export default function DesignLanguage() {
             <Swatch bg="var(--ground)" name="Limewash" role="ground" hex="#E5E4DB" sub=".92 .012 101" border />
           </div>
           <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:40px; margin-top:32px; align-items:start;">
-            <p style="font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--granite); margin:0;">Falur&ouml;d is fixed at its real pigment value &mdash; <span style="color:var(--falu);">#801818</span>, the iron-oxide red of Falun. Laurisilva and Ocean are <span style="color:var(--ink);">held to one another</span> &mdash; matched in lightness and low in chroma (L&nbsp;&asymp;&nbsp;0.44) &mdash; so the green and steel-blue read as one calm pair and the red is left to carry attention. Basalt anchors below; Granite and Limewash share a warm near-neutral axis.</p>
+            <p style="font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--granite); margin:0;">Falur&ouml;d is fixed at its real pigment value - <span style="color:var(--falu);">#801818</span>, the iron-oxide red of Falun. Laurisilva and Ocean are <span style="color:var(--ink);">held to one another</span> - matched in lightness and low in chroma (L&nbsp;&asymp;&nbsp;0.44) - so the green and steel-blue read as one calm pair and the red is left to carry attention. Basalt anchors below; Granite and Limewash share a warm near-neutral axis.</p>
             <div>
               <div style={`${mono} font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:0 0 12px;`}>Derived neutrals</div>
               <div style="display:flex; border:1px solid var(--line); border-radius:3px; overflow:hidden;">
@@ -117,7 +117,7 @@ export default function DesignLanguage() {
         {/* TYPOGRAPHY */}
         <section style={sectionTop}>
           <SectionHead title="Typography" note="Spectral · IBM Plex Sans · IBM Plex Mono" />
-          <p style="font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--granite); margin:0 0 30px; max-width:64ch;">One modular scale: base <span style="color:var(--ink);">16&nbsp;px</span>, ratio <span style="color:var(--ink);">1.25</span> (the 5:4 major third). Every size is 16&nbsp;&times;&nbsp;1.25&#8319; &mdash; nothing chosen by eye.</p>
+          <p style="font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--granite); margin:0 0 30px; max-width:64ch;">One modular scale: base <span style="color:var(--ink);">16&nbsp;px</span>, ratio <span style="color:var(--ink);">1.25</span> (the 5:4 major third). Every size is 16&nbsp;&times;&nbsp;1.25&#8319; - nothing chosen by eye.</p>
           <div style="display:grid; gap:0;">
             <TypeRow label={<span>Display &middot; n5<br />Spectral 500 &middot; 49px</span>}>
               <div style="font-family:var(--serif); font-weight:500; font-size:49px; line-height:1.0; letter-spacing:-.022em;">Hewn from basalt</div>
@@ -132,7 +132,7 @@ export default function DesignLanguage() {
               <div style="font-family:var(--sans); font-weight:400; font-size:20px; line-height:1.45; color:var(--ink);">The standfirst sits one step above body.</div>
             </TypeRow>
             <TypeRow label={<span>Body &middot; n0<br />Plex Sans 400 &middot; 16px</span>}>
-              <p style="font-family:var(--sans); font-size:16px; line-height:1.6; color:var(--ink); margin:0; max-width:62ch;">Volcanic rock and limewashed plaster, the deep green of the laurisilva, the cold blue of the Atlantic &mdash; and against all of it, <span style="font-family:var(--serif); font-style:italic;">one steady red</span>. The body holds a calm grotesque so the serif can speak.</p>
+              <p style="font-family:var(--sans); font-size:16px; line-height:1.6; color:var(--ink); margin:0; max-width:62ch;">Volcanic rock and limewashed plaster, the deep green of the laurisilva, the cold blue of the Atlantic - and against all of it, <span style="font-family:var(--serif); font-style:italic;">one steady red</span>. The body holds a calm grotesque so the serif can speak.</p>
             </TypeRow>
             <TypeRow label={<span>Small / Eyebrow &middot; n-1<br />Plex Sans &middot; 13px</span>}>
               <div>
@@ -142,7 +142,7 @@ export default function DesignLanguage() {
             </TypeRow>
             <div style="display:grid; grid-template-columns:172px 1fr; gap:24px; align-items:baseline; padding:18px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
               <div style={`${mono} font-size:10.5px; line-height:1.6; color:var(--granite);`}>Technical &middot; n-1<br />Plex Mono &middot; 13px</div>
-              <div style={`${mono} font-size:13px; color:var(--laurel);`}>lat 32.7&deg; N &middot; lon 16.9&deg; W &middot; color/laurisilva &middot; grid/8</div>
+              <div style={`${mono} font-size:13px; color:var(--laurel);`}>color/laurisilva &middot; grid/8 &middot; type/spectral &middot; ratio/1.25</div>
             </div>
           </div>
         </section>
@@ -150,7 +150,7 @@ export default function DesignLanguage() {
         {/* AZULEJO */}
         <section style={sectionTop}>
           <SectionHead title="Azulejo" note="tracery · seamless net" />
-          <p style="font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--granite); margin:0 0 26px; max-width:68ch;">Rebuilt as tracery. Each motif is drawn so its arcs run unbroken into the next tile &mdash; a continuous net rather than stamped units &mdash; drawn in ocean, the secondary blue, kept low in opacity so it sits behind the page, not on top of it. Compass-and-rule construction on the 8&nbsp;px grid, after the Gothic and the <span style="font-style:italic;">de tapete</span> azulejo. Three densities.</p>
+          <p style="font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--granite); margin:0 0 26px; max-width:68ch;">Rebuilt as tracery. Each motif is drawn so its arcs run unbroken into the next tile - a continuous net rather than stamped units - drawn in ocean, the secondary blue, kept low in opacity so it sits behind the page, not on top of it. Compass-and-rule construction on the 8&nbsp;px grid, after the Gothic and the <span style="font-style:italic;">de tapete</span> azulejo. Three densities.</p>
           <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px;">
             <div>
               <div style="height:188px; border-radius:3px; border:1px solid var(--line); background:var(--ground); overflow:hidden;">
@@ -247,7 +247,7 @@ export default function DesignLanguage() {
         {/* ICONOGRAPHY */}
         <section style={sectionTop}>
           <SectionHead title="Iconography" note="24px grid · 1.5px stroke · geometric" />
-          <p style="font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--granite); margin:0 0 26px; max-width:66ch;">A line set drawn from primitives &mdash; straight runs, right angles, and circles on the 24&nbsp;px box &mdash; to match the engineered grotesque. No flourishes.</p>
+          <p style="font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--granite); margin:0 0 26px; max-width:66ch;">A line set drawn from primitives - straight runs, right angles, and circles on the 24&nbsp;px box - to match the engineered grotesque. No flourishes.</p>
           <div style="display:grid; grid-template-columns:repeat(8,1fr); gap:12px; color:var(--ink);">
             <IconCell label="arrow"><I><line x1="4" y1="12" x2="20" y2="12" /><polyline points="13,5 20,12 13,19" /></I></IconCell>
             <IconCell label="external"><I><line x1="6" y1="18" x2="18" y2="6" /><polyline points="8,6 18,6 18,16" /></I></IconCell>
@@ -344,14 +344,14 @@ export default function DesignLanguage() {
 
             <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:20px; display:flex; gap:13px; align-items:flex-start;">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ocean)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none; margin-top:1px;"><circle cx="12" cy="12" r="9" /><line x1="12" y1="11" x2="12" y2="16" /><line x1="12" y1="7.5" x2="12" y2="8" /></svg>
-              <div><div style="font-family:var(--sans); font-weight:600; font-size:14px; color:var(--ink); margin-bottom:4px;">Note</div><p style="font-family:var(--sans); font-size:14px; line-height:1.55; color:var(--granite); margin:0;">An informational block on Surface. No left-bar gimmick &mdash; the icon carries the meaning.</p></div>
+              <div><div style="font-family:var(--sans); font-weight:600; font-size:14px; color:var(--ink); margin-bottom:4px;">Note</div><p style="font-family:var(--sans); font-size:14px; line-height:1.55; color:var(--granite); margin:0;">An informational block on Surface. No left-bar gimmick - the icon carries the meaning.</p></div>
             </div>
 
             <div style="border:1px solid var(--line); border-radius:3px; background:var(--ground); padding:22px;">
               <CardHead>Blockquote</CardHead>
               <blockquote style="margin:0; padding-left:16px; border-left:2px solid var(--laurel);">
                 <p style="font-family:var(--serif); font-style:italic; font-size:19px; line-height:1.4; color:var(--ink); margin:0 0 10px;">Structure first; the surface only has to be honest about it.</p>
-                <cite style={`${mono} font-style:normal; font-size:11px; color:var(--granite);`}>&mdash; working principle</cite>
+                <cite style={`${mono} font-style:normal; font-size:11px; color:var(--granite);`}>- working principle</cite>
               </blockquote>
             </div>
 
@@ -398,7 +398,7 @@ export default function DesignLanguage() {
           </div>
         </section>
 
-        {/* INTERACTIVE — the first island. Everything above is static HTML; this
+        {/* INTERACTIVE - the first island. Everything above is static HTML; this
             one box is a lazy-loaded, client-rendered pimas component. */}
         <section style="padding:52px 0; border-top:1px solid var(--line);">
           <div style="display:flex; align-items:baseline; justify-content:space-between; margin:0 0 8px;">
@@ -406,23 +406,23 @@ export default function DesignLanguage() {
             <span style={`${mono} font-size:11px; letter-spacing:.06em; color:var(--granite);`}>one island &middot; client-rendered &middot; lazy</span>
           </div>
           <p style="font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--granite); margin:0 0 24px; max-width:64ch;">
-            The rest of this page is static HTML that ships no JavaScript. The panel below is a single <span style="color:var(--ink);">island</span> &mdash; prerendered here for free, then bundled on its own and mounted live by pimas only once it scrolls into view.
+            The rest of this page is static HTML that ships no JavaScript. The panel below is a single <span style="color:var(--ink);">island</span> - prerendered here for free, then bundled on its own and mounted live by pimas only once it scrolls into view.
           </p>
           <Island slug="accordion" component={Accordion} client="visible" />
 
           <div style="display:flex; align-items:baseline; justify-content:space-between; margin:36px 0 8px;">
-            <h3 style="font-family:var(--serif); font-weight:600; font-size:20px; letter-spacing:-.01em; margin:0; color:var(--ink);">Primitives &mdash; onMount &amp; ErrorBoundary</h3>
+            <h3 style="font-family:var(--serif); font-weight:600; font-size:20px; letter-spacing:-.01em; margin:0; color:var(--ink);">Primitives - onMount &amp; ErrorBoundary</h3>
             <span style={`${mono} font-size:11px; letter-spacing:.06em; color:var(--granite);`}>two new pimas primitives &middot; dogfooded live</span>
           </div>
           <p style="font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--granite); margin:0 0 24px; max-width:64ch;">
-            Two more pieces of the framework, exercised in one island. On the left, <span style="color:var(--ink);">onMount</span> focuses a field once it&rsquo;s in the live DOM. On the right, an <span style="color:var(--ink);">ErrorBoundary</span> catches a child that throws during render &mdash; and recovers on reset.
+            Two more pieces of the framework, exercised in one island. On the left, <span style="color:var(--ink);">onMount</span> focuses a field once it&rsquo;s in the live DOM. On the right, an <span style="color:var(--ink);">ErrorBoundary</span> catches a child that throws during render - and recovers on reset.
           </p>
           <Island slug="primitives-demo" component={PrimitivesDemo} client="load" />
         </section>
 
         <footer style="margin-top:56px; padding-top:24px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
           <span style={`${mono} font-size:11px; letter-spacing:.06em; color:var(--granite);`}>Foundations &middot; palette, type, tile, buttons, icons, components.</span>
-          <span style={`${mono} font-size:11px; letter-spacing:.06em; color:var(--laurel);`}>built with pimas &rarr; static shell + one {TOKENS.jsBytes}&thinsp;KB island &rarr; this is the system</span>
+          <span style={`${mono} font-size:11px; letter-spacing:.06em; color:var(--laurel);`}>built with <a href="/pimas/" style="color:var(--laurel); border-bottom:1px solid var(--laurel);">pimas</a> &rarr; static shell + one {TOKENS.jsBytes}&thinsp;KB island &rarr; this is the system</span>
         </footer>
       </div>
     </div>

@@ -43,13 +43,13 @@ export interface PageMeta {
 /**
  * The full <head> for a page. Title/description/canonical/OG from `meta`; the
  * shared reset + tokens inline (zero extra requests). Fonts are self-hosted,
- * same-origin — `build.mjs` injects the preloads + @font-face block ahead of
+ * same-origin - `build.mjs` injects the preloads + @font-face block ahead of
  * this, so there are zero external requests.
  */
 export function headHTML(meta: PageMeta): string {
   const url = SITE + meta.path;
   // Home is just the name; inner pages get the suffix.
-  const title = meta.path === "/" ? meta.title : `${meta.title} — Noah Hyden`;
+  const title = meta.path === "/" ? meta.title : `${meta.title} - Noah Hyden`;
   // NOTE: <meta charset> is emitted first by build.mjs, ahead of the font block,
   // so it stays within the first 1024 bytes. Don't add it here.
   return [

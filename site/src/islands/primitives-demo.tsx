@@ -1,5 +1,5 @@
 /**
- * Two new pimas primitives, dogfooded live on the page — an island that exercises
+ * Two new pimas primitives, dogfooded live on the page - an island that exercises
  * `onMount` (from pimas/dom) and `<ErrorBoundary>` (from pimas/flow).
  *
  * Like the accordion, this module is PURE: it default-exports a component and
@@ -7,10 +7,10 @@
  * hook. No side effects at import, so SSR bakes the static markup (0 KB JS) and
  * the client build lazy-mounts it live.
  *
- *   • onMount + ref  — an <input> that autofocuses AFTER the nodes are inserted,
+ *   • onMount + ref  - an <input> that autofocuses AFTER the nodes are inserted,
  *     proving onMount fires post-insertion (a bare effect would see a detached
  *     node and the focus would be lost).
- *   • ErrorBoundary  — a counter whose child THROWS during render once count ≥ 3.
+ *   • ErrorBoundary  - a counter whose child THROWS during render once count ≥ 3.
  *     The boundary catches it and swaps to a fallback; reset() zeroes the count
  *     and rebuilds the working counter fresh.
  */
@@ -24,7 +24,7 @@ const label = `${mono} font-size:10px; letter-spacing:.12em; text-transform:uppe
 const card =
   "border:1px solid var(--line); border-radius:3px; background:var(--ground); padding:22px;";
 
-/** A tidy laurel button — the one interactive control shape used throughout. */
+/** A tidy laurel button - the one interactive control shape used throughout. */
 function Btn(props: { onClick: () => void; children: Child; tone?: "laurel" | "falu" }) {
   const bg = props.tone === "falu" ? "var(--falu)" : "var(--laurel)";
   return (
@@ -41,7 +41,7 @@ function Btn(props: { onClick: () => void; children: Child; tone?: "laurel" | "f
 /** onMount + ref autofocus: the input takes focus only once it's in the live tree. */
 function AutofocusField(): Child {
   let el: HTMLInputElement | undefined;
-  // Fires AFTER insertion — a plain effect would run against a detached node.
+  // Fires AFTER insertion - a plain effect would run against a detached node.
   onMount(() => el?.focus());
   return (
     <div>
@@ -67,7 +67,7 @@ function AutofocusField(): Child {
 
 /**
  * The crash-test child: reads the count signal and THROWS during render (inside a
- * render thunk) once count ≥ 3 — the pattern ErrorBoundary catches. A throw in an
+ * render thunk) once count ≥ 3 - the pattern ErrorBoundary catches. A throw in an
  * event handler would NOT be caught, which is why the increment lives outside.
  */
 function CrashCounter(props: { count: () => number; inc: () => void }): Child {

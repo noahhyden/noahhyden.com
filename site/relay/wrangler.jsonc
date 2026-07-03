@@ -1,0 +1,16 @@
+{
+  // Cloudflare Worker config for the pimas live-demo LLM relay.
+  // Deploy: see README.md in this folder.
+  "name": "pimas-llm-relay",
+  "main": "worker.js",
+  "compatibility_date": "2026-06-01",
+  // Per-IP burst limiter (native binding, GA). ~6 requests / 10s / IP.
+  "ratelimit": [{ "name": "RL", "namespace_id": "1001", "simple": { "limit": 6, "period": 10 } }],
+  // KV for the hard per-IP + global daily caps. Create it, then paste the id:
+  //   wrangler kv namespace create CAP
+  "kv_namespaces": [{ "binding": "CAP", "id": "PASTE_KV_ID_HERE" }],
+  // Serve at api.noahhyden.com (Cloudflare must be the DNS for the zone). The
+  // GitHub Pages root stays DNS-only / untouched. Or drop this block and use the
+  // free *.workers.dev hostname.
+  "routes": [{ "pattern": "api.noahhyden.com", "custom_domain": true }]
+}

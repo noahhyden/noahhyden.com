@@ -1,7 +1,7 @@
 /**
  * The whole build: compile each page's .tsx, render it through pimas/server's
  * string backend in Node, and write one static HTML file per route. No Vite, no
- * meta-framework — for a handful of pages a plain esbuild + render loop is the
+ * meta-framework - for a handful of pages a plain esbuild + render loop is the
  * smallest honest pipeline (and the one we can read top to bottom).
  *
  * Output is fully static, zero JavaScript. The footer's build metrics are
@@ -20,12 +20,11 @@ const OUT = resolve(ROOT, "../dist");
 const CACHE = resolve(ROOT, ".cache/pages");
 const require = createRequire(import.meta.url);
 
-// The route table is just data — sitemap, etc. fall out of it.
+// The route table is just data - sitemap, etc. fall out of it.
 const ROUTES = [
   { url: "/", page: "index" },
-  { url: "/about/", page: "about" },
   { url: "/projects/", page: "projects" },
-  { url: "/writing/", page: "writing" },
+  // { url: "/writing/", page: "writing" },  // hidden for now - nothing to show yet
   { url: "/design-language/", page: "design-language" },
   { url: "/pimas/", page: "pimas" },
 ];
@@ -44,7 +43,7 @@ const ISLANDS = [
 ];
 
 // Build every island + the boot entry into one client bundle set. `splitting`
-// factors the shared pimas kernel into a single chunk — so boot and all islands
+// factors the shared pimas kernel into a single chunk - so boot and all islands
 // share ONE kernel instance in the browser (no dual-kernel hazard). Unlike the
 // SSR page build, pimas is NOT external here: the browser needs it bundled.
 // Returns the total gzipped JS an island page ships (all files in dist/islands).
@@ -74,7 +73,7 @@ async function buildIslands() {
 
 // ── Self-hosted fonts ───────────────────────────────────────────────────────
 // Vendored from Fontsource (OFL), woff2 only, latin + latin-ext subsets. All
-// static instances — Spectral/Plex Mono have no variable build, and for these
+// static instances - Spectral/Plex Mono have no variable build, and for these
 // narrow axes static is both smaller and simpler. This is what makes the site
 // truly zero-external-request: fonts are served from our own origin.
 const FONT_SUBSETS = ["latin", "latin-ext"];
@@ -96,7 +95,7 @@ const UNICODE_RANGE = {
   latin: "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD",
   "latin-ext": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF",
 };
-// Faces that paint above the fold (LCP) — preload these (and only these) so
+// Faces that paint above the fold (LCP) - preload these (and only these) so
 // they win before first paint: the Spectral 500 hero headline and the IBM Plex
 // Sans 400 body copy.
 const FONT_PRELOAD = ["spectral-latin-500-normal.woff2", "ibm-plex-sans-latin-400-normal.woff2"];
@@ -211,7 +210,7 @@ async function main() {
       ? `\n<script type="module" src="/islands/boot.js"></script>`
       : "";
 
-    // charset MUST be first (within the first 1024 bytes) — before the font block.
+    // charset MUST be first (within the first 1024 bytes) - before the font block.
     let html = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n${FONT_HEAD}\n${headHTML(meta)}\n</head>\n<body>\n${body}${bootScript}\n</body>\n</html>\n`;
 
     // Inject the honest build metrics. JS shipped is 0 for the static shell, or
@@ -244,7 +243,7 @@ async function main() {
     }
   }
 
-  console.log(`\n✓ built ${ROUTES.length} route(s) → dist/  (pimas v${pimasVersion}, 0 KB JS shipped)`);
+  console.log(`\nbuilt ${ROUTES.length} route(s) -> dist/  (pimas v${pimasVersion}, 0 KB JS shipped)`);
 }
 
 main().catch((e) => {
