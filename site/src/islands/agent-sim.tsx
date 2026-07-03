@@ -14,10 +14,10 @@
  * The speculation is always real pimas (store copy-on-write shadow). Pure module
  * (no import side effects) so SSR bakes the baseline as static HTML; claim adopts.
  */
-import { createSignal, createMemo } from "pimas";
-import { createStore } from "pimas/store";
-import { createAgentBridge } from "pimas/agent";
-import type { Child } from "pimas/dom";
+import { createSignal, createMemo } from "pimas-ui";
+import { createStore } from "pimas-ui/store";
+import { createAgentBridge } from "pimas-ui/agent";
+import type { Child } from "pimas-ui/dom";
 import { runLiveAgent, type LiveTool } from "./live-agent.js";
 
 interface Country { name: string; capacity: number; transparency: number; competition: number; }

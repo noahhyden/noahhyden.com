@@ -3,7 +3,7 @@
  * (once per document), the nav, and the footer. Pages supply only their own
  * content and which nav item is active.
  */
-import type { Child } from "pimas/dom";
+import type { Child } from "pimas-ui/dom";
 import { AzulejoDefs } from "./Azulejo.js";
 import { Nav } from "./Nav.js";
 import { Footer } from "./Footer.js";

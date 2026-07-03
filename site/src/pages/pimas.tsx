@@ -39,7 +39,7 @@ function Tile(props: { cap: string; val: string; tone: "plain" | "wrong" | "ok" 
 function Lane(props: {
   head: string;
   emphasis: string;
-  children?: import("pimas/dom").Child;
+  children?: import("pimas-ui/dom").Child;
   meterLabel: string;
   meterValue: string;
   meterTone: "bad" | "good";

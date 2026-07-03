@@ -9,7 +9,7 @@
     "serve": "node --watch-path=src build.mjs"
   },
   "dependencies": {
-    "pimas": "file:../../pimas"
+    "pimas-ui": "file:../../pimas"
   },
   "devDependencies": {
     "@fontsource/ibm-plex-mono": "^5.2.7",

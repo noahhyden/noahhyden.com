@@ -4,7 +4,7 @@
  * and footer rather than the site Shell, and defines its own three azulejo
  * patterns. Not in the nav. Ported faithfully from the hand-built page.
  */
-import type { Child } from "pimas/dom";
+import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { TOKENS } from "../design.js";
 import { Island } from "../components/Island.js";

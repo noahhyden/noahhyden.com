@@ -8,9 +8,9 @@
  * the island boot script. The whole point: proof that fine-grained interactivity
  * works, shipped only on the page that uses it.
  */
-import { createSignal } from "pimas";
-import { For } from "pimas/flow";
-import type { Child } from "pimas/dom";
+import { createSignal } from "pimas-ui";
+import { For } from "pimas-ui/flow";
+import type { Child } from "pimas-ui/dom";
 
 const ITEMS: Array<{ q: string; a: string }> = [
   {

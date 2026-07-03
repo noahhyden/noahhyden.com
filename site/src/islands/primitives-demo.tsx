@@ -14,10 +14,10 @@
  *     The boundary catches it and swaps to a fallback; reset() zeroes the count
  *     and rebuilds the working counter fresh.
  */
-import { createSignal } from "pimas";
-import { onMount } from "pimas/dom";
-import { ErrorBoundary } from "pimas/flow";
-import type { Child } from "pimas/dom";
+import { createSignal } from "pimas-ui";
+import { onMount } from "pimas-ui/dom";
+import { ErrorBoundary } from "pimas-ui/flow";
+import type { Child } from "pimas-ui/dom";
 
 const mono = "font-family:var(--mono);";
 const label = `${mono} font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:0 0 12px;`;

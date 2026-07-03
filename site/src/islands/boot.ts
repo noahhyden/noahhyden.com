@@ -11,7 +11,7 @@
  * esbuild code-splitting factors the pimas kernel into one shared chunk, so boot
  * and every island share a SINGLE kernel instance (no dual-kernel hazard, #26).
  */
-import { claim } from "pimas/hydrate";
+import { claim } from "pimas-ui/hydrate";
 
 type IslandModule = { default: (props: unknown) => unknown };
 

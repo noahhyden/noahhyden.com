@@ -9,7 +9,7 @@
  * The build discovers islands by their slug (see build.mjs ISLANDS) and emits
  * one client bundle per slug. Keep `slug` in sync with that list.
  */
-import type { Child } from "pimas/dom";
+import type { Child } from "pimas-ui/dom";
 
 export function Island(props: {
   slug: string;

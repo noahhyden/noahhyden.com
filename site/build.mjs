@@ -29,7 +29,7 @@ const ROUTES = [
   { url: "/pimas/", page: "pimas" },
 ];
 
-const pimasVersion = require("pimas/package.json").version || "0.0.0";
+const pimasVersion = require("pimas-ui/package.json").version || "0.0.0";
 
 // ── Islands ───────────────────────────────────────────────────────────────
 // Interactive components shipped as their own lazy-loaded client bundles. The
@@ -60,7 +60,7 @@ async function buildIslands() {
     format: "esm",
     platform: "browser",
     jsx: "automatic",
-    jsxImportSource: "pimas",
+    jsxImportSource: "pimas-ui",
     minify: true,
     logLevel: "warning",
   });
@@ -151,12 +151,12 @@ async function bundlePage(page) {
     format: "esm",
     platform: "node",
     jsx: "automatic",
-    jsxImportSource: "pimas",
+    jsxImportSource: "pimas-ui",
     // Keep pimas EXTERNAL: bundling it would inline a second copy of the engine
     // with its own currentBackend global (the dual-kernel hazard), so the page's
     // h() and renderToString() would touch different backends. External → both
     // resolve to the one installed package → exactly one kernel instance.
-    external: ["pimas", "pimas/*"],
+    external: ["pimas-ui", "pimas-ui/*"],
     logLevel: "warning",
   });
   return import(pathToFileURL(join(CACHE, `${page}.mjs`)).href + `?t=${process.hrtime.bigint()}`);
@@ -170,7 +170,7 @@ function sitemap(routes) {
 }
 
 async function main() {
-  const { renderToString } = await import("pimas/server");
+  const { renderToString } = await import("pimas-ui/server");
 
   // headHTML/TOKENS are build-only (not in the page tree), so compile design.ts
   // on its own and import it here.

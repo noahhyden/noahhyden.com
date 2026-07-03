@@ -3,7 +3,7 @@
  * glance" aside), links out to Projects and Writing, and the working principle.
  * The old /about/ route is folded in here; the nav "About" now jumps to #about.
  */
-import type { Child } from "pimas/dom";
+import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
 import { AzulejoBand } from "../components/Azulejo.js";
