@@ -7,6 +7,8 @@
  */
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
+import { Island } from "../components/Island.js";
+import AgentSim from "../islands/agent-sim.js";
 
 export const meta: PageMeta = {
   path: "/pimas/",
@@ -71,6 +73,15 @@ function Reason(props: { ix: string; title: string; body: string }) {
   );
 }
 
+function DiffCell(props: { what: string; gap: string }) {
+  return (
+    <div style="background:var(--ground); padding:16px 18px;">
+      <div style="font-family:var(--sans); font-size:14.5px; font-weight:600; color:var(--ink); margin-bottom:4px;">{props.what}</div>
+      <div style="font-family:var(--sans); font-size:13.5px; line-height:1.5; color:var(--granite);">{props.gap}</div>
+    </div>
+  );
+}
+
 function Stat(props: { big: string; bigColor: string; label: string }) {
   return (
     <div style="border-left:2px solid var(--ocean); padding:2px 0 2px 16px;">
@@ -131,6 +142,12 @@ export default function Pimas() {
           <Stat big="exact" bigColor="var(--ink)" label="re-runs the app's own logic — ground truth, not a learned world-model guess" />
         </div>
 
+        {/* live demo island */}
+        <section style="margin:48px 0;">
+          <div style="font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 14px;">See it &mdash; not a video, the real engine</div>
+          <Island slug="agent-sim" component={AgentSim} client="visible" />
+        </section>
+
         {/* why */}
         <section style="margin:52px 0;">
           <div style="font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 8px;">Why non-committal is the whole point</div>
@@ -165,6 +182,27 @@ export default function Pimas() {
               model you query.
             </p>
           </div>
+        </section>
+
+        {/* how this differs — pre-empt the "isn't this just X?" */}
+        <section style="margin:52px 0;">
+          <div style="font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 8px;">&ldquo;Isn&rsquo;t this just&hellip;?&rdquo;</div>
+          <h2 style="font-family:var(--serif); font-weight:500; font-size:32px; line-height:1.1; letter-spacing:-.02em; margin:0 0 12px; max-width:22ch;">Non-committal what-if isn&rsquo;t new. This combination is.</h2>
+          <p style="font-family:var(--sans); font-size:16px; line-height:1.6; color:var(--granite); margin:0 0 24px; max-width:64ch;">
+            Speculative execution is a well-worn idea &mdash; a database can do it, a spreadsheet can do it. What
+            no one has put together is <b style="color:var(--ink);">exact + zero side-effects + on a live reactive UI graph + as a first-class agent tool</b>. Each neighbour gives up one of those:
+          </p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:3px; overflow:hidden;">
+            <DiffCell what="Optimistic UI / snapshots" gap="commit, then roll back — the side effects already fired." />
+            <DiffCell what="Agent sandboxes / computer-use" gap="really execute, just in an isolated copy — effects fire there, and it&rsquo;s a whole environment." />
+            <DiffCell what="LangGraph time-travel / fork" gap="re-executes nodes — &lsquo;LLM calls, API requests fire again&rsquo; (their docs)." />
+            <DiffCell what="Tool approval (human-in-the-loop)" gap="shows the proposed call, not the exact resulting state." />
+            <DiffCell what="Learned agent world-models" gap="approximate — they guess the outcome and drift." />
+            <DiffCell what="Datomic with · spreadsheets · PRAXA" gap="real non-committal what-if — but on a DB value, a cell grid, or an analyst&rsquo;s view; not a live UI an agent queries." />
+          </div>
+          <p style="font-family:var(--mono); font-size:13px; line-height:1.6; color:var(--ink); margin:20px 0 0;">
+            pimas is the one that is <span style="color:var(--laurel);">all four at once</span>.
+          </p>
         </section>
 
         {/* fit */}

@@ -40,6 +40,7 @@ const ISLAND_BOOT = "src/islands/boot.ts";
 const ISLANDS = [
   { slug: "accordion", entry: "src/islands/accordion.tsx" },
   { slug: "primitives-demo", entry: "src/islands/primitives-demo.tsx" },
+  { slug: "agent-sim", entry: "src/islands/agent-sim.tsx" },
 ];
 
 // Build every island + the boot entry into one client bundle set. `splitting`
