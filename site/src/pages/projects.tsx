@@ -11,7 +11,7 @@ import { Shell } from "../components/Shell.js";
 export const meta: PageMeta = {
   path: "/projects/",
   title: "Projects",
-  description: "Open-source work, pulled from GitHub - tools, experiments, and the occasional rabbit hole.",
+  description: "Open-source work, pulled from GitHub: tools and experiments.",
 };
 
 interface Repo {
@@ -146,7 +146,7 @@ export default function Projects(props: { repos?: Repo[]; error?: boolean }) {
           </div>
           <a href="https://github.com/noahhyden" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px; color:var(--falu); border-bottom:1px solid var(--falu); padding-bottom:2px;">@noahhyden on GitHub &rarr;</a>
         </div>
-        <p style="font-family:var(--sans); font-size:17px; line-height:1.6; color:var(--granite); margin:24px 0 0; max-width:58ch;">Pulled from my public repositories at build time, freshest first. Some are finished, some are experiments, some are me thinking out loud in code.</p>
+        <p style="font-family:var(--sans); font-size:17px; line-height:1.6; color:var(--granite); margin:24px 0 0; max-width:58ch;">Pulled from my public repositories at build time, most recently updated first. Some are finished, some are experiments.</p>
       </header>
 
       <main style="max-width:1080px; margin:0 auto; padding:8px 40px 24px;">
