@@ -1,10 +1,12 @@
 /**
- * /pimas/ - a standalone writeup of the agent-native layer of pimas: an AI agent
- * that can run the exact what-if in a shadow graph and commit nothing. Same design
- * language as the rest of the site (Madeira basalt palette, Spectral / IBM Plex),
- * static HTML, zero JS. The live/shadow comparison is a static diagram - the
- * dashed outline is the site's stand-in for "speculative / uncommitted".
+ * /pimas/ - a writeup of pimas: a from-scratch fine-grained reactive UI engine
+ * whose standing dependency graph an AI agent can subscribe to, get causal
+ * explanations from, and simulate against before it acts. Facts here are taken
+ * from the pimas repo README (the source of truth); this page explains, plainly,
+ * what it is, how it works, why it works, and where it fits. Same design language
+ * as the rest of the site, static HTML, zero JS except the one live-demo island.
  */
+import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
 import { Island } from "../components/Island.js";
@@ -12,56 +14,44 @@ import AgentSim from "../islands/agent-sim.js";
 
 export const meta: PageMeta = {
   path: "/pimas/",
-  title: "pimas - simulate before you commit",
+  title: "pimas - a reactive UI engine an agent can simulate against",
   description:
-    "A personal project: a from-scratch reactive UI engine that lets an AI agent run the exact what-if in a shadow graph - predict a change without ever committing it.",
+    "A from-scratch fine-grained reactive UI framework (zero runtime dependencies, no virtual DOM) whose dependency graph an AI agent can subscribe to, get causal explanations from, and simulate against before it commits anything.",
 };
 
-/** A small labelled state tile. `tone` picks the border/fill semantics. */
-function Tile(props: { cap: string; val: string; tone: "plain" | "wrong" | "ok" | "shadow" }) {
-  const map = {
-    plain: "border:1.5px solid var(--line); color:var(--ink);",
-    wrong: "border:1.5px solid var(--falu); background:rgba(128,24,24,.08); color:var(--falu);",
-    ok: "border:1.5px solid var(--laurel); background:rgba(59,91,71,.09); color:var(--laurel);",
-    shadow: "border:1.5px dashed var(--ocean); background:rgba(59,86,105,.08); color:var(--ocean);",
-  } as const;
-  const capColor = props.tone === "shadow" ? "var(--ocean)" : "var(--granite)";
+const eyebrow =
+  "font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 8px;";
+const h2s =
+  "font-family:var(--serif); font-weight:500; font-size:31px; line-height:1.12; letter-spacing:-.02em; margin:0 0 18px; max-width:26ch;";
+const h3s =
+  "font-family:var(--serif); font-weight:600; font-size:20px; letter-spacing:-.01em; margin:34px 0 10px; color:var(--ink);";
+const body =
+  "font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--ink); margin:0 0 18px; max-width:72ch;";
+
+/** Inline code / identifier. */
+function C(props: { children: Child }) {
   return (
-    <div style={`width:132px; border-radius:3px; padding:11px 12px; ${map[props.tone]}`}>
-      <span style={`display:block; font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:${capColor}; margin-bottom:5px;`}>
-        {props.cap}
+    <span style="font-family:var(--mono); font-size:.86em; color:var(--ocean); white-space:nowrap;">
+      {props.children}
+    </span>
+  );
+}
+
+/** A numbered mechanism step. */
+function Step(props: { n: string; children: Child }) {
+  return (
+    <li style="display:flex; gap:15px; align-items:baseline; margin:0 0 12px;">
+      <span style="flex:none; font-family:var(--mono); font-size:12px; font-weight:600; color:var(--ocean); width:20px;">
+        {props.n}
       </span>
-      <span style="font-family:var(--mono); font-size:15px; font-weight:600; font-variant-numeric:tabular-nums;">{props.val}</span>
-    </div>
-  );
-}
-
-function Lane(props: {
-  head: string;
-  emphasis: string;
-  children?: import("pimas-ui/dom").Child;
-  meterLabel: string;
-  meterValue: string;
-  meterTone: "bad" | "good";
-}) {
-  const meterColor = props.meterTone === "bad" ? "var(--falu)" : "var(--laurel)";
-  return (
-    <div style="flex:1 1 260px; border:1px solid var(--line); border-radius:3px; background:var(--ground); padding:18px 18px 16px; display:flex; flex-direction:column; gap:16px;">
-      <div style="font-family:var(--mono); font-size:12px; color:var(--granite);">
-        {props.head} · <b style="color:var(--ink); font-weight:600;">{props.emphasis}</b>
-      </div>
-      <div style="min-height:96px; display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; background:radial-gradient(circle at 1px 1px, rgba(23,30,26,.07) 1px, transparent 0) 0 0 / 13px 13px; border-radius:2px; padding:16px;">
+      <span style="font-family:var(--sans); font-size:15.5px; line-height:1.64; color:var(--ink);">
         {props.children}
-      </div>
-      <div style="display:flex; align-items:baseline; justify-content:space-between; border-top:1px dashed var(--line); padding-top:12px; font-family:var(--mono); font-size:12px; color:var(--granite);">
-        <span>{props.meterLabel}</span>
-        <span style={`font-size:26px; font-weight:700; letter-spacing:-.01em; font-variant-numeric:tabular-nums; color:${meterColor};`}>{props.meterValue}</span>
-      </div>
-    </div>
+      </span>
+    </li>
   );
 }
 
-function Reason(props: { ix: string; title: string; body: string }) {
+function Reason(props: { ix: string; title: string; body: Child }) {
   return (
     <div>
       <h3 style="font-family:var(--serif); font-weight:600; font-size:19px; letter-spacing:-.01em; margin:0 0 6px; display:flex; gap:11px; align-items:baseline;">
@@ -73,7 +63,7 @@ function Reason(props: { ix: string; title: string; body: string }) {
   );
 }
 
-function DiffCell(props: { what: string; gap: string }) {
+function DiffCell(props: { what: string; gap: Child }) {
   return (
     <div style="background:var(--ground); padding:16px 18px;">
       <div style="font-family:var(--sans); font-size:14.5px; font-weight:600; color:var(--ink); margin-bottom:4px;">{props.what}</div>
@@ -82,20 +72,9 @@ function DiffCell(props: { what: string; gap: string }) {
   );
 }
 
-function Stat(props: { big: string; bigColor: string; label: string }) {
+function FitItem(props: { title: string; body: Child }) {
   return (
-    <div style="border-left:2px solid var(--ocean); padding:2px 0 2px 16px;">
-      <div style={`font-family:var(--mono); font-size:34px; font-weight:700; letter-spacing:-.02em; line-height:1; font-variant-numeric:tabular-nums; color:${props.bigColor};`}>
-        {props.big}
-      </div>
-      <div style="font-family:var(--sans); font-size:14.5px; line-height:1.5; color:var(--granite); margin-top:11px;">{props.label}</div>
-    </div>
-  );
-}
-
-function FitItem(props: { title: string; body: string }) {
-  return (
-    <li style="display:flex; gap:12px; align-items:baseline; font-family:var(--sans); font-size:15.5px; line-height:1.6; color:var(--granite);">
+    <li style="display:flex; gap:12px; align-items:baseline; font-family:var(--sans); font-size:15.5px; line-height:1.62; color:var(--granite);">
       <span style="flex:none; font-family:var(--mono); color:var(--ocean);">&rarr;</span>
       <span><b style="color:var(--ink); font-weight:600;">{props.title}</b> - {props.body}</span>
     </li>
@@ -106,125 +85,256 @@ export default function Pimas() {
   return (
     <Shell>
       <header style="max-width:900px; margin:0 auto; padding:76px 40px 0;">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 22px;">
-          A personal project - pimas
-        </div>
-        <h1 style="font-family:var(--serif); font-weight:500; font-size:52px; line-height:1.05; letter-spacing:-.022em; margin:0; max-width:17ch;">
-          Let an agent see what happens before it happens.
+        <div style={eyebrow.replace("11px", "12px")}>A personal project - pimas</div>
+        <h1 style="font-family:var(--serif); font-weight:500; font-size:50px; line-height:1.06; letter-spacing:-.022em; margin:0; max-width:19ch;">
+          A reactive UI engine an agent can simulate against before it acts.
         </h1>
-        <p style="font-family:var(--sans); font-size:17px; line-height:1.62; color:var(--granite); margin:24px 0 0; max-width:60ch;">
-          Every way an AI agent touches software today, it has to <em>do</em> a thing to find out what the
-          thing does - then look again. I&rsquo;ve been building a reactive engine where the agent runs the
-          exact what-if in a shadow, commits nothing, and leaves the real system untouched.
+        <p style="font-family:var(--sans); font-size:17px; line-height:1.64; color:var(--ink); margin:24px 0 0; max-width:66ch;">
+          pimas is a fine-grained reactive UI framework I built from scratch: no React, no virtual DOM, no
+          in-browser transpiler, zero runtime dependencies. It is the same engine class as SolidJS. Values are
+          observable, and only the exact DOM nodes that read a changed value update; there is no diffing. This
+          site is built on it and ships 0&nbsp;KB of JavaScript.
+        </p>
+        <p style="font-family:var(--sans); font-size:17px; line-height:1.64; color:var(--granite); margin:18px 0 0; max-width:66ch;">
+          The framework is also the lab for the part worth owning. A from-scratch fine-grained engine keeps a
+          standing <b style="color:var(--ink);">dependency graph</b> of what derives from what. That graph is,
+          incidentally, a live machine-readable model of the page - something an agent can subscribe to, get
+          causal explanations from, and <b style="color:var(--ink);">simulate against before it acts</b>. A
+          virtual DOM has no such graph, and the reason it cannot is mechanical. That is the rest of this page.
         </p>
       </header>
 
       <main style="max-width:900px; margin:0 auto; padding:0 40px;">
 
-        {/* live vs shadow */}
-        <div style="margin:44px 0 8px; display:flex; gap:14px; flex-wrap:wrap;">
-          <Lane head="Ordinary agent" emphasis="act &amp; re-scrape" meterLabel="wrong live states" meterValue="27&ndash;36" meterTone="bad">
-            <Tile cap="live model" val="rank #4" tone="wrong" />
-          </Lane>
-          <Lane head="pimas agent" emphasis="simulate first" meterLabel="wrong live states" meterValue="0" meterTone="good">
-            <Tile cap="live model" val="rank #3" tone="ok" />
-            <Tile cap="shadow" val="rank #4" tone="shadow" />
-          </Lane>
-        </div>
-        <p style="font-family:var(--mono); font-size:12px; color:var(--granite); text-align:center; margin:6px 0 0;">
-          same task - &ldquo;find the one input that lifts this to&nbsp;#1&rdquo; - both agents reach the same answer
-        </p>
-
-        {/* stat strip */}
-        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin:44px 0;">
-          <Stat big="0" bigColor="var(--laurel)" label="wrong live states the pimas agent passes through - vs 27–36 for the ordinary one" />
-          <Stat big="~14×" bigColor="var(--ink)" label="fewer actions to reach the same answer (4 vs 55 on the solvable task)" />
-          <Stat big="exact" bigColor="var(--ink)" label="re-runs the app's own logic - ground truth, not a learned world-model guess" />
-        </div>
-
         {/* live demo island */}
-        <section style="margin:48px 0;">
-          <div style="font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 14px;">See it - not a video, the real engine</div>
+        <section style="margin:44px 0 8px;">
+          <div style={eyebrow}>A live demo, running in your browser</div>
           <Island slug="agent-sim" component={AgentSim} client="visible" />
         </section>
 
-        {/* why */}
+        {/* the problem */}
         <section style="margin:52px 0;">
-          <div style="font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 8px;">Why non-committal is the whole point</div>
-          <h2 style="font-family:var(--serif); font-weight:500; font-size:32px; line-height:1.1; letter-spacing:-.02em; margin:0 0 28px; max-width:20ch;">Observation shouldn&rsquo;t require mutation.</h2>
-          <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:26px 40px;">
-            <Reason ix="01" title="Side effects don't fire" body="A probe isn't free - it can send a request, write a row, trigger a cascade. Speculate recomputes the derived result with no effect flushed. The network, the database, the DOM are never touched." />
-            <Reason ix="02" title="The live app never goes wrong" body="The search runs in a shadow, so nobody watching sees the app thrash, the store never holds garbage between tries, and a crash mid-search can't freeze it in a broken state." />
-            <Reason ix="03" title="Planning is counterfactuals" body="To choose between three moves you must evaluate branches you won't take. If evaluating means committing, you can't compare without entering all three. Speculate weighs them against the same start; the agent commits once." />
-            <Reason ix="04" title="Exact, not approximate" body="Learned agent world-models guess the outcome and drift. pimas re-runs the app's own pure logic against a shadow of the real dependency graph - bit-identical to what committing would have produced." />
+          <div style={eyebrow}>The problem it solves</div>
+          <h2 style={h2s}>Observation shouldn&rsquo;t require mutation.</h2>
+          <p style={body}>
+            Every existing way an agent touches a UI - WebMCP actions, computer-use, Playwright scraping - shares
+            one property: to learn what an action does, it has to <em>do</em> the action, then look again.
+            Observation requires mutation. So real side effects fire (a network write, an email, a database row),
+            the live app passes through every wrong state the agent considered, and planning more than one step
+            ahead means entering branches you will not keep.
+          </p>
+          <p style={body}>
+            <C>speculate</C> removes that tax: it computes the exact derived consequence of a change with nothing
+            committed, so the UI stops being a surface you poke and becomes a model you query.
+          </p>
+        </section>
+
+        {/* how it works */}
+        <section style="margin:52px 0;">
+          <div style={eyebrow}>How it works</div>
+          <h2 style={h2s}>One mechanism, three surfaces.</h2>
+
+          <h3 style={h3s}>The reactive kernel</h3>
+          <p style={body}>
+            The whole engine is one idea: reading a value inside a computation subscribes that computation to it,
+            and writing the value re-runs exactly the computations that read it. The core is about 200 lines.
+            Every reactive thing - a <b style="color:var(--ink);">signal</b> (a unit of state), a{" "}
+            <b style="color:var(--ink);">memo</b> (a value derived by a pure function), an{" "}
+            <b style="color:var(--ink);">effect</b> (a computation that acts on the outside world) - is the same
+            kind of node. Each node records the nodes it read last run (its sources) and the nodes that read it
+            (its observers); reads and writes keep both links in sync.
+          </p>
+          <p style={body}>
+            Updates are two-phase, which is what keeps them glitch-free. A write only marks its dependents -
+            directly downstream nodes as definitely-stale, everything below as maybe-stale - and computes
+            nothing. Computation happens lazily on read: a maybe-stale node checks its own sources first, recomputes
+            only if one of them actually changed, and propagates further only if its own result actually changed. A
+            value written back equal to what it was stops the cascade dead. A diamond (two paths from one source to
+            one sink) recomputes the sink exactly once, on fully-current inputs. Subscriptions are rebuilt every
+            run, so a conditional branch subscribes only to what it actually read that time.
+          </p>
+
+          <h3 style={h3s}>Rendering, without a diff</h3>
+          <p style={body}>
+            The renderer never diffs. It runs each component once to build real DOM nodes and wraps every dynamic
+            binding in its own effect, so a change re-runs one binding, not a subtree. The common case - a text
+            node whose value became a new string - reassigns that one text node&rsquo;s contents in place. The
+            same component code renders two ways through a single seam: in the browser a dynamic binding is a live
+            subscription; on the server it runs once with no subscription and bakes into HTML. Nothing in a
+            component knows which backend it ran under. That is why this site prerenders to static HTML at 0&nbsp;KB
+            JS, and why an interactive <b style="color:var(--ink);">island</b> can <C>claim()</C> the
+            server-rendered DOM in place instead of throwing it away and rebuilding it.
+          </p>
+
+          <h3 style={h3s}>The agent surface: subscribe, explain, simulate</h3>
+          <p style={body}>
+            <C>pimas/agent</C> turns the running graph into three things an agent can use. You declare what is
+            readable with <C>expose(name,&nbsp;fn)</C> and what is callable with <C>action(name,&nbsp;fn)</C>.
+          </p>
+          <ul style="list-style:none; padding:0; margin:0 0 6px;">
+            <Step n="L1">
+              <b style="color:var(--ink);">Subscribe.</b> Each exposed value is wrapped in an effect that emits a
+              delta whenever it changes. Because the accessor runs inside that effect, it subscribes to exactly the
+              fields it reads - <C>{"() => rows[3].status"}</C> watches just that field. The agent is pushed
+              changes; no polling, no scraping the DOM.
+            </Step>
+            <Step n="L2">
+              <b style="color:var(--ink);">Explain.</b> Calling an action records what it wrote and which exposed
+              values changed as a result, by walking the dependency graph. <C>explain()</C> returns a causal
+              sentence: <em>total</em> changed because <em>addItem</em> wrote <C>cart[3].qty</C>, which the{" "}
+              <em>total</em> memo reads.
+            </Step>
+            <Step n="L3">
+              <b style="color:var(--ink);">Simulate.</b> <C>speculate</C> runs hypothetical writes against a shadow
+              of the graph and returns the exact predicted state without committing. It is the piece the rest of
+              the framework exists to make possible - the next section.
+            </Step>
+          </ul>
+        </section>
+
+        {/* how a what-if runs */}
+        <section style="margin:52px 0;">
+          <div style={eyebrow}>The mechanism</div>
+          <h2 style={h2s}>How a what-if actually runs.</h2>
+          <p style={body}>
+            <C>speculate</C> works because the graph separates two things a virtual DOM keeps tangled: the{" "}
+            <b style="color:var(--ink);">topology</b> (what derives from what) and the{" "}
+            <b style="color:var(--ink);">values</b> flowing through it. A what-if shadows the values and reuses the
+            topology read-only.
+          </p>
+          <ol style="list-style:none; padding:0; margin:0 0 8px;">
+            <Step n="1">A shadow overlay is opened - a map from node to hypothetical value. The real nodes are not touched.</Step>
+            <Step n="2">The hypothetical write lands only in the overlay.</Step>
+            <Step n="3">
+              Reads during the speculation return the shadowed value if there is one; otherwise a memo is
+              recomputed <em>detached</em> (no subscription, no ownership) against the overlay and cached, so a
+              diamond still computes once; otherwise the real committed value is returned.
+            </Step>
+            <Step n="4">No effect ever fires. Nothing that talks to the network, the DOM, or storage runs.</Step>
+            <Step n="5">The predicted state you asked for is read off the overlay and returned.</Step>
+            <Step n="6">Rollback is free: the overlay is dropped. The real graph was never mutated, so there is nothing to undo.</Step>
+          </ol>
+          <p style={body}>
+            <C>speculatePlan</C> composes several changes in one shadow; <C>speculateSweep</C> runs one independent
+            what-if per input, for a sensitivity sweep; <C>commitPlan</C> applies an approved scenario for real, so
+            preview and commit stay symmetric. Store edits are shadowed too, by copy-on-write, so hypothetical
+            changes to tables and lists work the same way.
+          </p>
+
+          <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:26px 40px; margin-top:32px;">
+            <Reason ix="01" title="Side effects don't fire" body="A probe isn't free in a normal system: it can send a request, write a row, trigger a cascade. speculate recomputes the derived result with no effect flushed. The network, the database, the DOM are never touched." />
+            <Reason ix="02" title="The live app never goes wrong" body="The search runs in the shadow, so nobody watching the app sees it thrash, the state never holds garbage between tries, and a crash mid-search can't freeze the real app in a broken state." />
+            <Reason ix="03" title="Planning is counterfactuals" body="To choose between moves you must evaluate branches you won't take. If evaluating means committing, you can't compare without entering all of them. speculate weighs them against the same starting point; the agent commits once." />
+            <Reason ix="04" title="Exact, not approximate" body="A learned world-model guesses the outcome and drifts. speculate re-runs the app's own pure memos against a shadow of the real graph, so the prediction is bit-identical to what committing would have produced." />
           </div>
         </section>
 
-        {/* how */}
+        {/* why an ordinary stack can't */}
         <section style="margin:52px 0;">
-          <div style="font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 8px;">Why an ordinary stack can&rsquo;t</div>
-          <h2 style="font-family:var(--serif); font-weight:500; font-size:32px; line-height:1.1; letter-spacing:-.02em; margin:0 0 24px; max-width:22ch;">It&rsquo;s cheap only on a graph that already exists.</h2>
-          <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:26px 28px; font-family:var(--sans); font-size:16px; line-height:1.65; color:var(--granite);">
-            <p style="margin:0 0 14px;">
-              pimas is a fine-grained reactive engine: state is observable, and it keeps the
-              <b style="color:var(--ink);"> dependency graph</b> (what derives from what) separate from the
-              <b style="color:var(--ink);"> values</b> flowing through it. So a hypothetical is just: shadow the
-              values, reuse the real graph read-only, don&rsquo;t flush the effects, and roll back by throwing the
-              shadow away. The same surface projects onto the browser&rsquo;s WebMCP tool standard as
-              <span style="font-family:var(--mono); font-size:14px; color:var(--ocean);"> simulate_*</span> tools an
-              agent just calls.
-            </p>
-            <p style="margin:0;">
-              A virtual-DOM framework has no standing dependency graph to shadow - it would have to re-render
-              and diff, with no guarantee the result is side-effect-free.
-              <b style="color:var(--ink);"> Committing is how you normally find out what happens; here the agent
-              finds out without it happening</b> - so the UI stops being a surface you poke and becomes a
-              model you query.
+          <div style={eyebrow}>Why an ordinary stack can&rsquo;t</div>
+          <h2 style={h2s}>It needs a graph that exists before the question is asked.</h2>
+          <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:24px 26px;">
+            <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--granite); margin:0;">
+              A virtual-DOM framework keeps no standing dependency graph. To find out what a change does it
+              re-renders the component tree and diffs the output - and rendering routinely runs effects and reads
+              that are not guaranteed pure, so there is no way to promise a probe was side-effect-free, and no exact
+              derived state to read short of actually applying the change. A fine-grained engine keeps the graph
+              standing between updates; a re-render-and-diff framework builds a fresh one every time and throws it
+              away. <b style="color:var(--ink);">Speculation needs the graph that is already there.</b>
             </p>
           </div>
         </section>
 
-        {/* how this differs - pre-empt the "isn't this just X?" */}
+        {/* benchmark */}
         <section style="margin:52px 0;">
-          <div style="font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 8px;">&ldquo;Isn&rsquo;t this just&hellip;?&rdquo;</div>
-          <h2 style="font-family:var(--serif); font-weight:500; font-size:32px; line-height:1.1; letter-spacing:-.02em; margin:0 0 12px; max-width:22ch;">Non-committal what-if isn&rsquo;t new. This combination is.</h2>
-          <p style="font-family:var(--sans); font-size:16px; line-height:1.6; color:var(--granite); margin:0 0 24px; max-width:64ch;">
-            Speculative execution is a well-worn idea - a database can do it, a spreadsheet can do it. What
-            no one has put together is <b style="color:var(--ink);">exact + zero side-effects + on a live reactive UI graph + as a first-class agent tool</b>. Each neighbour gives up one of those:
+          <div style={eyebrow}>Measured, with a real agent in the loop</div>
+          <h2 style={h2s}>Same policy, same answers, a fraction of the footprint.</h2>
+          <p style={body}>
+            The same grid-search policy drives an OECD-style composite-indicator model through the projected tools
+            under two conditions: a <b style="color:var(--ink);">baseline</b> that can only mutate and re-read, and
+            one that also has the <C>simulate_*</C> tools. Both reach the same correct answer. The only thing that
+            differs is what the run costs and how many wrong states the live model passes through.
+          </p>
+          <div style="overflow-x:auto; margin:24px 0 0;">
+            <table style="width:100%; border-collapse:collapse; font-family:var(--sans); font-size:14.5px;">
+              <thead>
+                <tr>
+                  <th style="text-align:left; font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--granite); font-weight:600; padding:0 14px 10px 0; border-bottom:1px solid var(--line);">Task</th>
+                  <th style="text-align:left; font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--granite); font-weight:600; padding:0 14px 10px; border-bottom:1px solid var(--line);">Baseline (mutate &amp; re-read)</th>
+                  <th style="text-align:left; font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--laurel); font-weight:600; padding:0 0 10px 14px; border-bottom:1px solid var(--line);">With simulate_*</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:14px 14px 14px 0; border-bottom:1px solid var(--line); color:var(--ink);">France &rarr; top-2 <span style="color:var(--granite);">(solvable)</span></td>
+                  <td style="padding:14px; border-bottom:1px solid var(--line); color:var(--granite); font-variant-numeric:tabular-nums;">55 calls &middot; 37 commits &middot; <b style="color:var(--falu);">27 wrong live states</b></td>
+                  <td style="padding:14px 0 14px 14px; border-bottom:1px solid var(--line); color:var(--granite); font-variant-numeric:tabular-nums;">4 calls &middot; 1 commit &middot; <b style="color:var(--laurel);">0</b></td>
+                </tr>
+                <tr>
+                  <td style="padding:14px 14px 14px 0; color:var(--ink);">Germany &rarr; #1 <span style="color:var(--granite);">(impossible)</span></td>
+                  <td style="padding:14px; color:var(--granite); font-variant-numeric:tabular-nums;">54 calls &middot; 36 commits &middot; <b style="color:var(--falu);">36 wrong live states</b></td>
+                  <td style="padding:14px 0 14px 14px; color:var(--granite); font-variant-numeric:tabular-nums;">3 calls &middot; 0 commits &middot; <b style="color:var(--laurel);">0</b></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-family:var(--sans); font-size:15px; line-height:1.64; color:var(--granite); margin:22px 0 0; max-width:72ch;">
+            &ldquo;Impossible&rdquo; is where non-committal wins hardest: to be sure a goal cannot be reached, the
+            baseline has to probe the whole space and pass through every wrong state on the way; the agent-native
+            run sweeps it in the shadow and never touches the real model. The same preview &rarr; approve &rarr;
+            commit loop has also run end-to-end against a real HTTP backend, where the preview shows the exact
+            resulting totals and only the approved action fires a real write.
+          </p>
+        </section>
+
+        {/* isn't this just */}
+        <section style="margin:52px 0;">
+          <div style={eyebrow}>&ldquo;Isn&rsquo;t this just&hellip;?&rdquo;</div>
+          <h2 style={h2s}>Non-committal what-if isn&rsquo;t new. This combination is.</h2>
+          <p style="font-family:var(--sans); font-size:16px; line-height:1.62; color:var(--granite); margin:0 0 24px; max-width:66ch;">
+            Speculative execution is a well-worn idea. What no one has put in one place is{" "}
+            <b style="color:var(--ink);">exact, zero side-effects, on a live reactive UI graph, as a first-class
+            agent tool</b>. Each neighbour gives up one of those.
           </p>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:3px; overflow:hidden;">
-            <DiffCell what="Optimistic UI / snapshots" gap="commit, then roll back - the side effects already fired." />
-            <DiffCell what="Agent sandboxes / computer-use" gap="really execute, just in an isolated copy - effects fire there, and it&rsquo;s a whole environment." />
-            <DiffCell what="LangGraph time-travel / fork" gap="re-executes nodes - &lsquo;LLM calls, API requests fire again&rsquo; (their docs)." />
-            <DiffCell what="Tool approval (human-in-the-loop)" gap="shows the proposed call, not the exact resulting state." />
-            <DiffCell what="Learned agent world-models" gap="approximate - they guess the outcome and drift." />
-            <DiffCell what="Datomic with · spreadsheets · PRAXA" gap="real non-committal what-if - but on a DB value, a cell grid, or an analyst&rsquo;s view; not a live UI an agent queries." />
+            <DiffCell what="React / any virtual DOM" gap="No standing dependency graph to shadow: to see a change it re-renders and diffs, and rendering isn't guaranteed side-effect-free." />
+            <DiffCell what="SolidJS (same engine class)" gap="The reactivity is the same idea. The agent surface - subscribe, explain, speculate - has no Solid analog." />
+            <DiffCell what="WebMCP / computer-use / Playwright" gap="Every agent-to-UI path here is call-an-action or scrape-a-snapshot; to learn what an action does you run it. None expose the live graph." />
+            <DiffCell what="Optimistic UI / MST snapshots" gap="Commit then roll back (or deep-copy) for UX latency, driven by the app. speculate pre-computes without committing, for the agent, with a values-only shadow and free rollback." />
+            <DiffCell what="LangGraph time-travel / fork" gap="Re-executes nodes - 'LLM calls, API requests fire again' (their docs)." />
+            <DiffCell what="Learned agent world-models" gap="Guess the next state and drift. speculate re-runs the app's own pure memos, so the prediction is bit-identical to committing." />
+            <DiffCell what="Redux DevTools / MobX trace" gap="Causal tracing exists - for humans. Exposing the causal chain to an agent is unclaimed." />
+            <DiffCell what="Datomic · spreadsheets · PRAXA" gap="Real non-committal what-if, but on a DB value, a cell grid, or an analyst's view; not a live UI graph an agent queries." />
           </div>
-          <p style="font-family:var(--mono); font-size:13px; line-height:1.6; color:var(--ink); margin:20px 0 0;">
-            pimas is the one that is <span style="color:var(--laurel);">all four at once</span>.
-          </p>
         </section>
 
         {/* fit */}
         <section style="margin:52px 0;">
-          <div style="font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 8px;">Sharpest fit</div>
-          <h2 style="font-family:var(--serif); font-weight:500; font-size:32px; line-height:1.1; letter-spacing:-.02em; margin:0 0 24px; max-width:24ch;">Agents that plan over state where a wrong commit costs something.</h2>
-          <ul style="list-style:none; padding:0; margin:0; display:grid; gap:14px;">
-            <FitItem title="Agentic workflows & ops" body="preview the exact resulting state, then approve → commit, instead of mutating live systems to see what an action does." />
-            <FitItem title="Robotics & physical orchestration" body="&lsquo;simulate before you act&rsquo; as a safety property when the committed action moves something real and irreversible." />
-            <FitItem title="Quantitative models" body="pricing, project economics, risk - the model is already pure, so exact what-if is free and what-if is the whole job." />
-            <FitItem title="Tooling for AI agents" body="give any agent a non-committal preview of a tool's effect before it fires, as a first-class capability." />
+          <div style={eyebrow}>Where it fits</div>
+          <h2 style={h2s}>Sharpest where a wrong commit costs something, and the logic is pure.</h2>
+          <ul style="list-style:none; padding:0; margin:0 0 26px; display:grid; gap:14px;">
+            <FitItem title="Quantitative models (the sharpest fit)" body="pricing, project economics, risk, physical models. The math is already pure, so exact what-if is free and what-if is the whole job. Proven on a self-replicating lunar-factory model (von-neumann) and an OECD-style composite indicator (sector-engines)." />
+            <FitItem title="Agentic ops & workflows" body="preview the exact resulting state, approve, then commit - instead of mutating live systems to find out what an action does. Run end-to-end against a real HTTP backend." />
+            <FitItem title="Robotics & physical orchestration" body="'simulate before you act' as a safety property, when the committed action moves something real and irreversible." />
+            <FitItem title="Tooling for AI agents" body="give any agent a non-committal preview of a tool's effect before it fires, projected onto WebMCP as simulate_* tools it calls like any other." />
           </ul>
+          <div style="border-left:2px solid var(--falu); padding:4px 0 4px 16px;">
+            <p style="font-family:var(--sans); font-size:15px; line-height:1.64; color:var(--granite); margin:0; max-width:70ch;">
+              <b style="color:var(--ink);">One honest limitation.</b> <C>speculate</C> is exact only if the
+              derivations are pure - assumed, not enforced. That is exactly why the sharpest fit is pure,
+              derived-heavy models: there, purity is free rather than a property you have to police.
+            </p>
+          </div>
         </section>
 
-        {/* cta */}
-        <section style="margin:52px 0 72px; background:var(--ink); border-radius:4px; padding:30px 32px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:18px;">
-          <div style="font-family:var(--sans); font-size:16.5px; line-height:1.5; color:var(--ground); max-width:46ch;">
-            It&rsquo;s real code and a reproducible benchmark, not a deck.
-            <span style="color:var(--tile);"> Building agents that touch live state? Let&rsquo;s go deep.</span>
-          </div>
-          <a href="https://github.com/noahhyden/pimas" target="_blank" rel="noopener" style="font-family:var(--mono); font-size:13px; letter-spacing:.03em; background:var(--laurel); color:var(--ground); padding:13px 22px; border-radius:2px; white-space:nowrap;">
-            Read the code &rarr;
+        {/* code */}
+        <section style="margin:52px 0 72px; border-top:1px solid var(--line); padding-top:28px; display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:14px;">
+          <p style="font-family:var(--sans); font-size:16px; line-height:1.6; color:var(--granite); margin:0; max-width:52ch;">
+            The code, the decisions log, and the benchmark harness are on GitHub. It is published to npm as{" "}
+            <C>pimas-ui</C>.
+          </p>
+          <a href="https://github.com/noahhyden/pimas" target="_blank" rel="noopener" style="font-family:var(--mono); font-size:13px; letter-spacing:.03em; color:var(--falu); border-bottom:1px solid var(--falu); padding-bottom:2px; white-space:nowrap;">
+            github.com/noahhyden/pimas &rarr;
           </a>
         </section>
 

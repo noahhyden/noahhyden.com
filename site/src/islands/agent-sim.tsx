@@ -1,7 +1,7 @@
 /**
  * agent-sim - the live demo for /pimas/. A small country-ranking model runs in a
  * real pimas reactive graph in YOUR browser, wired to a real `createAgentBridge`.
- * Three ways to drive it toward a goal ("get Poland to #1"):
+ * Three ways to drive it toward a goal ("get France into the top 2"):
  *
  *   • pimas    - scripted: one `speculateSweep` in a SHADOW; live ranking frozen;
  *     one commit. 0 wrong live states.
@@ -20,16 +20,16 @@ import { createAgentBridge } from "pimas-ui/agent";
 import type { Child } from "pimas-ui/dom";
 import { runLiveAgent, type LiveTool } from "./live-agent.js";
 
-interface Country { name: string; capacity: number; transparency: number; competition: number; }
+interface Country { name: string; innovation: number; governance: number; sustainability: number; }
 const DATA: Country[] = [
-  { name: "Sweden", capacity: 90, transparency: 82, competition: 42 },
-  { name: "Germany", capacity: 76, transparency: 70, competition: 60 },
-  { name: "Spain", capacity: 62, transparency: 66, competition: 72 },
-  { name: "Poland", capacity: 44, transparency: 52, competition: 96 },
+  { name: "Sweden", innovation: 88, governance: 84, sustainability: 40 },
+  { name: "Germany", innovation: 80, governance: 78, sustainability: 48 },
+  { name: "Spain", innovation: 64, governance: 60, sustainability: 66 },
+  { name: "France", innovation: 52, governance: 50, sustainability: 95 },
 ];
-const GOAL_UNIT = "Poland";
-const PILLARS = ["capacity", "transparency", "competition"] as const;
-const GRID = [2, 4, 8]; // upweight-only: only competition@{2,4,8} make Poland #1
+const GOAL_UNIT = "France";
+const PILLARS = ["innovation", "governance", "sustainability"] as const;
+const GRID = [2, 4, 8]; // upweight-only: only sustainability@{2,4,8} lift France into the top 2
 
 // Production relay endpoint (Cloudflare Worker). Empty until deployed - Live AI
 // falls back gracefully. Override locally with window.__PIMAS_PROXY__.
@@ -38,8 +38,8 @@ const PROXY_URL = "";
 const mono = "font-family:var(--mono);";
 
 export default function AgentSim(): Child {
-  const [w, setW] = createStore<Record<string, number>>({ capacity: 1, transparency: 1, competition: 1 });
-  const score = (c: Country) => c.capacity * w.capacity + c.transparency * w.transparency + c.competition * w.competition;
+  const [w, setW] = createStore<Record<string, number>>({ innovation: 1, governance: 1, sustainability: 1 });
+  const score = (c: Country) => c.innovation * w.innovation + c.governance * w.governance + c.sustainability * w.sustainability;
   const ranking = createMemo(() => {
     const rows = DATA.map((c) => ({ name: c.name, score: score(c) }));
     rows.sort((a, b) => b.score - a.score);
@@ -48,6 +48,10 @@ export default function AgentSim(): Child {
   const maxScore = createMemo(() => Math.max(...ranking().map((r) => r.score)));
   const order = () => ranking().map((x) => x.name);
   const topUnit = () => ranking()[0]!.name;
+  // Goal is "France into the top 2" - met when the goal unit's rank is <= 2.
+  const goalRank = () => ranking().find((r) => r.name === GOAL_UNIT)?.rank ?? 99;
+  const goalMet = () => goalRank() <= 2;
+  const orderMeetsGoal = (units: string[]) => units.slice(0, 2).includes(GOAL_UNIT);
 
   const bridge = createAgentBridge((r) => {
     r.expose("ranking", () => ranking().map((x) => ({ unit: x.name, rank: x.rank })));
@@ -66,13 +70,13 @@ export default function AgentSim(): Child {
   const [log, setLog] = createSignal<Array<{ t: string; tone: "plain" | "ok" | "wrong" }>>([]);
   const [shadow, setShadow] = createSignal<{ label: string; ok: boolean } | null>(null);
   const [flash, setFlash] = createSignal<"none" | "wrong" | "ok">("none");
-  const [goal, setGoal] = createSignal("Get Poland to #1 by changing a single pillar weight.");
+  const [goal, setGoal] = createSignal("Get France into the top 2 by changing a single pillar weight.");
   const [note, setNote] = createSignal("");
 
   const reduced = () => typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
   const wait = (ms: number) => new Promise<void>((res) => setTimeout(res, reduced() ? 0 : ms));
   const addLog = (t: string, tone: "plain" | "ok" | "wrong" = "plain") => setLog([...log(), { t, tone }].slice(-8));
-  const reset = () => { setW("capacity", 1); setW("transparency", 1); setW("competition", 1); };
+  const reset = () => { setW("innovation", 1); setW("governance", 1); setW("sustainability", 1); };
   const candidates = () => PILLARS.flatMap((p) => GRID.map((g) => [p, g] as [string, number]));
   function clear() {
     reset(); setLog([]); setShadow(null); setFlash("none"); setNote("");
@@ -89,8 +93,9 @@ export default function AgentSim(): Child {
     let answer: [string, number] | null = null;
     for (let i = 0; i < cands.length; i++) {
       const [p, g] = cands[i]!;
-      const ok = res[i]!.ranking[0]!.unit === GOAL_UNIT;
-      setShadow({ label: `${p} = ${g}  →  ${res[i]!.ranking[0]!.unit} #1`, ok });
+      const fr = res[i]!.ranking.find((r) => r.unit === GOAL_UNIT)!;
+      const ok = fr.rank <= 2;
+      setShadow({ label: `${p} = ${g}  →  France #${fr.rank}`, ok });
       if (ok && !answer) answer = [p, g];
       await wait(300);
     }
@@ -108,8 +113,8 @@ export default function AgentSim(): Child {
     let answer: [string, number] | null = null;
     for (const [p, g] of candidates()) {
       bridge.call("setWeight", p, g); setCalls(calls() + 2); setWrites(writes() + 1);
-      const ok = topUnit() === GOAL_UNIT;
-      addLog(`setWeight(${p}, ${g})  →  ${topUnit()} #1`, ok ? "ok" : "wrong");
+      const ok = goalMet();
+      addLog(`setWeight(${p}, ${g})  →  France #${goalRank()}`, ok ? "ok" : "wrong");
       if (ok) { answer = [p, g]; setFlash("ok"); await wait(420); break; }
       setWrong(wrong() + 1); setFlash("wrong");
       await wait(340);
@@ -136,7 +141,8 @@ export default function AgentSim(): Child {
         const weights = (a.weights as number[]) ?? [];
         const res = bridge.speculateSweep("setWeight", weights.map((g) => [a.pillar, g])) as Array<{ ranking: Array<{ unit: string }> }>;
         setSims(sims() + weights.length);
-        setShadow({ label: `swept ${a.pillar} (${weights.length}) - live untouched`, ok: false });
+        const anyOk = res.some((pt) => orderMeetsGoal(pt.ranking.map((r) => r.unit)));
+        setShadow({ label: `swept ${a.pillar} (${weights.length}) - live untouched`, ok: anyOk });
         return { points: weights.map((g, i) => ({ weight: g, ranking: res[i]!.ranking.map((r) => r.unit) })) };
       },
     },
@@ -144,15 +150,16 @@ export default function AgentSim(): Child {
       decl: {
         name: "simulate_config",
         description: "PREDICT the ranking for a set of pillar weights, WITHOUT committing. Nothing changes.",
-        parameters: { type: "object", properties: { capacity: { type: "number" }, transparency: { type: "number" }, competition: { type: "number" } } },
+        parameters: { type: "object", properties: { innovation: { type: "number" }, governance: { type: "number" }, sustainability: { type: "number" } } },
       },
       run: (a) => {
         setCalls(calls() + 1);
         const steps: Array<[string, ...unknown[]]> = [];
         for (const p of PILLARS) if (a[p] != null) steps.push(["setWeight", p, a[p]]);
-        const s = bridge.speculatePlan(steps) as { ranking: Array<{ unit: string }> };
+        const s = bridge.speculatePlan(steps) as { ranking: Array<{ unit: string; rank: number }> };
         setSims(sims() + 1);
-        setShadow({ label: `config → ${s.ranking[0]!.unit} #1 - live untouched`, ok: s.ranking[0]!.unit === GOAL_UNIT });
+        const fr = s.ranking.find((r) => r.unit === GOAL_UNIT);
+        setShadow({ label: `config → France #${fr?.rank ?? "-"} - live untouched`, ok: !!fr && fr.rank <= 2 });
         return { ranking: s.ranking.map((r) => r.unit) };
       },
     },
@@ -165,7 +172,7 @@ export default function AgentSim(): Child {
       run: (a) => {
         setCalls(calls() + 1); setWrites(writes() + 1);
         bridge.call("setWeight", a.pillar, a.weight);
-        setFlash(topUnit() === GOAL_UNIT ? "ok" : "wrong");
+        setFlash(goalMet() ? "ok" : "wrong");
         return { ranking: order() };
       },
     },
@@ -181,8 +188,8 @@ export default function AgentSim(): Child {
 
   function liveSystem(g: string): string {
     return (
-      "You control a country-ranking model through tools. Countries: Sweden, Germany, Spain, Poland. " +
-      "Each has hidden scores in three pillars - capacity, transparency, competition. The composite is a " +
+      "You control an OECD-style composite-indicator model through tools. Countries: Sweden, Germany, Spain, France. " +
+      "Each has hidden sub-scores in three pillars - innovation, governance, sustainability. The composite is a " +
       "weighted sum of the pillars; every weight starts at 1; the ranking is by composite, highest first.\n\n" +
       "Weights can be any positive number - try a wide range like 0.5, 2, 4, 8, 16, not tiny nudges. " +
       "Prefer simulate_sweep to test several weights of ONE pillar in a single call. Explore with the " +
@@ -215,7 +222,7 @@ export default function AgentSim(): Child {
       });
       setTokens(r.tokens);
       setShadow(null);
-      if (r.answer) { if (!note()) setNote(String(r.answer.note ?? "")); setFlash(topUnit() === GOAL_UNIT ? "ok" : "none"); setDone(true); }
+      if (r.answer) { if (!note()) setNote(String(r.answer.note ?? "")); setFlash(goalMet() ? "ok" : "none"); setDone(true); }
       else { addLog("stopped without submitting", "wrong"); }
     } catch (e) {
       setNote("Live AI is resting (the relay hit its rate limit or is offline). Try the scripted agents above - they always run.");
@@ -269,7 +276,7 @@ export default function AgentSim(): Child {
       <p style="font-family:var(--sans); font-size:14px; line-height:1.55; color:var(--granite); margin:0 0 16px; max-width:62ch;">
         {() => mode() === "live"
           ? "A real language model drives the same tools. Its what-ifs run in a shadow; watch whether it keeps the live model clean."
-          : "Goal: get Poland to #1 by re-weighting one pillar. Same task, two agents. Watch the live model on the left."}
+          : "Goal: get France into the top 2 by re-weighting one pillar. Same task, two agents. Watch the live model on the left."}
       </p>
 
       {/* goal input (live only) */}
