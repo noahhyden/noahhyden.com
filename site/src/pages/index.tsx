@@ -13,7 +13,7 @@ export const meta: PageMeta = {
   path: "/",
   title: "Noah Hyden",
   description:
-    "Noah Hyden, aerospace engineer. Airframes, software, and an early-stage company I'm not ready to name yet.",
+    "Noah Hyden - aerospace engineer in Stockholm. Airframes, software, and pimas: a reactive UI engine an AI agent can simulate against before it acts.",
 };
 
 function HeroRosette() {
@@ -99,7 +99,7 @@ export default function Home() {
         <div style="position:relative; max-width:1080px; margin:0 auto;">
           <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 22px;">Aerospace engineer</div>
           <h1 style="font-family:var(--serif); font-weight:500; font-size:clamp(40px,11vw,76px); line-height:1.0; letter-spacing:-.025em; color:var(--ink); margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></h1>
-          <p style="font-family:var(--sans); font-size:19px; line-height:1.6; color:var(--ink); margin:0 0 36px; max-width:56ch;">I trained as an aerospace engineer. I work on airframes and software, and I&rsquo;m building an early-stage company I&rsquo;m not ready to talk about yet.</p>
+          <p style="font-family:var(--sans); font-size:19px; line-height:1.6; color:var(--ink); margin:0 0 36px; max-width:56ch;">I trained as an aerospace engineer. I work on airframes and software.</p>
           <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
             <a href="#about" className="btn" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:var(--laurel); color:var(--ground); white-space:nowrap;">More about me <ArrowIcon /></a>
             <a href="/projects/" style="display:inline-flex; align-items:center; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:transparent; color:var(--ink); border:1px solid var(--granite); white-space:nowrap;">Projects</a>
@@ -121,9 +121,9 @@ export default function Home() {
           <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">My family is from <span style="font-style:italic;">Madeira</span> and <span style="font-style:italic;">Sweden</span>. The colours and tilework on this site come from there: the basalt and laurel green of Madeira, and one Swedish red.</p>
 
           <h3 style="font-family:var(--serif); font-weight:600; font-size:25px; letter-spacing:-.012em; margin:44px 0 16px;">What I&rsquo;m doing now</h3>
-          <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">I&rsquo;m building an early-stage company I&rsquo;m not ready to talk about yet. It&rsquo;s technical and it&rsquo;s early. When there&rsquo;s something to show, it&rsquo;ll turn up under <a href="/projects/" className="ln" style="color:var(--falu); border-bottom:1px solid var(--falu);">Projects</a> first.</p>
+          <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">I&rsquo;m building an early-stage company in procurement intelligence. It&rsquo;s early; when there&rsquo;s something to show, it&rsquo;ll turn up under <a href="/projects/" className="ln" style="color:var(--falu); border-bottom:1px solid var(--falu);">Projects</a> first.</p>
 
-          <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">Otherwise I keep some things public on GitHub and write occasionally. LinkedIn is the fastest way to reach me.</p>
+          <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">Otherwise I keep some things public on GitHub. LinkedIn is the fastest way to reach me.</p>
 
           <div style="display:flex; flex-wrap:wrap; gap:14px; margin-top:36px;">
             <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" className="btn" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:var(--falu); color:var(--ground);"><LinkedInIcon size={17} />Connect on LinkedIn</a>
@@ -138,10 +138,9 @@ export default function Home() {
           <div style="padding:22px 24px 24px;">
             <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:0 0 16px;">At a glance</div>
             <dl style="margin:0; font-size:14px;">
-              <Fact k="field" v="Aerospace eng." />
-              <Fact k="now" v="Stealth" accent="var(--falu)" />
-              <Fact k="roots" v="Madeira &middot; Sweden" />
-              <Fact k="writes" v="Sometimes" last />
+              <Fact k="degree" v="B.Sc. Aerospace Eng." />
+              <Fact k="location" v="Stockholm, SE" />
+              <Fact k="roots" v="Madeira &middot; Sweden" last />
             </dl>
             <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:22px 0 12px;">Find me</div>
             <div style="display:flex; flex-direction:column; gap:9px;">

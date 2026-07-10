@@ -25,7 +25,7 @@ export function Footer() {
             Noah Hyden<span style="color:var(--falu);">.</span>
           </div>
           <p style="font-family:var(--sans); font-size:14px; line-height:1.55; color:var(--granite); margin:0; max-width:42ch;">
-            Aerospace engineer. Building quietly. Happy to talk shop - reach me on LinkedIn.
+            Aerospace engineer in Stockholm. Happy to talk shop - reach me on LinkedIn.
           </p>
         </div>
         <div style="display:flex; gap:14px;">

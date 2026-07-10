@@ -25,7 +25,6 @@ const ROUTES = [
   { url: "/", page: "index" },
   { url: "/projects/", page: "projects" },
   { url: "/papers/", page: "papers" },
-  // { url: "/writing/", page: "writing" },  // hidden for now - nothing to show yet
   { url: "/design-language/", page: "design-language" },
   { url: "/pimas/", page: "pimas" },
 ];

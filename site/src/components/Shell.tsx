@@ -8,7 +8,7 @@ import { AzulejoDefs } from "./Azulejo.js";
 import { Nav } from "./Nav.js";
 import { Footer } from "./Footer.js";
 
-type Section = "about" | "projects" | "papers" | "writing" | null;
+type Section = "about" | "pimas" | "projects" | "papers" | null;
 
 export function Shell(props: { active?: Section; children?: Child }) {
   return (

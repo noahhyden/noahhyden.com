@@ -110,6 +110,11 @@ export default function Pimas() {
         {/* live demo island */}
         <section style="margin:44px 0 8px;">
           <div style={eyebrow}>A live demo, running in your browser</div>
+          <p style="font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--granite); margin:0 0 18px; max-width:72ch;">
+            Drive the model or watch an agent, then look at the dependency graph below it: the nodes are this
+            model&rsquo;s own signals and memos, and one lights only when its compute function actually re-ran -
+            fine-grained recomputation you can watch, counted for real.
+          </p>
           <Island slug="agent-sim" component={AgentSim} client="visible" />
         </section>
 

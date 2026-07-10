@@ -21,7 +21,7 @@
  * The speculation is always real pimas (store copy-on-write shadow). Pure module
  * (no import side effects) so SSR bakes the baseline as static HTML; claim adopts.
  */
-import { createSignal, createMemo } from "pimas-ui";
+import { createSignal, createMemo, createEffect, untrack, isSpeculating } from "pimas-ui";
 import { createStore } from "pimas-ui/store";
 import { createAgentBridge } from "pimas-ui/agent";
 import type { CauseRecord } from "pimas-ui/agent";
@@ -42,6 +42,9 @@ const GRID = [2, 4, 8]; // upweight-only: only sustainability@{2,4,8} lift Franc
 // Production relay endpoint (Cloudflare Worker). Empty until deployed - Live AI
 // falls back gracefully. Override locally with window.__PIMAS_PROXY__.
 const PROXY_URL = "";
+// The Live-AI mode dead-ends without the relay, so its button only renders when
+// PROXY_URL is set. Flip PROXY_URL to a real endpoint and the button returns.
+const LIVE_ENABLED = PROXY_URL !== "";
 
 const mono = "font-family:var(--mono);";
 
@@ -50,17 +53,38 @@ interface ExposedRow { unit: string; rank: number; score: number; }
 
 export default function AgentSim(): Child {
   const [w, setW] = createStore<Record<string, number>>({ innovation: 1, governance: 1, sustainability: 1 });
-  const score = (c: Country) => c.innovation * w.innovation + c.governance * w.governance + c.sustainability * w.sustainability;
-  const ranking = createMemo(() => {
-    const rows = DATA.map((c) => ({ name: c.name, score: score(c) }));
+
+  // ── recompute ledgers (plain, NON-reactive): each time a memo's compute fn
+  // actually runs we bump a counter here. isSpeculating() splits real committed
+  // runs (rc) from shadow runs inside a speculate (sc). This is the REAL signal
+  // the dependency-graph viz lights from - no faked highlights, no invented
+  // numbers. Mutating plain objects inside a memo body is safe: nothing reads
+  // them reactively, so there is no write-during-compute cycle. ──
+  type NodeId = "scores" | "ranking" | "maxScore" | "leader" | "franceRank";
+  const NODE_IDS: NodeId[] = ["scores", "ranking", "maxScore", "leader", "franceRank"];
+  const zero = (): Record<NodeId, number> => ({ scores: 0, ranking: 0, maxScore: 0, leader: 0, franceRank: 0 });
+  const rc = zero(); // committed recomputes
+  const sc = zero(); // shadow (speculative) recomputes
+  const instrument = <T,>(id: NodeId, fn: () => T): (() => T) =>
+    createMemo(() => { const v = fn(); if (isSpeculating()) sc[id]++; else rc[id]++; return v; });
+
+  // The model as a real reactive graph: three weight signals -> `scores` ->
+  // `ranking` -> the three exposed outputs (leader, franceRank) plus maxScore.
+  const scores = instrument("scores", () =>
+    DATA.map((c) => ({ name: c.name, score: c.innovation * w.innovation + c.governance * w.governance + c.sustainability * w.sustainability })));
+  const ranking = instrument("ranking", () => {
+    const rows = scores().map((r) => ({ ...r }));
     rows.sort((a, b) => b.score - a.score);
     return rows.map((r, i) => ({ ...r, rank: i + 1 }));
   });
-  const maxScore = createMemo(() => Math.max(...ranking().map((r) => r.score)));
+  const maxScore = instrument("maxScore", () => Math.max(...ranking().map((r) => r.score)));
+  const leaderMemo = instrument("leader", () => ranking()[0]!.name);
+  const franceRankMemo = instrument("franceRank", () => ranking().find((r) => r.name === GOAL_UNIT)?.rank ?? 99);
+
   const order = () => ranking().map((x) => x.name);
-  const topUnit = () => ranking()[0]!.name;
+  const topUnit = () => leaderMemo();
   // Goal is "France into the top 2" - met when the goal unit's rank is <= 2.
-  const goalRank = () => ranking().find((r) => r.name === GOAL_UNIT)?.rank ?? 99;
+  const goalRank = () => franceRankMemo();
   const goalMet = () => goalRank() <= 2;
   const orderMeetsGoal = (units: string[]) => units.slice(0, 2).includes(GOAL_UNIT);
 
@@ -143,6 +167,53 @@ export default function AgentSim(): Child {
   const predMax = createMemo(() => Math.max(...predicted().map((r) => r.score)));
   const predGoalRank = () => predicted().find((r) => r.unit === GOAL_UNIT)?.rank ?? 99;
   const dirty = () => draftWeight() !== w[draftPillar()];
+
+  // ── graph-viz state: which nodes recomputed on the last COMMIT (hot / hotW)
+  // and which the current SPECULATE touched in a shadow (specHot), read off the
+  // real ledgers above by two effects. An effect (not the memo body) does the
+  // reactive writes, so the reactive semantics of the model are untouched. ──
+  const [counts, setCounts] = createSignal<Record<NodeId, number>>({ ...rc });
+  const [hot, setHot] = createSignal<Record<NodeId, boolean>>({} as Record<NodeId, boolean>);
+  const [hotW, setHotW] = createSignal<Record<string, boolean>>({});
+  const [specHot, setSpecHot] = createSignal<Record<NodeId, boolean>>({} as Record<NodeId, boolean>);
+  let prevRC = { ...rc };
+  let prevW: Record<string, number> = { innovation: w.innovation, governance: w.governance, sustainability: w.sustainability };
+  let firstCommitPass = true;
+  // Reading every memo here pulls any dirty one (running its fn -> bumping rc),
+  // then we diff the ledger against the previous snapshot: a node is "hot" iff
+  // its compute fn genuinely ran this round. Inputs are hot iff their value
+  // actually changed. The very first pass (mount/SSR) seeds, it does not flash.
+  createEffect(() => {
+    const cw: Record<string, number> = { innovation: w.innovation, governance: w.governance, sustainability: w.sustainability };
+    void scores(); void ranking(); void maxScore(); void leaderMemo(); void franceRankMemo();
+    untrack(() => {
+      const nh = {} as Record<NodeId, boolean>;
+      for (const id of NODE_IDS) nh[id] = rc[id] > prevRC[id];
+      const nw: Record<string, boolean> = {};
+      for (const p of PILLARS) nw[p] = cw[p] !== prevW[p];
+      prevRC = { ...rc };
+      prevW = cw;
+      setCounts({ ...rc });
+      if (firstCommitPass) firstCommitPass = false;
+      else { setHot(nh); setHotW(nw); }
+    });
+  });
+
+  // The same diff for speculation: reading `predicted()` runs speculatePlan in a
+  // shadow, bumping sc for whatever the exposed contract recomputes there. Only
+  // active in you-drive mode; the leaf `maxScore` is not exposed, so it stays
+  // dark under speculate - that is real, not hidden.
+  let prevSC = { ...sc };
+  createEffect(() => {
+    if (mode() !== "you") { setSpecHot({} as Record<NodeId, boolean>); prevSC = { ...sc }; return; }
+    void predicted(); void predMax();
+    untrack(() => {
+      const sh = {} as Record<NodeId, boolean>;
+      for (const id of NODE_IDS) sh[id] = sc[id] > prevSC[id];
+      prevSC = { ...sc };
+      setSpecHot(sh);
+    });
+  });
 
   function fmtExplain(c: CauseRecord): string {
     if (c.action === "plan") {
@@ -363,11 +434,86 @@ export default function AgentSim(): Child {
     </button>
   );
 
+  // ── dependency-graph viz: nodes = the signals/memos of THIS model, edges =
+  // derives-from, laid out in tiers left-to-right. The topology is hand-authored
+  // to match this one model (it is NOT auto-discovered); the highlighting is not
+  // - it comes straight from the real recompute ledgers above. ──
+  const NW = 132, NH = 38;
+  interface GNode { id: string; label: string; x: number; y: number; input: boolean; }
+  const G_NODES: GNode[] = [
+    { id: "innovation", label: "innovation", x: 4, y: 8, input: true },
+    { id: "governance", label: "governance", x: 4, y: 66, input: true },
+    { id: "sustainability", label: "sustainability", x: 4, y: 124, input: true },
+    { id: "scores", label: "scores", x: 198, y: 66, input: false },
+    { id: "ranking", label: "ranking", x: 392, y: 66, input: false },
+    { id: "maxScore", label: "maxScore", x: 586, y: 8, input: false },
+    { id: "leader", label: "leader", x: 586, y: 66, input: false },
+    { id: "franceRank", label: "franceRank", x: 586, y: 124, input: false },
+  ];
+  const G_EDGES: Array<[string, string]> = [
+    ["innovation", "scores"], ["governance", "scores"], ["sustainability", "scores"],
+    ["scores", "ranking"], ["ranking", "maxScore"], ["ranking", "leader"], ["ranking", "franceRank"],
+  ];
+  const gById = (id: string) => G_NODES.find((n) => n.id === id)!;
+  // In you-drive mode with a pending (uncommitted) draft, the speculate overlay is live.
+  const specMode = () => mode() === "you" && dirty();
+  type Lit = "spec" | "comm" | "none";
+  const nodeLit = (n: GNode): Lit => {
+    if (n.input) {
+      if (specMode() && draftPillar() === n.id) return "spec";
+      return hotW()[n.id] ? "comm" : "none";
+    }
+    if (specMode() && specHot()[n.id as NodeId]) return "spec";
+    return hot()[n.id as NodeId] ? "comm" : "none";
+  };
+  const edgeLit = (from: string, to: string): Lit => {
+    if (to === "scores") {
+      if (specMode() && draftPillar() === from) return "spec";
+      return hotW()[from] ? "comm" : "none";
+    }
+    if (specMode() && specHot()[to as NodeId]) return "spec";
+    return hot()[to as NodeId] ? "comm" : "none";
+  };
+  const litStroke = (s: Lit) => (s === "spec" ? "var(--ocean)" : s === "comm" ? "var(--laurel)" : "var(--line)");
+
+  const graph = () => (
+    <div style="margin-top:20px;">
+      <div style={`${mono} font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:8px;`}>dependency graph &middot; this model</div>
+      <div style="overflow-x:auto; border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:14px;">
+        <svg viewBox="0 0 726 170" style="display:block; width:100%; min-width:660px; height:auto;" role="img" aria-label="dependency graph of the demo model">
+          {G_EDGES.map(([from, to]) => {
+            const a = gById(from), b = gById(to);
+            const x1 = a.x + NW, y1 = a.y + NH / 2, x2 = b.x, y2 = b.y + NH / 2;
+            return (
+              <line x1={String(x1)} y1={String(y1)} x2={String(x2)} y2={String(y2)}
+                style={() => { const s = edgeLit(from, to); return `stroke:${litStroke(s)}; stroke-width:${s === "none" ? "1" : "1.8"}px; ${s === "spec" ? "stroke-dasharray:5 3;" : ""}`; }} />
+            );
+          })}
+          {G_NODES.map((n) => (
+            <g>
+              <rect x={String(n.x)} y={String(n.y)} width={String(NW)} height={String(NH)} rx="3"
+                style={() => { const s = nodeLit(n); return `fill:var(--ground); stroke:${litStroke(s)}; stroke-width:${s === "none" ? "1" : "2"}px; ${s === "spec" ? "stroke-dasharray:5 3;" : ""}`; }} />
+              <text x={String(n.x + NW / 2)} y={String(n.y + 16)} text-anchor="middle"
+                style={() => { const s = nodeLit(n); return `font-family:var(--mono); font-size:11px; fill:${s === "spec" ? "var(--ocean)" : s === "comm" ? "var(--laurel)" : "var(--ink)"};`; }}>{n.label}</text>
+              <text x={String(n.x + NW / 2)} y={String(n.y + 30)} text-anchor="middle"
+                style={() => { const s = nodeLit(n); return `font-family:var(--mono); font-size:9px; fill:${s === "none" ? "var(--granite)" : s === "spec" ? "var(--ocean)" : "var(--laurel)"};`; }}>
+                {n.input ? (() => `w ${w[n.id].toFixed(1)}`) : (() => `runs ${counts()[n.id as NodeId]}`)}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </div>
+      <p style="font-family:var(--sans); font-size:12px; line-height:1.55; color:var(--granite); margin:8px 0 0; max-width:70ch;">
+        This is the dependency graph for this one demo model, hand-wired to match it (not auto-discovered); a node lights <span style="color:var(--laurel);">laurel</span> only when its compute function genuinely re-ran on the last commit (the count is that node&rsquo;s real recompute total), and lights <span style="color:var(--ocean);">ocean, dashed</span> when the current speculate touched it in a shadow with nothing committed.
+      </p>
+    </div>
+  );
+
   return (
     <div style="border:1px solid var(--line); border-radius:4px; background:var(--ground); padding:22px;">
       <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:6px;">
         <div style={`${mono} font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite);`}>Live demo - drive it, or watch an agent</div>
-        <div style="display:flex; gap:7px; flex-wrap:wrap;">{modeBtn("you", "you drive")}{modeBtn("pimas", "pimas agent")}{modeBtn("ordinary", "ordinary agent")}{modeBtn("live", "live AI")}</div>
+        <div style="display:flex; gap:7px; flex-wrap:wrap;">{modeBtn("you", "you drive")}{modeBtn("pimas", "pimas agent")}{modeBtn("ordinary", "ordinary agent")}{LIVE_ENABLED ? modeBtn("live", "live AI") : null}</div>
       </div>
       <p style="font-family:var(--sans); font-size:14px; line-height:1.55; color:var(--granite); margin:0 0 16px; max-width:64ch;">
         {() => mode() === "you"
@@ -473,6 +619,9 @@ export default function AgentSim(): Child {
           </div>
         )}
       </div>
+
+      {/* the model's dependency graph, lit from real recompute counts */}
+      {graph()}
 
       {/* note / result line */}
       {() => note() ? <p style="font-family:var(--sans); font-size:13px; line-height:1.55; color:var(--ink); margin:14px 0 0; padding:11px 13px; background:var(--surface); border-radius:3px; border-left:2px solid var(--ocean);">{note()}</p> : null}

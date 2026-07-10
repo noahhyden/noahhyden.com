@@ -4,7 +4,7 @@
  */
 import { GitHubIcon, LinkedInIcon } from "./icons.js";
 
-type Section = "about" | "pimas" | "projects" | "papers" | "writing" | null;
+type Section = "about" | "pimas" | "projects" | "papers" | null;
 
 function link(href: string, label: string, active: boolean) {
   const color = active ? "var(--ink)" : "var(--granite)";
