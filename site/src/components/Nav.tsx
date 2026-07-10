@@ -4,7 +4,7 @@
  */
 import { GitHubIcon, LinkedInIcon } from "./icons.js";
 
-type Section = "about" | "projects" | "writing" | null;
+type Section = "about" | "projects" | "papers" | "writing" | null;
 
 function link(href: string, label: string, active: boolean) {
   const color = active ? "var(--ink)" : "var(--granite)";
@@ -26,6 +26,7 @@ export function Nav(props: { active?: Section } = {}) {
       <div style="display:flex; align-items:center; gap:30px;">
         {link("/#about", "About", false)}
         {link("/projects/", "Projects", active === "projects")}
+        {link("/papers/", "Papers", active === "papers")}
         <span style="width:1px; height:18px; background:var(--line);" />
         <a href="https://github.com/noahhyden" target="_blank" rel="noopener" aria-label="GitHub" style="display:inline-flex; color:var(--granite);">
           <GitHubIcon />
