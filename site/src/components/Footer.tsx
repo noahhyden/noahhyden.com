@@ -45,15 +45,15 @@ export function Footer() {
             Built with <a href="/pimas/" style="color:var(--laurel); border-bottom:1px solid var(--laurel);">pimas</a> - no React, no virtual DOM, no in-browser transpiler
           </div>
           <div style="display:flex; flex-wrap:wrap; gap:6px 18px;">
-            <span><strong style="color:var(--ink); font-weight:500;">{TOKENS.jsBytes} KB</strong> JavaScript shipped</span>
+            <span><strong style="color:var(--ink); font-weight:500;">{TOKENS.jsBytes} KB</strong> framework JS</span>
+            <span><strong style="color:var(--ink); font-weight:500;">{TOKENS.themeJs} KB</strong> inline theme toggle</span>
             <span><strong style="color:var(--ink); font-weight:500;">{TOKENS.htmlKb} KB</strong> HTML (gzip)</span>
             <span><strong style="color:var(--ink); font-weight:500;">0</strong> external requests</span>
             <span>prerendered in <strong style="color:var(--ink); font-weight:500;">{TOKENS.renderMs} ms</strong></span>
-            <span>0 wasted re-renders <span style="color:var(--granite);">(fine-grained - no diff pass)</span></span>
             <span>pimas <strong style="color:var(--ink); font-weight:500;">v{TOKENS.pimasVer}</strong></span>
           </div>
           <div style="margin-top:6px; color:var(--granite);">
-            Everything is inlined, static, and same-origin - HTML, CSS, SVG, and self-hosted fonts (Spectral &amp; IBM Plex, OFL). No CDN, no third party, nothing to phone home.
+            Everything is inlined, static, and same-origin - HTML, CSS, SVG, and self-hosted fonts (Spectral &amp; IBM Plex, OFL). No CDN, no third party, nothing to phone home. The only script is that one inline theme toggle; there is no JavaScript bundle on a static page.
           </div>
         </div>
       </div>

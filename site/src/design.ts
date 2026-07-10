@@ -14,7 +14,18 @@ export const TOKENS = {
   htmlKb: "__BUILD_HTML_KB__",
   pimasVer: "__BUILD_PIMAS_VER__",
   builtAt: "__BUILD_AT__",
+  themeJs: "__BUILD_THEME_JS__",
 } as const;
+
+// Dark palette, single-sourced. Applied both by system preference (unless the
+// visitor explicitly chose light) and by an explicit data-theme="dark" that the
+// inline theme toggle sets - so a manual choice always wins over the OS setting.
+// Accents are lifted from the raw Madeira values, which are too dark to read on
+// a dark ground.
+const DARK_TOKENS = `
+    --ground:#12140f; --surface:#1b1e18; --line:#2c302a; --ink:#e5e4db;
+    --laurel:#7fae8f; --ocean:#7fa0b6; --falu:#d67a72; --granite:#9a988c; --tile:#8595a0;
+    --nav-bg:rgba(18,20,15,.86); --footer-tint:rgba(229,228,219,.03);`;
 
 const BASE_CSS = `
 :root{
@@ -39,12 +50,9 @@ a{color:inherit;text-decoration:none;}
 a:focus-visible,button:focus-visible{outline:2px solid var(--laurel); outline-offset:2px; border-radius:2px;}
 @media(max-width:720px){.about-grid{grid-template-columns:1fr !important; gap:40px !important;} .about-grid aside{position:static !important; top:auto !important;}}
 @media (prefers-color-scheme:dark){
-  :root{
-    --ground:#12140f; --surface:#1b1e18; --line:#2c302a; --ink:#e5e4db;
-    --laurel:#7fae8f; --ocean:#7fa0b6; --falu:#d67a72; --granite:#9a988c; --tile:#8595a0;
-    --nav-bg:rgba(18,20,15,.86); --footer-tint:rgba(229,228,219,.03);
-  }
+  :root:not([data-theme="light"]){${DARK_TOKENS}}
 }
+:root[data-theme="dark"]{${DARK_TOKENS}}
 `.trim();
 
 const SITE = "https://noahhyden.com";

@@ -163,6 +163,21 @@ async function bundlePage(page) {
   return import(pathToFileURL(join(CACHE, `${page}.mjs`)).href + `?t=${process.hrtime.bigint()}`);
 }
 
+// The ONLY script an otherwise-static page ships: a tiny inline theme toggle.
+// It runs in <head> so it sets data-theme from a saved choice BEFORE first paint
+// (no flash of the wrong theme), then wires the nav button on DOMContentLoaded.
+// An explicit choice overrides the OS prefers-color-scheme default; with no
+// choice saved, the OS setting wins. Inlined, so it ships inside the HTML (it is
+// counted in the HTML gzip figure), and there is still no separate JS bundle.
+const THEME_JS =
+  `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}` +
+  `document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme-toggle');if(!b)return;` +
+  `b.addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme');` +
+  `if(!c)c=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';var n=c==='dark'?'light':'dark';` +
+  `document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}})})})();`;
+const THEME_SCRIPT = `<script>${THEME_JS}</script>`;
+const THEME_KB = (Buffer.byteLength(THEME_JS) / 1024).toFixed(1);
+
 function sitemap(routes) {
   const urls = routes
     .map((r) => `  <url><loc>https://noahhyden.com${r.url}</loc></url>`)
@@ -212,7 +227,7 @@ async function main() {
       : "";
 
     // charset MUST be first (within the first 1024 bytes) - before the font block.
-    let html = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n${FONT_HEAD}\n${headHTML(meta)}\n</head>\n<body>\n${body}${bootScript}\n</body>\n</html>\n`;
+    let html = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n${THEME_SCRIPT}\n${FONT_HEAD}\n${headHTML(meta)}\n</head>\n<body>\n${body}${bootScript}\n</body>\n</html>\n`;
 
     // Inject the honest build metrics. JS shipped is 0 for the static shell, or
     // the island bundle's real gzipped weight on pages that mount one.
@@ -223,6 +238,7 @@ async function main() {
       .replaceAll(TOKENS.jsBytes, jsKb)
       .replaceAll(TOKENS.htmlKb, htmlKb)
       .replaceAll(TOKENS.pimasVer, pimasVersion)
+      .replaceAll(TOKENS.themeJs, THEME_KB)
       .replaceAll(TOKENS.builtAt, new Date().toISOString().slice(0, 10));
 
     const file = join(OUT, route.url === "/" ? "index.html" : `${route.url}index.html`);

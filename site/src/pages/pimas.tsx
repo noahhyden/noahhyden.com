@@ -93,7 +93,8 @@ export default function Pimas() {
           pimas is a fine-grained reactive UI framework I built from scratch: no React, no virtual DOM, no
           in-browser transpiler, zero runtime dependencies. It is the same engine class as SolidJS. Values are
           observable, and only the exact DOM nodes that read a changed value update; there is no diffing. This
-          site is built on it and ships 0&nbsp;KB of JavaScript.
+          site is built on it and its static pages ship no framework JavaScript at all (just one
+          sub-1&nbsp;KB inline theme toggle).
         </p>
         <p style="font-family:var(--sans); font-size:17px; line-height:1.64; color:var(--granite); margin:18px 0 0; max-width:66ch;">
           The framework is also the lab for the part worth owning. A from-scratch fine-grained engine keeps a
