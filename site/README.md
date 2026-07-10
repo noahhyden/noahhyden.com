@@ -31,8 +31,9 @@ The footer reports defensible, build-measured numbers as an anti-bloat incentive
 JavaScript actually shipped (0), gzipped HTML weight, prerender time, pimas
 version, and the structural "no diff pass → no wasted re-renders" property.
 Browser RAM is deliberately *not* reported (theater). External requests are
-reported honestly - fonts are the one remaining external origin (Google Fonts),
-slated for self-hosting to reach a true zero.
+reported honestly - and there are none: fonts are self-hosted from our own
+origin (vendored from Fontsource, woff2 only), so the site makes zero external
+requests at runtime.
 
 ## Layout
 

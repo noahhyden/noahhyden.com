@@ -19,7 +19,7 @@ export const meta: PageMeta = {
 function HeroRosette() {
   // Home-only variant: the rosette net faded out with a radial mask, top-right.
   return (
-    <svg width="420" height="420" viewBox="0 0 420 420" style="position:absolute; top:-40px; right:-80px; opacity:.5; pointer-events:none;" aria-hidden="true">
+    <svg width="420" height="420" viewBox="0 0 420 420" style="position:absolute; top:-40px; right:-80px; opacity:.6; pointer-events:none;" aria-hidden="true">
       <defs>
         <radialGradient id="fade" cx="70%" cy="30%" r="75%">
           <stop offset="0%" stop-color="#fff" stop-opacity="1" />
@@ -36,7 +36,7 @@ function HeroRosette() {
 
 function Card(props: { href: string; n: string; accent: string; title: string; body: string; cta: string; icon: Child }) {
   return (
-    <a href={props.href} style="display:block; border:1px solid var(--line); border-radius:3px; background:var(--ground); padding:30px 28px 28px;">
+    <a href={props.href} className="lift" style="display:block; border:1px solid var(--line); border-radius:3px; background:var(--ground); padding:30px 28px 28px;">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;">
         <span style={`display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:2px; background:var(--surface); color:${props.accent};`}>
           {props.icon}
@@ -59,6 +59,27 @@ const GridIcon = () => (
   </svg>
 );
 
+const GraphIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="6" cy="6" r="2.5" />
+    <circle cx="18" cy="7" r="2.5" />
+    <circle cx="11" cy="18" r="2.5" />
+    <path d="M8.1 7.4 L9 16" />
+    <path d="M8.3 6.2 L15.6 6.7" />
+    <path d="M16.4 9 L12.6 15.9" />
+  </svg>
+);
+
+const PageIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 3 h8 l4 4 v14 H6 Z" />
+    <path d="M14 3 v4 h4" />
+    <path d="M9 12 h6" />
+    <path d="M9 15.5 h6" />
+    <path d="M9 8.5 h2.5" />
+  </svg>
+);
+
 function Fact(props: { k: string; v: string; accent?: string; last?: boolean }) {
   const border = props.last ? "border-top:1px solid var(--line); border-bottom:1px solid var(--line);" : "border-top:1px solid var(--line);";
   return (
@@ -73,24 +94,24 @@ export default function Home() {
   return (
     <Shell active={null}>
       {/* HERO */}
-      <header style="position:relative; overflow:hidden; padding:96px 40px 88px; border-bottom:1px solid var(--line);">
+      <header style="position:relative; overflow:hidden; padding:96px clamp(20px,5vw,40px) 88px; border-bottom:1px solid var(--line);">
         <HeroRosette />
         <div style="position:relative; max-width:1080px; margin:0 auto;">
           <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 22px;">Aerospace engineer</div>
-          <h1 style="font-family:var(--serif); font-weight:500; font-size:76px; line-height:1.0; letter-spacing:-.025em; color:var(--ink); margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></h1>
+          <h1 style="font-family:var(--serif); font-weight:500; font-size:clamp(40px,11vw,76px); line-height:1.0; letter-spacing:-.025em; color:var(--ink); margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></h1>
           <p style="font-family:var(--sans); font-size:19px; line-height:1.6; color:var(--ink); margin:0 0 36px; max-width:56ch;">I trained as an aerospace engineer. I work on airframes and software, and I&rsquo;m building an early-stage company I&rsquo;m not ready to talk about yet.</p>
           <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
-            <a href="#about" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:var(--laurel); color:var(--ground); white-space:nowrap;">More about me <ArrowIcon /></a>
+            <a href="#about" className="btn" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:var(--laurel); color:var(--ground); white-space:nowrap;">More about me <ArrowIcon /></a>
             <a href="/projects/" style="display:inline-flex; align-items:center; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:transparent; color:var(--ink); border:1px solid var(--granite); white-space:nowrap;">Projects</a>
           </div>
         </div>
       </header>
 
       {/* ABOUT - merged from the old /about/ page */}
-      <section id="about" style="max-width:1080px; margin:0 auto; padding:80px 40px 8px; display:grid; grid-template-columns:1fr 296px; gap:64px; align-items:start;">
+      <section id="about" className="about-grid" style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px) 8px; display:grid; grid-template-columns:1fr 296px; gap:64px; align-items:start;">
         <article>
           <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 18px;">About</div>
-          <h2 style="font-family:var(--serif); font-weight:500; font-size:44px; line-height:1.06; letter-spacing:-.022em; margin:0 0 26px; max-width:18ch;">I trained as an aerospace engineer.</h2>
+          <h2 style="font-family:var(--serif); font-weight:500; font-size:clamp(32px,7vw,44px); line-height:1.06; letter-spacing:-.022em; margin:0 0 26px; max-width:18ch;">I trained as an aerospace engineer.</h2>
 
           <p style="font-family:var(--sans); font-size:20px; line-height:1.6; color:var(--ink); margin:0 0 28px;">I started on airframes and stress paths. What stuck wasn&rsquo;t aircraft in particular; it was the way of working: figure out what carries the load, make everything else defer to it, and don&rsquo;t add a part you can&rsquo;t justify.</p>
 
@@ -100,12 +121,12 @@ export default function Home() {
           <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">My family is from <span style="font-style:italic;">Madeira</span> and <span style="font-style:italic;">Sweden</span>. The colours and tilework on this site come from there: the basalt and laurel green of Madeira, and one Swedish red.</p>
 
           <h3 style="font-family:var(--serif); font-weight:600; font-size:25px; letter-spacing:-.012em; margin:44px 0 16px;">What I&rsquo;m doing now</h3>
-          <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">I&rsquo;m building an early-stage company I&rsquo;m not ready to talk about yet. It&rsquo;s technical and it&rsquo;s early. When there&rsquo;s something to show, it&rsquo;ll turn up under <a href="/projects/" style="color:var(--falu); border-bottom:1px solid var(--falu);">Projects</a> first.</p>
+          <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">I&rsquo;m building an early-stage company I&rsquo;m not ready to talk about yet. It&rsquo;s technical and it&rsquo;s early. When there&rsquo;s something to show, it&rsquo;ll turn up under <a href="/projects/" className="ln" style="color:var(--falu); border-bottom:1px solid var(--falu);">Projects</a> first.</p>
 
           <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">Otherwise I keep some things public on GitHub and write occasionally. LinkedIn is the fastest way to reach me.</p>
 
           <div style="display:flex; flex-wrap:wrap; gap:14px; margin-top:36px;">
-            <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:var(--falu); color:var(--ground);"><LinkedInIcon size={17} />Connect on LinkedIn</a>
+            <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" className="btn" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:var(--falu); color:var(--ground);"><LinkedInIcon size={17} />Connect on LinkedIn</a>
             <a href="/projects/" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:transparent; color:var(--ink); border:1px solid var(--granite);">Projects <ArrowIcon /></a>
           </div>
         </article>
@@ -131,14 +152,17 @@ export default function Home() {
         </aside>
       </section>
 
-      {/* WHERE TO NEXT + PRINCIPLE */}
-      <main style="max-width:1080px; margin:0 auto; padding:64px 40px 0;">
-        <div style="max-width:520px;">
-          <Card href="/projects/" n="01" accent="var(--ocean)" title="Projects" cta="browse"
+      {/* WHERE TO NEXT */}
+      <main style="max-width:1080px; margin:0 auto; padding:64px clamp(20px,5vw,40px) 96px;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 22px;">Where to next</div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px;">
+          <Card href="/pimas/" n="01" accent="var(--laurel)" title="pimas" cta="read the writeup"
+            body="A reactive UI engine I built from scratch. Its dependency graph lets an AI agent simulate a change before committing it. This site runs on it." icon={<GraphIcon />} />
+          <Card href="/projects/" n="02" accent="var(--ocean)" title="Projects" cta="browse"
             body="Open-source work, pulled from GitHub: tools and experiments." icon={<GridIcon />} />
+          <Card href="/papers/" n="03" accent="var(--falu)" title="Papers" cta="read"
+            body="Working papers from the von-neumann project, each typeset and published as a PDF." icon={<PageIcon />} />
         </div>
-
-        <div style="margin:64px 0;"></div>
       </main>
     </Shell>
   );

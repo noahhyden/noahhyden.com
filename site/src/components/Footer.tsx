@@ -39,7 +39,7 @@ export function Footer() {
       </div>
 
       {/* ── honest pimas metrics band ───────────────────────────────────── */}
-      <div style="position:relative; border-top:1px solid var(--line); background:rgba(23,30,26,.025);">
+      <div style="position:relative; border-top:1px solid var(--line); background:var(--footer-tint);">
         <div style="max-width:1080px; margin:0 auto; padding:22px 40px; font-family:var(--mono); font-size:11px; line-height:1.7; color:var(--granite);">
           <div style="letter-spacing:.14em; text-transform:uppercase; color:var(--laurel); margin-bottom:8px;">
             Built with <a href="/pimas/" style="color:var(--laurel); border-bottom:1px solid var(--laurel);">pimas</a> - no React, no virtual DOM, no in-browser transpiler
@@ -61,7 +61,10 @@ export function Footer() {
       <div style="position:relative; border-top:1px solid var(--line);">
         <div style="max-width:1080px; margin:0 auto; padding:16px 40px; display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; color:var(--granite);">
           <span>&copy; 2026 Noah Hyden</span>
-          <a href="/pimas/" style="color:var(--granite);">how this site was built</a>
+          <span style="display:flex; gap:18px;">
+            <a href="/design-language/" class="ln" style="color:var(--granite);">Design language &rarr;</a>
+            <a href="/pimas/" style="color:var(--granite);">how this site was built</a>
+          </span>
         </div>
       </div>
     </footer>

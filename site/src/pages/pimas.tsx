@@ -313,7 +313,14 @@ export default function Pimas() {
           <div style={eyebrow}>Where it fits</div>
           <h2 style={h2s}>Sharpest where a wrong commit costs something, and the logic is pure.</h2>
           <ul style="list-style:none; padding:0; margin:0 0 26px; display:grid; gap:14px;">
-            <FitItem title="Quantitative models (the sharpest fit)" body="pricing, project economics, risk, physical models. The math is already pure, so exact what-if is free and what-if is the whole job. Proven on a self-replicating lunar-factory model (von-neumann) and an OECD-style composite indicator (sector-engines)." />
+            <FitItem title="Quantitative models (the sharpest fit)" body={
+              <>
+                pricing, project economics, risk, physical models. The math is already pure, so exact what-if is
+                free and what-if is the whole job. Proven on a self-replicating lunar-factory model (
+                <a href="https://github.com/noahhyden/von-neumann" target="_blank" rel="noopener" style="color:var(--ocean); border-bottom:1px solid var(--ocean); white-space:nowrap;">von-neumann</a>
+                , written up in the <a href="/papers/" style="color:var(--ocean); border-bottom:1px solid var(--ocean);">papers</a>) and an OECD-style composite indicator (sector-engines).
+              </>
+            } />
             <FitItem title="Agentic ops & workflows" body="preview the exact resulting state, approve, then commit - instead of mutating live systems to find out what an action does. Run end-to-end against a real HTTP backend." />
             <FitItem title="Robotics & physical orchestration" body="'simulate before you act' as a safety property, when the committed action moves something real and irreversible." />
             <FitItem title="Tooling for AI agents" body="give any agent a non-committal preview of a tool's effect before it fires, projected onto WebMCP as simulate_* tools it calls like any other." />

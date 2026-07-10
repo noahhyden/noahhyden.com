@@ -4,13 +4,14 @@
  */
 import { GitHubIcon, LinkedInIcon } from "./icons.js";
 
-type Section = "about" | "projects" | "papers" | "writing" | null;
+type Section = "about" | "pimas" | "projects" | "papers" | "writing" | null;
 
 function link(href: string, label: string, active: boolean) {
   const color = active ? "var(--ink)" : "var(--granite)";
   const weight = active ? "font-weight:500;" : "";
+  const underline = active ? "border-bottom:2px solid var(--falu); padding-bottom:2px;" : "";
   return (
-    <a href={href} style={`font-family:var(--sans); font-size:14px; color:${color}; ${weight}`}>
+    <a href={href} class="ln" style={`font-family:var(--sans); font-size:14px; color:${color}; ${weight}${underline}`}>
       {label}
     </a>
   );
@@ -19,12 +20,13 @@ function link(href: string, label: string, active: boolean) {
 export function Nav(props: { active?: Section } = {}) {
   const active = props.active ?? null;
   return (
-    <nav style="position:sticky; top:0; z-index:10; display:flex; align-items:center; justify-content:space-between; padding:18px 40px; background:rgba(229,228,219,.86); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);">
+    <nav style="position:sticky; top:0; z-index:10; display:flex; align-items:center; justify-content:space-between; padding:18px 40px; background:var(--nav-bg); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);">
       <a href="/" style="font-family:var(--serif); font-weight:600; font-size:19px; letter-spacing:-.01em; color:var(--ink); white-space:nowrap;">
         Noah Hyden<span style="color:var(--falu);">.</span>
       </a>
       <div style="display:flex; align-items:center; gap:30px;">
         {link("/#about", "About", false)}
+        {link("/pimas/", "pimas", active === "pimas")}
         {link("/projects/", "Projects", active === "projects")}
         {link("/papers/", "Papers", active === "papers")}
         <span style="width:1px; height:18px; background:var(--line);" />

@@ -92,7 +92,7 @@ export async function getData(): Promise<{ repos: Repo[]; error: boolean }> {
 function RepoCard(props: { r: Repo }) {
   const r = props.r;
   return (
-    <a href={r.url} target="_blank" rel="noopener" style="display:flex; flex-direction:column; border:1px solid var(--line); border-radius:3px; background:var(--ground); padding:24px 24px 20px; min-height:168px;">
+    <a className="lift" href={r.url} target="_blank" rel="noopener" style="display:flex; flex-direction:column; border:1px solid var(--line); border-radius:3px; background:var(--ground); padding:24px 24px 20px; min-height:168px;">
       <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px;">
         <div style="display:flex; align-items:center; gap:10px; min-width:0;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ocean)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none;">
@@ -127,7 +127,7 @@ function RepoCard(props: { r: Repo }) {
 function RepoRow(props: { r: Repo }) {
   const r = props.r;
   return (
-    <a href={r.url} target="_blank" rel="noopener" style="display:flex; align-items:flex-start; justify-content:space-between; gap:28px; border-top:1px solid var(--line); padding:22px 4px 22px; flex-wrap:wrap;">
+    <a className="lift" href={r.url} target="_blank" rel="noopener" style="display:flex; align-items:flex-start; justify-content:space-between; gap:28px; border-top:1px solid var(--line); padding:22px 4px 22px; flex-wrap:wrap;">
       <div style="flex:1 1 320px; min-width:0;">
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ocean)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none;">
@@ -161,7 +161,7 @@ function ErrorBlock() {
       <div>
         <div style="font-family:var(--serif); font-weight:600; font-size:19px; margin-bottom:6px;">Couldn&rsquo;t reach GitHub at build time</div>
         <p style="font-family:var(--sans); font-size:15px; line-height:1.55; color:var(--granite); margin:0 0 14px;">The repository list usually bakes in at build. If it&rsquo;s being stubborn, the projects are all on my profile directly.</p>
-        <a href="https://github.com/noahhyden?tab=repositories" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--sans); font-weight:500; font-size:14px; padding:10px 18px; border-radius:2px; background:var(--falu); color:var(--ground);">Open my repositories &rarr;</a>
+        <a className="btn" href="https://github.com/noahhyden?tab=repositories" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--sans); font-weight:500; font-size:14px; padding:10px 18px; border-radius:2px; background:var(--falu); color:var(--ground);">Open my repositories &rarr;</a>
       </div>
     </div>
   );
@@ -190,18 +190,18 @@ export default function Projects(props: { repos?: Repo[]; error?: boolean }) {
 
   return (
     <Shell active="projects">
-      <header style="max-width:1080px; margin:0 auto; padding:80px 40px 40px;">
+      <header style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px) 40px;">
         <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <div>
             <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 22px;">Projects - baked in from GitHub</div>
-            <h1 style="font-family:var(--serif); font-weight:500; font-size:52px; line-height:1.05; letter-spacing:-.022em; margin:0; max-width:18ch;">What I&rsquo;ve been building.</h1>
+            <h1 style="font-family:var(--serif); font-weight:500; font-size:clamp(34px,7vw,52px); line-height:1.05; letter-spacing:-.022em; margin:0; max-width:18ch;">What I&rsquo;ve been building.</h1>
           </div>
           <a href="https://github.com/noahhyden" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px; color:var(--falu); border-bottom:1px solid var(--falu); padding-bottom:2px;">@noahhyden on GitHub &rarr;</a>
         </div>
         <p style="font-family:var(--sans); font-size:17px; line-height:1.6; color:var(--granite); margin:24px 0 0; max-width:58ch;">Pulled from my public repositories at build time. A few pinned highlights first, then everything else, most recently pushed first. Some are finished, some are experiments.</p>
       </header>
 
-      <main style="max-width:1080px; margin:0 auto; padding:8px 40px 24px;">
+      <main style="max-width:1080px; margin:0 auto; padding:8px clamp(20px,5vw,40px) 24px;">
         {error ? <ErrorBlock /> : null}
 
         {hasRepos && pinned.length > 0 ? (

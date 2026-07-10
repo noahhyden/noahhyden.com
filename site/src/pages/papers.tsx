@@ -124,7 +124,7 @@ function Authors(props: { authors: Author[] }) {
     parts.push(<span>{label}</span>);
     if (a.orcid) {
       parts.push(
-        <a href={`https://orcid.org/${a.orcid}`} target="_blank" rel="noopener" style="color:var(--ocean); border-bottom:1px solid var(--line); margin-left:6px;">
+        <a className="ln" href={`https://orcid.org/${a.orcid}`} target="_blank" rel="noopener" style="color:var(--ocean); border-bottom:1px solid var(--line); margin-left:6px;">
           ORCID {a.orcid}
         </a>,
       );
@@ -172,10 +172,10 @@ function PaperArticle(props: { p: Paper }) {
       ) : null}
 
       <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
-        <a href={p.pdf} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:14px; padding:11px 20px; border-radius:2px; background:var(--laurel); color:var(--ground);">
+        <a className="btn" href={p.pdf} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:14px; padding:11px 20px; border-radius:2px; background:var(--laurel); color:var(--ground);">
           Read the typeset PDF <ArrowIcon size={15} />
         </a>
-        <a href={p.source} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px; color:var(--ocean); border-bottom:1px solid var(--line); padding-bottom:2px;">
+        <a className="ln" href={p.source} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px; color:var(--ocean); border-bottom:1px solid var(--line); padding-bottom:2px;">
           Source on GitHub
         </a>
       </div>
@@ -190,7 +190,7 @@ function ErrorBlock() {
       <div>
         <div style="font-family:var(--serif); font-weight:600; font-size:19px; margin-bottom:6px;">Couldn&rsquo;t reach the von-neumann repo at build time</div>
         <p style="font-family:var(--sans); font-size:15px; line-height:1.55; color:var(--granite); margin:0 0 14px;">The paper list usually bakes in at build. The papers themselves are always live on the project site.</p>
-        <a href={`${VN_SITE}/#/papers`} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--sans); font-weight:500; font-size:14px; padding:10px 18px; border-radius:2px; background:var(--falu); color:var(--ground);">Open the papers on vn.noahhyden.com &rarr;</a>
+        <a className="btn" href={`${VN_SITE}/#/papers`} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--sans); font-weight:500; font-size:14px; padding:10px 18px; border-radius:2px; background:var(--falu); color:var(--ground);">Open the papers on vn.noahhyden.com &rarr;</a>
       </div>
     </div>
   );
@@ -205,20 +205,20 @@ export default function Papers(props: { papers?: Paper[]; error?: boolean }) {
 
   return (
     <Shell active="papers">
-      <header style="max-width:1080px; margin:0 auto; padding:80px 40px 40px;">
+      <header style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px) 40px;">
         <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px;">
           <div>
             <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 22px;">Papers - from the von-neumann project</div>
-            <h1 style="font-family:var(--serif); font-weight:500; font-size:52px; line-height:1.05; letter-spacing:-.022em; margin:0; max-width:20ch;">Working papers.</h1>
+            <h1 style="font-family:var(--serif); font-weight:500; font-size:clamp(34px,7vw,52px); line-height:1.05; letter-spacing:-.022em; margin:0; max-width:20ch;">Working papers.</h1>
           </div>
           <a href={`${VN_SITE}`} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px; color:var(--falu); border-bottom:1px solid var(--falu); padding-bottom:2px;">vn.noahhyden.com &rarr;</a>
         </div>
         <p style="font-family:var(--sans); font-size:17px; line-height:1.6; color:var(--granite); margin:24px 0 0; max-width:64ch;">
-          Longer-form write-ups from <a href={VN_SITE} target="_blank" rel="noopener" style="color:var(--ink); border-bottom:1px solid var(--line);">the von-neumann project</a>, each developing a single result in depth. Every paper is typeset in LaTeX and its bibliography is drawn from the same source list that powers the project&rsquo;s live models, so a claim in a paper and a claim on a live surface point at the identical reference. Read straight off that repo at build time, newest first.
+          Longer-form write-ups from <a className="ln" href={VN_SITE} target="_blank" rel="noopener" style="color:var(--ink); border-bottom:1px solid var(--line);">the von-neumann project</a>, each developing a single result in depth. Every paper is typeset in LaTeX and its bibliography is drawn from the same source list that powers the project&rsquo;s live models, so a claim in a paper and a claim on a live surface point at the identical reference. Read straight off that repo at build time, newest first.
         </p>
       </header>
 
-      <main style="max-width:1080px; margin:0 auto; padding:8px 40px 40px;">
+      <main style="max-width:1080px; margin:0 auto; padding:8px clamp(20px,5vw,40px) 40px;">
         {error ? <ErrorBlock /> : null}
         {hasPapers ? (
           <div>
