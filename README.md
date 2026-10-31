@@ -6,8 +6,8 @@ reactive UI framework, published to npm as `pimas-ui`) and prerendered to
 static, zero-JavaScript HTML.
 
 The source of truth is `site/src/`. `site/build.mjs` renders it to `dist/`, and
-`dist/` is promoted (copied) to the repo-root HTML files that GitHub Pages
-serves.
+GitHub Actions uploads `dist/` to GitHub Pages on every push to `main`. No build
+output is committed.
 
 ## Properties
 
@@ -62,18 +62,24 @@ site/
     islands/           interactive components shipped as lazy client bundles
 ```
 
-Build output lands in `site/dist/` (gitignored).
+Build output lands in `dist/` at the repo root (gitignored).
 
 ## Deploy
 
-The live site is served from the **repo-root** HTML files via GitHub Pages
-(served from the repo root, with `CNAME` + `.nojekyll`). To deploy, run the
-build and copy `site/dist/*` to the repo root.
+Deploys are automatic. `.github/workflows/deploy.yml` builds `site/` on every
+push to `main` and uploads `dist/` to GitHub Pages via `actions/deploy-pages`;
+the Pages source is **GitHub Actions**, not a branch. A local `npm run build` is
+a preview only - `dist/` is gitignored and nothing generated is committed. The
+same workflow can be run by hand from the Actions tab (`workflow_dispatch`).
+
+The build fetches the GitHub API for `/projects/` and `/papers/`. A failed fetch
+fails the build rather than publishing an empty page. The workflow sets
+`GH_BUILD_TOKEN` from the job's `GITHUB_TOKEN`, so the unauthenticated rate
+limit is not in play; the build reads only `GH_BUILD_TOKEN`, so a stray ambient
+token cannot break it.
 
 ## Conventions
 
 - No em-dashes and no emoji anywhere in source or copy - see `CLAUDE.md`.
 - Write plainly; do not invent biographical facts, posts, papers, or
   credentials.
-</content>
-</invoke>

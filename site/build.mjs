@@ -176,6 +176,8 @@ async function main() {
 
     // Pages may prerender data (e.g. GitHub fetch) at build time; no runtime requests.
     const data = mod.getData ? await mod.getData() : {};
+    // A page reporting `error` fetched nothing; fail the build rather than publish an empty page.
+    if (data && data.error) throw new Error(`${route.page}: build-time data fetch failed`);
 
     const t0 = performance.now();
     const body = renderToString(() => Page(data));

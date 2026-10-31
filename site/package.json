@@ -7,7 +7,6 @@
   "scripts": {
     "prebuild": "node scripts/check-comments.mjs && node scripts/check-rules.mjs",
     "build": "node build.mjs",
-    "postbuild": "rm -rf ../islands && cp -R ../dist/. ../",
     "serve": "node --watch-path=src build.mjs",
     "check:comments": "node scripts/check-comments.mjs",
     "check:rules": "node scripts/check-rules.mjs"
