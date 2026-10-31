@@ -52,6 +52,7 @@ Neither guard may pass over an empty file list.
   - [`121-graph-highlights-come-from-real-ledgers.md`](AGENTS.d/121-graph-highlights-come-from-real-ledgers.md) - Graph highlights come from real recompute ledgers
   - [`140-the-metrics-band-reports-only-defensible-numbers.md`](AGENTS.d/140-the-metrics-band-reports-only-defensible-numbers.md) - The metrics band reports only defensible numbers
   - [`141-azulejo-pattern-defined-once-per-document.md`](AGENTS.d/141-azulejo-pattern-defined-once-per-document.md) - Azulejo pattern is defined once per document
+  - [`150-upstream-copy-is-sanitized-for-typography.md`](AGENTS.d/150-upstream-copy-is-sanitized-for-typography.md) - Upstream copy is sanitized for typography
 
 ## Build & deploy
 
