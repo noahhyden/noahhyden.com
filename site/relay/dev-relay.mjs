@@ -1,11 +1,4 @@
-/**
- * LOCAL dev relay — proves the live-AI demo end to end without deploying anything.
- * Holds the Gemini key server-side; the browser demo posts {contents, tools} and
- * this forwards to Gemini generateContent, returning the JSON verbatim. Permissive
- * CORS (localhost only). The production equivalent is relay/worker.js (Cloudflare).
- *
- *   GEMINI_MODEL=gemini-2.5-flash node relay/dev-relay.mjs   # reads ~/.config/pimas-eval.key
- */
+/** Local dev relay: forwards {contents, tools} to Gemini with the key held server-side; prod is relay/worker.js. */
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 

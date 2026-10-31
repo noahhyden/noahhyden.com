@@ -1,13 +1,4 @@
-/**
- * The site's first interactive ISLAND - an accordion, built with pimas.
- *
- * This module is PURE: it only default-exports a component and imports the
- * headless core (`pimas`) + control flow (`pimas/flow`). No DOM code, no
- * side effects at import - so the SSR build imports it to bake the collapsed
- * markup (0 KB JS), and the client build bundles it to be lazy-mounted live by
- * the island boot script. The whole point: proof that fine-grained interactivity
- * works, shipped only on the page that uses it.
- */
+/** The first interactive island: a pure accordion (AGENTS.d/120-island-modules-are-pure.md). */
 import { createSignal } from "pimas-ui";
 import { For } from "pimas-ui/flow";
 import type { Child } from "pimas-ui/dom";

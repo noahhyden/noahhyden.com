@@ -1,11 +1,3 @@
-/**
- * /pimas/ - a writeup of pimas: a from-scratch fine-grained reactive UI engine
- * whose standing dependency graph an AI agent can subscribe to, get causal
- * explanations from, and simulate against before it acts. Facts here are taken
- * from the pimas repo README (the source of truth); this page explains, plainly,
- * what it is, how it works, why it works, and where it fits. Same design language
- * as the rest of the site, static HTML, zero JS except the one live-demo island.
- */
 import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";

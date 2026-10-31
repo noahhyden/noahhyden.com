@@ -1,16 +1,3 @@
-/**
- * Papers - the working papers from the von-neumann project (vn.noahhyden.com).
- * That repo is the source of truth: each paper lives under papers/<slug>/ with a
- * paper.json describing it, and CI typesets the PDF and publishes it beside the
- * live site at https://vn.noahhyden.com/papers/<slug>.pdf.
- *
- * This page mirrors that list. `getData` runs at BUILD time: it reads the paper
- * metadata straight from the von-neumann repo on GitHub, so the shipped page is
- * static HTML with the papers baked in and makes zero runtime requests. We check
- * von-neumann for updates here; von-neumann never reaches back to this site. If
- * the build-time fetch fails, we prerender the same graceful fallback the
- * projects page uses.
- */
 import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
@@ -52,9 +39,7 @@ const GH_HEADERS = {
   "User-Agent": "noahhyden.com-build",
 };
 
-/** Sanitize upstream prose to the repo's typography rules: no em-dash (U+2014),
- * and fold the LaTeX double-hyphen (`--`, used for en/em dashes in the source)
- * down to a single spaced hyphen so the abstract reads cleanly as HTML. */
+/** Sanitize upstream prose: no em-dash, fold LaTeX `--` to a spaced hyphen. */
 function clean(s: string): string {
   return String(s)
     .replace(/—/g, "-")

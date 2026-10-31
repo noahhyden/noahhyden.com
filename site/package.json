@@ -5,12 +5,15 @@
   "type": "module",
   "description": "noahhyden.com - authored in pimas, prerendered to static HTML.",
   "scripts": {
+    "prebuild": "node scripts/check-comments.mjs",
     "build": "node build.mjs",
     "postbuild": "rm -rf ../islands && cp -R ../dist/. ../",
-    "serve": "node --watch-path=src build.mjs"
+    "serve": "node --watch-path=src build.mjs",
+    "check:comments": "node scripts/check-comments.mjs",
+    "check:comments:update": "node scripts/check-comments.mjs --update"
   },
   "dependencies": {
-    "pimas-ui": "file:../../pimas"
+    "pimas-ui": "0.1.2"
   },
   "devDependencies": {
     "@fontsource/ibm-plex-mono": "^5.2.7",

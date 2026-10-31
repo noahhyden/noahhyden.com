@@ -1,13 +1,4 @@
-/**
- * A tiny browser-side LLM agent loop. The model's "brain" is remote - reached
- * through a thin relay that holds the API key (`proxyUrl`) - but its "hands" (the
- * tools) run RIGHT HERE, against the live pimas graph. The LLM only chooses
- * function calls; `LiveTool.run` executes them client-side, so the real
- * speculate/commit never leaves the browser.
- *
- * Framework-agnostic: no pimas import. The island wires its bridge into `tools`.
- * Speaks the Gemini generateContent shape (the relay forwards it verbatim).
- */
+/** Browser-side LLM agent loop, Gemini generateContent shape; tools run client-side (AGENTS.d/122-live-ai-tools-run-client-side.md). */
 export interface LiveTool {
   decl: { name: string; description: string; parameters: object };
   run: (args: Record<string, unknown>) => unknown;

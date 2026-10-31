@@ -1,19 +1,8 @@
-/**
- * Projects - the repo list. The original fetched GitHub live in the browser
- * (a runtime external request + a loading/skeleton state). Here `getData` runs
- * at BUILD time, so the shipped page is static HTML with the repos baked in and
- * makes zero runtime requests. If the build-time fetch fails, we prerender the
- * same graceful "couldn't reach GitHub" block the original showed.
- *
- * The page shows a small, curated set of pinned projects as cards up top, then
- * lists every other repo one by one below it.
- */
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
 import { ArrowIcon } from "../components/icons.js";
 
-/** Curated highlights, shown as cards above the full list, in this order. A repo
- * is pinned iff its name appears here; everything else falls into the list. */
+/** Pinned repos shown as cards above the list, in this order. */
 const PINNED = ["von-neumann", "pimas", "ataegina-cli"];
 
 export const meta: PageMeta = {
@@ -68,8 +57,7 @@ export async function getData(): Promise<{ repos: Repo[]; error: boolean }> {
     const raw = await res.json();
     const repos: Repo[] = (Array.isArray(raw) ? raw : [])
       .filter((r) => !r.fork && !r.archived)
-      // Most recently pushed first; the component pulls pinned repos out and
-      // orders them by the PINNED table, so a plain recency sort is enough here.
+      // Most recently pushed first.
       .sort((a, b) => new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime())
       .map((r) => ({
         name: r.name,
@@ -122,8 +110,7 @@ function RepoCard(props: { r: Repo }) {
   );
 }
 
-/** One repo in the full list below the pinned cards: a single full-width row,
- * name + description on the left, language/stars/updated meta on the right. */
+/** One repo in the full list: name + description left, meta right. */
 function RepoRow(props: { r: Repo }) {
   const r = props.r;
   return (
@@ -181,8 +168,7 @@ export default function Projects(props: { repos?: Repo[]; error?: boolean }) {
   const hasRepos = !error && repos.length > 0;
   const isEmpty = !error && repos.length === 0;
 
-  // Pinned repos, ordered by the PINNED table; everything else stays in the
-  // build-time recency order for the list below.
+  // Pinned repos in PINNED order; the rest keep recency order.
   const pinned = PINNED.map((name) => repos.find((r) => r.name === name)).filter(
     (r): r is Repo => r !== undefined,
   );

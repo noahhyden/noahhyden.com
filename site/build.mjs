@@ -1,12 +1,4 @@
-/**
- * The whole build: compile each page's .tsx, render it through pimas/server's
- * string backend in Node, and write one static HTML file per route. No Vite, no
- * meta-framework - for a handful of pages a plain esbuild + render loop is the
- * smallest honest pipeline (and the one we can read top to bottom).
- *
- * Output is fully static, zero JavaScript. The footer's build metrics are
- * measured here and injected into the HTML.
- */
+/** Build: esbuild each page, render via pimas/server, write one static HTML file per route. */
 import { build as esbuild } from "esbuild";
 import { gzipSync } from "node:zlib";
 import { mkdir, writeFile, rm, readFile, readdir, cp, access } from "node:fs/promises";
@@ -31,10 +23,7 @@ const ROUTES = [
 
 const pimasVersion = require("pimas-ui/package.json").version || "0.0.0";
 
-// ── Islands ───────────────────────────────────────────────────────────────
-// Interactive components shipped as their own lazy-loaded client bundles. The
-// static shell stays 0 KB JS; only pages that mount an island load any script.
-// Keep each slug in sync with the `<Island slug=...>` used in a page.
+// Islands: lazy client bundles; keep each slug in sync with the `<Island slug=...>` in a page.
 const ISLAND_BOOT = "src/islands/boot.ts";
 const ISLANDS = [
   { slug: "accordion", entry: "src/islands/accordion.tsx" },
@@ -42,11 +31,7 @@ const ISLANDS = [
   { slug: "agent-sim", entry: "src/islands/agent-sim.tsx" },
 ];
 
-// Build every island + the boot entry into one client bundle set. `splitting`
-// factors the shared pimas kernel into a single chunk - so boot and all islands
-// share ONE kernel instance in the browser (no dual-kernel hazard). Unlike the
-// SSR page build, pimas is NOT external here: the browser needs it bundled.
-// Returns the total gzipped JS an island page ships (all files in dist/islands).
+// One split bundle set so boot and islands share ONE pimas kernel; returns the gzipped JS total.
 async function buildIslands() {
   const outdir = join(OUT, "islands");
   await esbuild({
@@ -71,11 +56,7 @@ async function buildIslands() {
   return (bytes / 1024).toFixed(1); // KB gz shipped by any island page
 }
 
-// ── Self-hosted fonts ───────────────────────────────────────────────────────
-// Vendored from Fontsource (OFL), woff2 only, latin + latin-ext subsets. All
-// static instances - Spectral/Plex Mono have no variable build, and for these
-// narrow axes static is both smaller and simpler. This is what makes the site
-// truly zero-external-request: fonts are served from our own origin.
+// Self-hosted woff2 (Fontsource, OFL), latin + latin-ext: keeps the site zero-external-request.
 const FONT_SUBSETS = ["latin", "latin-ext"];
 const FONT_FACES = [
   { fam: "spectral", css: "Spectral", weight: 400, style: "normal" },
@@ -88,16 +69,12 @@ const FONT_FACES = [
   { fam: "ibm-plex-mono", css: "IBM Plex Mono", weight: 400, style: "normal" },
   { fam: "ibm-plex-mono", css: "IBM Plex Mono", weight: 500, style: "normal" },
 ];
-// Standard Google/Fontsource unicode-ranges. latin already covers the
-// typographic punctuation we use (em dash, curly quotes, ×, °, ·, en/em space);
-// latin-ext carries any accented place names and loads only when one appears.
+// Standard Fontsource unicode-ranges; latin-ext loads only when an accented glyph appears.
 const UNICODE_RANGE = {
   latin: "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD",
   "latin-ext": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF",
 };
-// Faces that paint above the fold (LCP) - preload these (and only these) so
-// they win before first paint: the Spectral 500 hero headline and the IBM Plex
-// Sans 400 body copy.
+// Preload only the above-the-fold faces: Spectral 500 headline and IBM Plex Sans 400 body.
 const FONT_PRELOAD = ["spectral-latin-500-normal.woff2", "ibm-plex-sans-latin-400-normal.woff2"];
 
 const fontFile = (f, subset) => `${f.fam}-${subset}-${f.weight}-${f.style}.woff2`;
@@ -141,9 +118,7 @@ function fontHead() {
 }
 
 async function bundlePage(page) {
-  // Bundle for Node, automatic JSX → pimas. The page imports renderToString from
-  // pimas/server (string backend) and JSX resolves to pimas/jsx-runtime; no DOM
-  // backend is pulled in, so nothing touches `document`.
+  // Bundle for Node with automatic JSX -> pimas; no DOM backend is pulled in.
   await esbuild({
     entryPoints: [resolve(ROOT, `src/pages/${page}.tsx`)],
     outfile: join(CACHE, `${page}.mjs`),
@@ -152,22 +127,14 @@ async function bundlePage(page) {
     platform: "node",
     jsx: "automatic",
     jsxImportSource: "pimas-ui",
-    // Keep pimas EXTERNAL: bundling it would inline a second copy of the engine
-    // with its own currentBackend global (the dual-kernel hazard), so the page's
-    // h() and renderToString() would touch different backends. External → both
-    // resolve to the one installed package → exactly one kernel instance.
+    // Keep pimas EXTERNAL: bundling it makes a second kernel (dual-kernel hazard).
     external: ["pimas-ui", "pimas-ui/*"],
     logLevel: "warning",
   });
   return import(pathToFileURL(join(CACHE, `${page}.mjs`)).href + `?t=${process.hrtime.bigint()}`);
 }
 
-// The ONLY script an otherwise-static page ships: a tiny inline theme toggle.
-// It runs in <head> so it sets data-theme from a saved choice BEFORE first paint
-// (no flash of the wrong theme), then wires the nav button on DOMContentLoaded.
-// An explicit choice overrides the OS prefers-color-scheme default; with no
-// choice saved, the OS setting wins. Inlined, so it ships inside the HTML (it is
-// counted in the HTML gzip figure), and there is still no separate JS bundle.
+// The only script a page ships: inline theme toggle in <head>, sets data-theme before first paint.
 const THEME_JS =
   `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}` +
   `document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('theme-toggle');if(!b)return;` +
@@ -187,8 +154,7 @@ function sitemap(routes) {
 async function main() {
   const { renderToString } = await import("pimas-ui/server");
 
-  // headHTML/TOKENS are build-only (not in the page tree), so compile design.ts
-  // on its own and import it here.
+  // headHTML/TOKENS are build-only, so compile design.ts separately and import it.
   await esbuild({
     entryPoints: [resolve(ROOT, "src/design.ts")],
     outfile: join(CACHE, "design.mjs"),
@@ -211,8 +177,7 @@ async function main() {
     const Page = mod.default;
     const meta = mod.meta;
 
-    // A page may prerender data at build time (e.g. projects fetches GitHub),
-    // so the shipped page makes zero runtime requests.
+    // Pages may prerender data (e.g. GitHub fetch) at build time; no runtime requests.
     const data = mod.getData ? await mod.getData() : {};
 
     const t0 = performance.now();
@@ -228,8 +193,7 @@ async function main() {
     // charset MUST be first (within the first 1024 bytes) - before the font block.
     let html = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n${THEME_SCRIPT}\n${FONT_HEAD}\n${headHTML(meta)}\n</head>\n<body>\n${body}${bootScript}\n</body>\n</html>\n`;
 
-    // Inject the honest build metrics. JS shipped is 0 for the static shell, or
-    // the island bundle's real gzipped weight on pages that mount one.
+    // Inject build metrics: JS shipped is 0 for the static shell, else the island bundle's gzip size.
     const jsKb = hasIsland ? islandKb : "0";
     const htmlKb = (gzipSync(Buffer.from(html)).length / 1024).toFixed(1);
     html = html

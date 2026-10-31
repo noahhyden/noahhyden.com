@@ -1,7 +1,3 @@
-/**
- * Home - band layout: hero, about (prose + "at a glance" aside), destinations.
- * The nav "About" jumps to #about.
- */
 import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";

@@ -1,14 +1,5 @@
-/**
- * The azulejo "rosette" net - the recurring tilework motif. The original pasted
- * the same <pattern> and fill rects across pages; here the pattern is defined
- * once (AzulejoDefs, rendered in the Shell) and referenced by url(#rosette).
- */
 
-/**
- * The pattern definitions. Render exactly once per document (Shell does this).
- * Two motifs from the design language: the rosette net, and the Gothic
- * quatrefoil tracery used behind the footer.
- */
+/** Pattern definitions; render once per document (see AGENTS.d/141-azulejo-pattern-defined-once-per-document.md). */
 export function AzulejoDefs() {
   return (
     <svg width="0" height="0" style="position:absolute;" aria-hidden="true">
@@ -45,10 +36,7 @@ export function AzulejoDefs() {
   );
 }
 
-/**
- * A horizontal band filled with a tile motif - used in footers and card
- * headers. `pattern` selects which motif ("rosette" or "quatrefoil").
- */
+/** A horizontal band filled with a tile motif ("rosette" or "quatrefoil"). */
 export function AzulejoBand(props: { height?: number; opacity?: number; pattern?: string }) {
   const h = props.height ?? 120;
   const o = props.opacity ?? 0.28;

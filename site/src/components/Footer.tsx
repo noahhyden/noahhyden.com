@@ -1,20 +1,7 @@
-/**
- * The site footer + the honest "powered by pimas" metrics band.
- *
- * The numbers are build-injected (see TOKENS / build.mjs) and deliberately the
- * defensible ones: JavaScript actually shipped to this page (0 - the React/Babel
- * runtime is gone), gzipped HTML weight, prerender time, pimas version. No browser
- * RAM (theater). External requests are reported honestly - fonts are the one
- * remaining external origin, and we say so rather than claim a false zero.
- *
- * Layout follows the klarum footer: brand column + link columns (Work,
- * Elsewhere), the metrics band, then a stacked mono legal line.
- *
- * This band exists on purpose: it's an anti-bloat incentive. If a number gets
- * ugly, it's meant to be uncomfortable.
- */
+/** Footer + pimas metrics band; see AGENTS.d/140-the-metrics-band-reports-only-defensible-numbers.md. */
 import { TOKENS } from "../design.js";
 import { AzulejoBand } from "./Azulejo.js";
+import { Mark } from "./icons.js";
 
 const HEAD = "font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin-bottom:14px;";
 const LIST = "list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;";
@@ -27,8 +14,9 @@ export function Footer() {
 
       <div style="position:relative; max-width:1080px; margin:0 auto; padding:56px 40px; display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:32px 40px;">
         <div style="grid-column:span 2; min-width:220px;">
-          <div style="font-family:var(--serif); font-weight:600; font-size:21px; letter-spacing:-.01em; margin-bottom:10px;">
-            Noah Hyden<span style="color:var(--falu);">.</span>
+          <div style="display:flex; align-items:center; gap:12px; font-family:var(--serif); font-weight:600; font-size:21px; letter-spacing:-.01em; margin-bottom:10px;">
+            <Mark size={38} />
+            <span>Noah Hyden<span style="color:var(--falu);">.</span></span>
           </div>
           <p style="font-family:var(--sans); font-size:14px; line-height:1.55; color:var(--granite); margin:0; max-width:42ch;">
             Aerospace engineer in Stockholm.

@@ -1,11 +1,4 @@
-/**
- * The design system, in one place. The original site repeated this colour/type
- * token block (and a base reset) inline on every page; here it's a single source
- * of truth, lifted to :root so every component can reference var(--x).
- *
- * Palette + intent are unchanged from the hand-built site: Madeira basalt + the
- * laurel/ocean/falu azulejo accents, Spectral / IBM Plex type.
- */
+/** The design system tokens and base reset, single-sourced and lifted to :root. */
 
 /** Build-time metric sentinels. `build.mjs` replaces these in the final HTML. */
 export const TOKENS = {
@@ -17,11 +10,7 @@ export const TOKENS = {
   themeJs: "__BUILD_THEME_JS__",
 } as const;
 
-// Dark palette, single-sourced. Applied both by system preference (unless the
-// visitor explicitly chose light) and by an explicit data-theme="dark" that the
-// inline theme toggle sets - so a manual choice always wins over the OS setting.
-// Accents are lifted from the raw Madeira values, which are too dark to read on
-// a dark ground.
+// Dark palette, applied by system preference and by data-theme="dark"; a manual choice wins.
 const DARK_TOKENS = `
     --ground:#12140f; --surface:#1b1e18; --line:#2c302a; --ink:#e5e4db;
     --laurel:#7fae8f; --ocean:#7fa0b6; --falu:#d67a72; --granite:#9a988c; --tile:#8595a0;
@@ -64,21 +53,15 @@ export interface PageMeta {
   description: string;
 }
 
-/**
- * The full <head> for a page. Title/description/canonical/OG from `meta`; the
- * shared reset + tokens inline (zero extra requests). Fonts are self-hosted,
- * same-origin - `build.mjs` injects the preloads + @font-face block ahead of
- * this, so there are zero external requests.
- */
+/** The full <head> for a page; build.mjs injects font preloads and @font-face ahead of it. */
 export function headHTML(meta: PageMeta): string {
   const url = SITE + meta.path;
   // Home is just the name; inner pages get the suffix.
   const title = meta.path === "/" ? meta.title : `${meta.title} - Noah Hyden`;
-  // NOTE: <meta charset> is emitted first by build.mjs, ahead of the font block,
-  // so it stays within the first 1024 bytes. Don't add it here.
+  // <meta charset> is emitted first by build.mjs to stay within the first 1024 bytes; don't add it here.
   return [
     `<meta name="viewport" content="width=device-width, initial-scale=1">`,
-    `<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%233b5b47'/%3E%3Ccircle%20cx='16'%20cy='16'%20r='5'%20fill='%23801818'/%3E%3C/svg%3E">`,
+    `<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22%3E%3Crect%20width=%22100%22%20height=%22100%22%20rx=%2216%22%20fill=%22%23e5e4db%22/%3E%3Cg%20fill=%22none%22%3E%3Ccircle%20cx=%2250%22%20cy=%2250%22%20r=%2242%22%20stroke=%22%233b5669%22%20stroke-width=%226%22/%3E%3Cg%20stroke=%22%233b5b47%22%20stroke-width=%225%22%3E%3Ccircle%20cx=%2250%22%20cy=%2231%22%20r=%2217%22/%3E%3Ccircle%20cx=%2250%22%20cy=%2269%22%20r=%2217%22/%3E%3Ccircle%20cx=%2231%22%20cy=%2250%22%20r=%2217%22/%3E%3Ccircle%20cx=%2269%22%20cy=%2250%22%20r=%2217%22/%3E%3C/g%3E%3C/g%3E%3Ccircle%20cx=%2250%22%20cy=%2250%22%20r=%227.5%22%20fill=%22%23801818%22/%3E%3C/svg%3E">`,
     `<title>${title}</title>`,
     `<meta name="description" content="${esc(meta.description)}">`,
     `<link rel="canonical" href="${url}">`,

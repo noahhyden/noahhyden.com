@@ -1,8 +1,3 @@
-/**
- * Inline SVG icons. Each takes an optional size; colour comes from `currentColor`
- * (or a wrapping style) exactly as in the original markup. Defined once instead
- * of being pasted into every nav, footer, and aside.
- */
 
 export function GitHubIcon(props: { size?: number } = {}) {
   const s = props.size ?? 19;
@@ -28,6 +23,25 @@ export function ArrowIcon(props: { size?: number } = {}) {
     <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
       <line x1="4" y1="12" x2="19" y2="12" />
       <polyline points="13,6 20,12 13,18" />
+    </svg>
+  );
+}
+
+/** The site mark: azulejo quatrefoil, heavier strokes than the artwork so it reads at 24px. */
+export function Mark(props: { size?: number } = {}) {
+  const s = props.size ?? 34;
+  return (
+    <svg width={s} height={s} viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <circle cx="50" cy="50" r="48.4" stroke="var(--ocean)" stroke-width="0.9" />
+      <circle cx="50" cy="50" r="45.6" stroke="var(--ocean)" stroke-width="2.6" />
+      <g stroke="var(--laurel)" stroke-width="2.2">
+        <circle cx="50" cy="31.2" r="17.6" />
+        <circle cx="50" cy="68.8" r="17.6" />
+        <circle cx="31.2" cy="50" r="17.6" />
+        <circle cx="68.8" cy="50" r="17.6" />
+        <path d="M50 31.2 L68.8 50 L50 68.8 L31.2 50 Z" />
+      </g>
+      <circle cx="50" cy="50" r="3.2" fill="var(--falu)" />
     </svg>
   );
 }

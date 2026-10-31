@@ -1,8 +1,3 @@
-/**
- * Layout primitives ported from the klarum-landing component architecture:
- * Band, Block, Eyebrow, titles, Card, Button, PageShell. Same structure,
- * this site's tokens only (see design.ts). Inline styles, no JS.
- */
 import type { Child } from "pimas-ui/dom";
 import { Shell } from "./Shell.js";
 

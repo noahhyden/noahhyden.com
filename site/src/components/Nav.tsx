@@ -1,11 +1,4 @@
-/**
- * The sticky top nav, shaped after the klarum navbar: a full-bleed bar holding
- * one flat row in a 1080px container - wordmark hard left, link cluster, then an
- * actions cluster (GitHub, LinkedIn, theme toggle). No dropdowns or JS menus;
- * the link cluster wraps on narrow screens instead. `active` highlights the
- * current section (ink + medium weight, vs granite for the rest).
- */
-import { GitHubIcon, LinkedInIcon } from "./icons.js";
+import { GitHubIcon, LinkedInIcon, Mark } from "./icons.js";
 
 type Section = "about" | "pimas" | "projects" | "papers" | null;
 
@@ -25,8 +18,9 @@ export function Nav(props: { active?: Section } = {}) {
   return (
     <nav style="position:sticky; top:0; z-index:10; background:var(--nav-bg); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);">
       <div style="max-width:1080px; margin:0 auto; min-height:64px; padding:8px 40px; box-sizing:border-box; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 28px;">
-        <a href="/" style="font-family:var(--serif); font-weight:600; font-size:19px; letter-spacing:-.01em; color:var(--ink); white-space:nowrap;">
-          Noah Hyden<span style="color:var(--falu);">.</span>
+        <a href="/" style="display:inline-flex; align-items:center; gap:11px; font-family:var(--serif); font-weight:600; font-size:19px; letter-spacing:-.01em; color:var(--ink); white-space:nowrap;">
+          <Mark size={34} />
+          <span>Noah Hyden<span style="color:var(--falu);">.</span></span>
         </a>
         <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px 28px;">
           {link("/#about", "About", false)}

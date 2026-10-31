@@ -1,26 +1,4 @@
-/**
- * agent-sim - the live demo for /pimas/. A small country-ranking model runs in a
- * real pimas reactive graph in YOUR browser, wired to a real `createAgentBridge`.
- * Four ways to drive it toward a goal ("get France into the top 2"):
- *
- *   • you drive - YOU are the agent: pick a pillar, drag its weight, and watch the
- *     predicted ranking update through a real `speculatePlan` (a copy-on-write
- *     shadow) while the committed model on the left provably does NOT move. Commit
- *     applies it for real via `commitPlan`; `explain()` then reports what changed.
- *   • pimas    - scripted: one `speculateSweep` in a SHADOW; live ranking frozen;
- *     one commit. 0 wrong live states.
- *   • ordinary - scripted: must COMMIT each probe to observe it; the live ranking
- *     thrashes through wrong states.
- *   • Live AI  - a REAL LLM (through a key-holding relay) drives the same tools.
- *     Its "hands" (get_ranking / simulate_* / set_weight) execute right here
- *     against the real pimas bridge; only the model call leaves the browser.
- *
- * Below the demo, the same bridge's `descriptor()` (the machine-readable contract)
- * and `subscribe()` (the live delta stream) are shown as real, unedited output.
- *
- * The speculation is always real pimas (store copy-on-write shadow). Pure module
- * (no import side effects) so SSR bakes the baseline as static HTML; claim adopts.
- */
+/** agent-sim: live /pimas/ demo, a real pimas graph and createAgentBridge; see AGENTS.d/120-island-modules-are-pure.md. */
 import { createSignal, createMemo, createEffect, untrack, isSpeculating } from "pimas-ui";
 import { createStore } from "pimas-ui/store";
 import { createAgentBridge } from "pimas-ui/agent";
@@ -39,11 +17,9 @@ const GOAL_UNIT = "France";
 const PILLARS = ["innovation", "governance", "sustainability"] as const;
 const GRID = [2, 4, 8]; // upweight-only: only sustainability@{2,4,8} lift France into the top 2
 
-// Production relay endpoint (Cloudflare Worker). Empty until deployed - Live AI
-// falls back gracefully. Override locally with window.__PIMAS_PROXY__.
+// Relay endpoint; empty until deployed, override with window.__PIMAS_PROXY__ (AGENTS.d/122-live-ai-tools-run-client-side.md).
 const PROXY_URL = "";
-// The Live-AI mode dead-ends without the relay, so its button only renders when
-// PROXY_URL is set. Flip PROXY_URL to a real endpoint and the button returns.
+// Live AI button only renders when PROXY_URL is set.
 const LIVE_ENABLED = PROXY_URL !== "";
 
 const mono = "font-family:var(--mono);";
@@ -54,12 +30,7 @@ interface ExposedRow { unit: string; rank: number; score: number; }
 export default function AgentSim(): Child {
   const [w, setW] = createStore<Record<string, number>>({ innovation: 1, governance: 1, sustainability: 1 });
 
-  // ── recompute ledgers (plain, NON-reactive): each time a memo's compute fn
-  // actually runs we bump a counter here. isSpeculating() splits real committed
-  // runs (rc) from shadow runs inside a speculate (sc). This is the REAL signal
-  // the dependency-graph viz lights from - no faked highlights, no invented
-  // numbers. Mutating plain objects inside a memo body is safe: nothing reads
-  // them reactively, so there is no write-during-compute cycle. ──
+  // Plain non-reactive recompute ledgers; see AGENTS.d/121-graph-highlights-come-from-real-ledgers.md.
   type NodeId = "scores" | "ranking" | "maxScore" | "leader" | "franceRank";
   const NODE_IDS: NodeId[] = ["scores", "ranking", "maxScore", "leader", "franceRank"];
   const zero = (): Record<NodeId, number> => ({ scores: 0, ranking: 0, maxScore: 0, leader: 0, franceRank: 0 });
@@ -68,8 +39,7 @@ export default function AgentSim(): Child {
   const instrument = <T,>(id: NodeId, fn: () => T): (() => T) =>
     createMemo(() => { const v = fn(); if (isSpeculating()) sc[id]++; else rc[id]++; return v; });
 
-  // The model as a real reactive graph: three weight signals -> `scores` ->
-  // `ranking` -> the three exposed outputs (leader, franceRank) plus maxScore.
+  // Model graph: three weight signals -> scores -> ranking -> exposed outputs.
   const scores = instrument("scores", () =>
     DATA.map((c) => ({ name: c.name, score: c.innovation * w.innovation + c.governance * w.governance + c.sustainability * w.sustainability })));
   const ranking = instrument("ranking", () => {
@@ -106,8 +76,7 @@ export default function AgentSim(): Child {
     });
   });
 
-  // The machine-readable contract, read once from the real bridge (structure is
-  // static; the live VALUES are shown by the subscribe() stream below instead).
+  // Machine-readable contract, read once from the real bridge.
   const descriptor = bridge.descriptor();
 
   type Mode = "you" | "pimas" | "ordinary" | "live";
@@ -168,10 +137,7 @@ export default function AgentSim(): Child {
   const predGoalRank = () => predicted().find((r) => r.unit === GOAL_UNIT)?.rank ?? 99;
   const dirty = () => draftWeight() !== w[draftPillar()];
 
-  // ── graph-viz state: which nodes recomputed on the last COMMIT (hot / hotW)
-  // and which the current SPECULATE touched in a shadow (specHot), read off the
-  // real ledgers above by two effects. An effect (not the memo body) does the
-  // reactive writes, so the reactive semantics of the model are untouched. ──
+  // Graph-viz state read off the real ledgers by effects (AGENTS.d/121-graph-highlights-come-from-real-ledgers.md).
   const [counts, setCounts] = createSignal<Record<NodeId, number>>({ ...rc });
   const [hot, setHot] = createSignal<Record<NodeId, boolean>>({} as Record<NodeId, boolean>);
   const [hotW, setHotW] = createSignal<Record<string, boolean>>({});
@@ -179,10 +145,7 @@ export default function AgentSim(): Child {
   let prevRC = { ...rc };
   let prevW: Record<string, number> = { innovation: w.innovation, governance: w.governance, sustainability: w.sustainability };
   let firstCommitPass = true;
-  // Reading every memo here pulls any dirty one (running its fn -> bumping rc),
-  // then we diff the ledger against the previous snapshot: a node is "hot" iff
-  // its compute fn genuinely ran this round. Inputs are hot iff their value
-  // actually changed. The very first pass (mount/SSR) seeds, it does not flash.
+  // A node is hot iff its compute fn ran this round; first pass seeds without flashing.
   createEffect(() => {
     const cw: Record<string, number> = { innovation: w.innovation, governance: w.governance, sustainability: w.sustainability };
     void scores(); void ranking(); void maxScore(); void leaderMemo(); void franceRankMemo();
@@ -199,10 +162,7 @@ export default function AgentSim(): Child {
     });
   });
 
-  // The same diff for speculation: reading `predicted()` runs speculatePlan in a
-  // shadow, bumping sc for whatever the exposed contract recomputes there. Only
-  // active in you-drive mode; the leaf `maxScore` is not exposed, so it stays
-  // dark under speculate - that is real, not hidden.
+  // Same diff for speculation; the unexposed leaf maxScore stays dark, which is real.
   let prevSC = { ...sc };
   createEffect(() => {
     if (mode() !== "you") { setSpecHot({} as Record<NodeId, boolean>); prevSC = { ...sc }; return; }
@@ -434,10 +394,7 @@ export default function AgentSim(): Child {
     </button>
   );
 
-  // ── dependency-graph viz: nodes = the signals/memos of THIS model, edges =
-  // derives-from, laid out in tiers left-to-right. The topology is hand-authored
-  // to match this one model (it is NOT auto-discovered); the highlighting is not
-  // - it comes straight from the real recompute ledgers above. ──
+  // Dependency-graph viz: topology hand-authored, highlighting from the real ledgers.
   const NW = 132, NH = 38;
   interface GNode { id: string; label: string; x: number; y: number; input: boolean; }
   const G_NODES: GNode[] = [

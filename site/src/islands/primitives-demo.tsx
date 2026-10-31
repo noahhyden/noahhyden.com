@@ -1,19 +1,4 @@
-/**
- * Two new pimas primitives, dogfooded live on the page - an island that exercises
- * `onMount` (from pimas/dom) and `<ErrorBoundary>` (from pimas/flow).
- *
- * Like the accordion, this module is PURE: it default-exports a component and
- * imports only headless pieces (pimas + pimas/flow) plus the DOM-side `onMount`
- * hook. No side effects at import, so SSR bakes the static markup (0 KB JS) and
- * the client build lazy-mounts it live.
- *
- *   • onMount + ref  - an <input> that autofocuses AFTER the nodes are inserted,
- *     proving onMount fires post-insertion (a bare effect would see a detached
- *     node and the focus would be lost).
- *   • ErrorBoundary  - a counter whose child THROWS during render once count ≥ 3.
- *     The boundary catches it and swaps to a fallback; reset() zeroes the count
- *     and rebuilds the working counter fresh.
- */
+/** Dogfoods `onMount` and `<ErrorBoundary>` as a pure island (AGENTS.d/120-island-modules-are-pure.md). */
 import { createSignal } from "pimas-ui";
 import { onMount } from "pimas-ui/dom";
 import { ErrorBoundary } from "pimas-ui/flow";
@@ -65,11 +50,7 @@ function AutofocusField(): Child {
   );
 }
 
-/**
- * The crash-test child: reads the count signal and THROWS during render (inside a
- * render thunk) once count ≥ 3 - the pattern ErrorBoundary catches. A throw in an
- * event handler would NOT be caught, which is why the increment lives outside.
- */
+/** Throws during render once count >= 3; a throw in an event handler would not be caught. */
 function CrashCounter(props: { count: () => number; inc: () => void }): Child {
   const { count, inc } = props;
   return (

@@ -1,9 +1,3 @@
-/**
- * Design language - the foundations doc (palette, type scale, azulejo tilework,
- * buttons, icons, components). A standalone showcase: it keeps its own masthead
- * and footer rather than the site Shell, and defines its own three azulejo
- * patterns. Not in the nav. Ported faithfully from the hand-built page.
- */
 import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { TOKENS } from "../design.js";
@@ -398,8 +392,7 @@ export default function DesignLanguage() {
           </div>
         </section>
 
-        {/* INTERACTIVE - the first island. Everything above is static HTML; this
-            one box is a lazy-loaded, client-rendered pimas component. */}
+        {/* INTERACTIVE - the first island; everything above is static. */}
         <section style="padding:52px 0; border-top:1px solid var(--line);">
           <div style="display:flex; align-items:baseline; justify-content:space-between; margin:0 0 8px;">
             <h2 style="font-family:var(--serif); font-weight:600; font-size:25px; letter-spacing:-.01em; margin:0; color:var(--ink);">Interactive</h2>
