@@ -111,7 +111,6 @@ export default function Home() {
           <article>
             <div style="margin:0 0 18px;"><Eyebrow>About</Eyebrow></div>
             <SectionTitle style="margin:0 0 26px;"><span id="about-title">I trained as an aerospace engineer.</span></SectionTitle>
-            <p style="font-family:var(--sans); font-size:18px; line-height:1.6; color:var(--ink); margin:0 0 14px;">My family is from <span style="font-style:italic;">Madeira</span> and <span style="font-style:italic;">Sweden</span>.</p>
             <p style="font-family:var(--sans); font-size:18px; line-height:1.6; color:var(--ink); margin:0;">I&rsquo;m building an early-stage company in procurement intelligence.</p>
           </article>
 
@@ -124,7 +123,6 @@ export default function Home() {
               <dl style="margin:0; font-size:14px;">
                 <Fact k="degree" v="B.Sc. Aerospace Eng." />
                 <Fact k="location" v="Stockholm, SE" />
-                <Fact k="roots" v="Madeira &middot; Sweden" last />
               </dl>
               <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:22px 0 12px;">Find me</div>
               <div style="display:flex; flex-direction:column; gap:9px;">
