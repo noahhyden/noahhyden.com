@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "noahhyden.com — authored in pimas, prerendered to static HTML.",
+  "description": "noahhyden.com - authored in pimas, prerendered to static HTML.",
   "scripts": {
     "build": "node build.mjs",
+    "postbuild": "rm -rf ../islands && cp -R ../dist/. ../",
     "serve": "node --watch-path=src build.mjs"
   },
   "dependencies": {

@@ -23,6 +23,13 @@ files that GitHub Pages serves.
 - Do not invent biographical facts, posts, papers, or credentials. If real
   content is missing, leave a marked gap and ask - never fabricate a placeholder
   that reads as real.
+- **The landing page never speaks negatively of Noah or his work.** No
+  self-deprecation, no apology, no hedging, no "just a", no undercutting a
+  project while describing it. The register is factual and a little above
+  neutral; positive where positive is true. Equally binding in the other
+  direction: do not exaggerate, do not inflate scope, do not claim a result that
+  has not happened. If the honest sentence would come out negative, cut the
+  sentence instead of softening it.
 
 ## Build & deploy
 
@@ -30,12 +37,16 @@ files that GitHub Pages serves.
 cd site
 npm install
 npm run build          # esbuild -> pimas/server renderToString -> ../dist/*.html
+                       # then `postbuild` promotes dist/ to the repo root
 ```
 
 The live site is served from the **repo-root** HTML files (GitHub Pages, root,
-with `CNAME` + `.nojekyll`). `dist/` is gitignored; promote a build by copying
-`dist/*` to the repo root. Routes are the `ROUTES` table in `build.mjs`;
-`sitemap.xml` falls out of it.
+with `CNAME` + `.nojekyll`). `dist/` is gitignored and is promoted
+automatically: the `postbuild` script in `site/package.json` clears `islands/`
+(the chunk filenames are content-hashed, so a plain copy would leave orphans
+behind) and copies `dist/` over the root. There is no manual promote step; a
+build leaves the root ready to commit. Routes are the `ROUTES` table in
+`build.mjs`; `sitemap.xml` falls out of it.
 
 ## Git
 

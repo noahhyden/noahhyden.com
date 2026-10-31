@@ -1,13 +1,13 @@
 /**
- * Home - the single landing page. Hero, the merged About (prose + an "at a
- * glance" aside), and a link out to Projects. The old /about/ route is folded in
- * here; the nav "About" now jumps to #about.
+ * Home - band layout: hero, about (prose + "at a glance" aside), destinations.
+ * The nav "About" jumps to #about.
  */
 import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
 import { AzulejoBand } from "../components/Azulejo.js";
-import { ArrowIcon, GitHubIcon, LinkedInIcon } from "../components/icons.js";
+import { GitHubIcon, LinkedInIcon } from "../components/icons.js";
+import { Band, Eyebrow, PageTitle, SectionTitle, Card, Button } from "../components/primitives.js";
 
 export const meta: PageMeta = {
   path: "/",
@@ -34,19 +34,19 @@ function HeroRosette() {
   );
 }
 
-function Card(props: { href: string; n: string; accent: string; title: string; body: string; cta: string; icon: Child }) {
+function Dest(props: { href: string; n: string; accent: string; title: string; note?: string; icon: Child }) {
   return (
-    <a href={props.href} className="lift" style="display:block; border:1px solid var(--line); border-radius:3px; background:var(--ground); padding:30px 28px 28px;">
+    <Card href={props.href} tone="surface" style="padding:30px 28px 28px;">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;">
-        <span style={`display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:2px; background:var(--surface); color:${props.accent};`}>
+        <span style={`display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:2px; background:var(--ground); color:${props.accent};`}>
           {props.icon}
         </span>
         <span style="font-family:var(--mono); font-size:11px; color:var(--granite);">{props.n}</span>
       </div>
-      <div style="font-family:var(--serif); font-weight:600; font-size:23px; letter-spacing:-.01em; margin-bottom:9px;">{props.title}</div>
-      <p style="font-family:var(--sans); font-size:15px; line-height:1.55; color:var(--granite); margin:0 0 18px;">{props.body}</p>
-      <span style="display:inline-flex; align-items:center; gap:7px; font-family:var(--mono); font-size:12px; color:var(--falu);">{props.cta} &rarr;</span>
-    </a>
+      <div style="font-family:var(--serif); font-weight:600; font-size:23px; letter-spacing:-.01em; margin-bottom:6px;">{props.title}</div>
+      <div style="font-family:var(--sans); font-size:15px; color:var(--granite); margin-bottom:18px;">{props.note}</div>
+      <span style="display:inline-flex; align-items:center; gap:7px; font-family:var(--mono); font-size:12px; color:var(--falu);">Open &rarr;</span>
+    </Card>
   );
 }
 
@@ -94,75 +94,63 @@ export default function Home() {
   return (
     <Shell active={null}>
       {/* HERO */}
-      <header style="position:relative; overflow:hidden; padding:96px clamp(20px,5vw,40px) 88px; border-bottom:1px solid var(--line);">
-        <HeroRosette />
-        <div style="position:relative; max-width:1080px; margin:0 auto;">
-          <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 22px;">Aerospace engineer</div>
-          <h1 style="font-family:var(--serif); font-weight:500; font-size:clamp(40px,11vw,76px); line-height:1.0; letter-spacing:-.025em; color:var(--ink); margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></h1>
-          <p style="font-family:var(--sans); font-size:19px; line-height:1.6; color:var(--ink); margin:0 0 36px; max-width:56ch;">I trained as an aerospace engineer. I work on airframes and software.</p>
-          <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
-            <a href="#about" className="btn" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:var(--laurel); color:var(--ground); white-space:nowrap;">More about me <ArrowIcon /></a>
-            <a href="/projects/" style="display:inline-flex; align-items:center; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:transparent; color:var(--ink); border:1px solid var(--granite); white-space:nowrap;">Projects</a>
-          </div>
-        </div>
-      </header>
-
-      {/* ABOUT - merged from the old /about/ page */}
-      <section id="about" className="about-grid" style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px) 8px; display:grid; grid-template-columns:1fr 296px; gap:64px; align-items:start;">
-        <article>
-          <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 18px;">About</div>
-          <h2 style="font-family:var(--serif); font-weight:500; font-size:clamp(32px,7vw,44px); line-height:1.06; letter-spacing:-.022em; margin:0 0 26px; max-width:18ch;">I trained as an aerospace engineer.</h2>
-
-          <p style="font-family:var(--sans); font-size:20px; line-height:1.6; color:var(--ink); margin:0 0 28px;">I started on airframes and stress paths. What stuck wasn&rsquo;t aircraft in particular; it was the way of working: figure out what carries the load, make everything else defer to it, and don&rsquo;t add a part you can&rsquo;t justify.</p>
-
-          <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">I&rsquo;ve spent most of my time since on software, and I approach it the same way.</p>
-
-          <h3 style="font-family:var(--serif); font-weight:600; font-size:25px; letter-spacing:-.012em; margin:44px 0 16px;">Where I&rsquo;m from</h3>
-          <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">My family is from <span style="font-style:italic;">Madeira</span> and <span style="font-style:italic;">Sweden</span>. The colours and tilework on this site come from there: the basalt and laurel green of Madeira, and one Swedish red.</p>
-
-          <h3 style="font-family:var(--serif); font-weight:600; font-size:25px; letter-spacing:-.012em; margin:44px 0 16px;">What I&rsquo;m doing now</h3>
-          <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">I&rsquo;m building an early-stage company in procurement intelligence. It&rsquo;s early; when there&rsquo;s something to show, it&rsquo;ll turn up under <a href="/projects/" className="ln" style="color:var(--falu); border-bottom:1px solid var(--falu);">Projects</a> first.</p>
-
-          <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--ink); margin:0 0 22px;">Otherwise I keep some things public on GitHub. LinkedIn is the fastest way to reach me.</p>
-
-          <div style="display:flex; flex-wrap:wrap; gap:14px; margin-top:36px;">
-            <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" className="btn" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:var(--falu); color:var(--ground);"><LinkedInIcon size={17} />Connect on LinkedIn</a>
-            <a href="/projects/" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 22px; border-radius:2px; background:transparent; color:var(--ink); border:1px solid var(--granite);">Projects <ArrowIcon /></a>
-          </div>
-        </article>
-
-        <aside style="position:sticky; top:96px; border:1px solid var(--line); border-radius:3px; background:var(--ground); overflow:hidden;">
-          <div style="height:84px; background:var(--surface); position:relative; overflow:hidden; border-bottom:1px solid var(--line);">
-            <AzulejoBand height={84} opacity={0.42} />
-          </div>
-          <div style="padding:22px 24px 24px;">
-            <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:0 0 16px;">At a glance</div>
-            <dl style="margin:0; font-size:14px;">
-              <Fact k="degree" v="B.Sc. Aerospace Eng." />
-              <Fact k="location" v="Stockholm, SE" />
-              <Fact k="roots" v="Madeira &middot; Sweden" last />
-            </dl>
-            <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:22px 0 12px;">Find me</div>
-            <div style="display:flex; flex-direction:column; gap:9px;">
-              <a href="https://github.com/noahhyden" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:13px; color:var(--ink);"><span style="color:var(--granite); display:inline-flex;"><GitHubIcon size={16} /></span>github.com/noahhyden</a>
-              <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:13px; color:var(--ink);"><span style="color:var(--granite); display:inline-flex;"><LinkedInIcon size={16} /></span>in/noah-hyden</a>
+      <Band bordered>
+        <div style="position:relative; overflow:hidden; padding:96px clamp(20px,5vw,40px) 88px;">
+          <HeroRosette />
+          <div style="position:relative; max-width:1080px; margin:0 auto;">
+            <div style="margin:0 0 22px;"><Eyebrow>Aerospace engineer</Eyebrow></div>
+            <PageTitle style="margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></PageTitle>
+            <p style="font-family:var(--sans); font-size:19px; line-height:1.6; color:var(--ink); margin:0 0 36px; max-width:56ch;">I work on airframes and software.</p>
+            <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
+              <Button href="#about" variant="accent" size="md">More about me</Button>
+              <Button href="/projects/" variant="outline" size="md">Projects</Button>
             </div>
           </div>
-        </aside>
-      </section>
-
-      {/* WHERE TO NEXT */}
-      <main style="max-width:1080px; margin:0 auto; padding:64px clamp(20px,5vw,40px) 96px;">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 22px;">Where to next</div>
-        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px;">
-          <Card href="/pimas/" n="01" accent="var(--laurel)" title="pimas" cta="read the writeup"
-            body="A reactive UI engine I built from scratch. Its dependency graph lets an AI agent simulate a change before committing it. This site runs on it." icon={<GraphIcon />} />
-          <Card href="/projects/" n="02" accent="var(--ocean)" title="Projects" cta="browse"
-            body="Open-source work, pulled from GitHub: tools and experiments." icon={<GridIcon />} />
-          <Card href="/papers/" n="03" accent="var(--falu)" title="Papers" cta="read"
-            body="Working papers from the von-neumann project, each typeset and published as a PDF." icon={<PageIcon />} />
         </div>
-      </main>
+      </Band>
+
+      {/* ABOUT */}
+      <Band bordered tint id="about" labelledBy="about-title">
+        <div className="about-grid" style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px); display:grid; grid-template-columns:1fr 296px; gap:64px; align-items:start;">
+          <article>
+            <div style="margin:0 0 18px;"><Eyebrow>About</Eyebrow></div>
+            <SectionTitle style="margin:0 0 26px;"><span id="about-title">I trained as an aerospace engineer.</span></SectionTitle>
+            <p style="font-family:var(--sans); font-size:18px; line-height:1.6; color:var(--ink); margin:0 0 14px;">My family is from <span style="font-style:italic;">Madeira</span> and <span style="font-style:italic;">Sweden</span>.</p>
+            <p style="font-family:var(--sans); font-size:18px; line-height:1.6; color:var(--ink); margin:0;">I&rsquo;m building an early-stage company in procurement intelligence.</p>
+          </article>
+
+          <aside style="position:sticky; top:96px; border:1px solid var(--line); border-radius:3px; background:var(--ground); overflow:hidden;">
+            <div style="height:84px; background:var(--surface); position:relative; overflow:hidden; border-bottom:1px solid var(--line);">
+              <AzulejoBand height={84} opacity={0.42} />
+            </div>
+            <div style="padding:22px 24px 24px;">
+              <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:0 0 16px;">At a glance</div>
+              <dl style="margin:0; font-size:14px;">
+                <Fact k="degree" v="B.Sc. Aerospace Eng." />
+                <Fact k="location" v="Stockholm, SE" />
+                <Fact k="roots" v="Madeira &middot; Sweden" last />
+              </dl>
+              <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:22px 0 12px;">Find me</div>
+              <div style="display:flex; flex-direction:column; gap:9px;">
+                <a href="https://github.com/noahhyden" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:13px; color:var(--ink);"><span style="color:var(--granite); display:inline-flex;"><GitHubIcon size={16} /></span>github.com/noahhyden</a>
+                <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:13px; color:var(--ink);"><span style="color:var(--granite); display:inline-flex;"><LinkedInIcon size={16} /></span>in/noah-hyden</a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </Band>
+
+      {/* DESTINATIONS */}
+      <Band>
+        <div style="max-width:1080px; margin:0 auto; padding:64px clamp(20px,5vw,40px) 96px;">
+          <div style="margin:0 0 22px;"><Eyebrow>Explore</Eyebrow></div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px;">
+            <Dest href="/pimas/" n="01" accent="var(--laurel)" title="pimas" note="Reactive UI engine" icon={<GraphIcon />} />
+            <Dest href="/projects/" n="02" accent="var(--ocean)" title="Projects" note="Open source" icon={<GridIcon />} />
+            <Dest href="/papers/" n="03" accent="var(--falu)" title="Papers" note="Working papers" icon={<PageIcon />} />
+          </div>
+        </div>
+      </Band>
     </Shell>
   );
 }
