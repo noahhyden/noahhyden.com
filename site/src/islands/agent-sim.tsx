@@ -4,7 +4,6 @@ import { createStore } from "pimas-ui/store";
 import { createAgentBridge } from "pimas-ui/agent";
 import type { CauseRecord } from "pimas-ui/agent";
 import type { Child } from "pimas-ui/dom";
-import { runLiveAgent, type LiveTool } from "./live-agent.js";
 
 interface Country { name: string; innovation: number; governance: number; sustainability: number; }
 const DATA: Country[] = [
@@ -17,10 +16,6 @@ const GOAL_UNIT = "France";
 const PILLARS = ["innovation", "governance", "sustainability"] as const;
 const GRID = [2, 4, 8]; // upweight-only: only sustainability@{2,4,8} lift France into the top 2
 
-// Relay endpoint; empty until deployed, override with window.__PIMAS_PROXY__ (AGENTS.d/122-live-ai-tools-run-client-side.md).
-const PROXY_URL = "";
-// Live AI button only renders when PROXY_URL is set.
-const LIVE_ENABLED = PROXY_URL !== "";
 
 const mono = "font-family:var(--mono);";
 
@@ -79,7 +74,7 @@ export default function AgentSim(): Child {
   // Machine-readable contract, read once from the real bridge.
   const descriptor = bridge.descriptor();
 
-  type Mode = "you" | "pimas" | "ordinary" | "live";
+  type Mode = "you" | "pimas" | "ordinary";
   const [mode, setMode] = createSignal<Mode>("you");
   const [running, setRunning] = createSignal(false);
   const [done, setDone] = createSignal(false);
@@ -87,12 +82,9 @@ export default function AgentSim(): Child {
   const [writes, setWrites] = createSignal(0);
   const [wrong, setWrong] = createSignal(0);
   const [sims, setSims] = createSignal(0);
-  const [tokens, setTokens] = createSignal(0);
   const [log, setLog] = createSignal<Array<{ t: string; tone: "plain" | "ok" | "wrong" }>>([]);
   const [shadow, setShadow] = createSignal<{ label: string; ok: boolean } | null>(null);
   const [flash, setFlash] = createSignal<"none" | "wrong" | "ok">("none");
-  const [goal, setGoal] = createSignal("Get France into the top 2 by changing a single pillar weight.");
-  const [note, setNote] = createSignal("");
   // visitor-driven ("you be the agent") draft lever
   const [draftPillar, setDraftPillar] = createSignal<string>("sustainability");
   const [draftWeight, setDraftWeight] = createSignal<number>(1);
@@ -106,8 +98,8 @@ export default function AgentSim(): Child {
   const reset = () => { setW("innovation", 1); setW("governance", 1); setW("sustainability", 1); };
   const candidates = () => PILLARS.flatMap((p) => GRID.map((g) => [p, g] as [string, number]));
   function clear() {
-    reset(); setLog([]); setShadow(null); setFlash("none"); setNote("");
-    setCalls(0); setWrites(0); setWrong(0); setSims(0); setTokens(0); setDone(false);
+    reset(); setLog([]); setShadow(null); setFlash("none");
+    setCalls(0); setWrites(0); setWrong(0); setSims(0); setDone(false);
     setExplain(null); setDeltas([]); setDraftPillar("sustainability"); setDraftWeight(1);
   }
 
@@ -240,117 +232,10 @@ export default function AgentSim(): Child {
     setDone(!!answer);
   }
 
-  // ── live: a real LLM through the relay ──
-  const liveTools = (): LiveTool[] => [
-    {
-      decl: { name: "get_ranking", description: "The current committed ranking, best to worst.", parameters: { type: "object", properties: {} } },
-      run: () => { setCalls(calls() + 1); return { ranking: order() }; },
-    },
-    {
-      decl: {
-        name: "simulate_sweep",
-        description: "PREDICT the ranking at several weights for ONE pillar at once, WITHOUT committing. Nothing changes.",
-        parameters: { type: "object", properties: { pillar: { type: "string", enum: [...PILLARS] }, weights: { type: "array", items: { type: "number" } } }, required: ["pillar", "weights"] },
-      },
-      run: (a) => {
-        setCalls(calls() + 1);
-        const weights = (a.weights as number[]) ?? [];
-        const res = bridge.speculateSweep("setWeight", weights.map((g) => [a.pillar, g])) as Array<{ ranking: Array<{ unit: string }> }>;
-        setSims(sims() + weights.length);
-        const anyOk = res.some((pt) => orderMeetsGoal(pt.ranking.map((r) => r.unit)));
-        setShadow({ label: `swept ${a.pillar} (${weights.length}) - live untouched`, ok: anyOk });
-        return { points: weights.map((g, i) => ({ weight: g, ranking: res[i]!.ranking.map((r) => r.unit) })) };
-      },
-    },
-    {
-      decl: {
-        name: "simulate_config",
-        description: "PREDICT the ranking for a set of pillar weights, WITHOUT committing. Nothing changes.",
-        parameters: { type: "object", properties: { innovation: { type: "number" }, governance: { type: "number" }, sustainability: { type: "number" } } },
-      },
-      run: (a) => {
-        setCalls(calls() + 1);
-        const steps: Array<[string, ...unknown[]]> = [];
-        for (const p of PILLARS) if (a[p] != null) steps.push(["setWeight", p, a[p]]);
-        const s = bridge.speculatePlan(steps) as { ranking: Array<{ unit: string; rank: number }> };
-        setSims(sims() + 1);
-        const fr = s.ranking.find((r) => r.unit === GOAL_UNIT);
-        setShadow({ label: `config -> France #${fr?.rank ?? "-"} - live untouched`, ok: !!fr && fr.rank <= 2 });
-        return { ranking: s.ranking.map((r) => r.unit) };
-      },
-    },
-    {
-      decl: {
-        name: "set_weight",
-        description: "REALLY set a pillar's weight - this changes the live model everyone sees.",
-        parameters: { type: "object", properties: { pillar: { type: "string", enum: [...PILLARS] }, weight: { type: "number" } }, required: ["pillar", "weight"] },
-      },
-      run: (a) => {
-        setCalls(calls() + 1); setWrites(writes() + 1);
-        bridge.call("setWeight", a.pillar, a.weight);
-        setExplain(bridge.explain());
-        setFlash(goalMet() ? "ok" : "wrong");
-        return { ranking: order() };
-      },
-    },
-    {
-      decl: {
-        name: "submit_answer",
-        description: "Finish. Give the pillar+weight you applied, or impossible=true, and a short note.",
-        parameters: { type: "object", properties: { pillar: { type: "string" }, weight: { type: "number" }, impossible: { type: "boolean" }, note: { type: "string" } } },
-      },
-      run: (a) => { setCalls(calls() + 1); if (a.note) setNote(String(a.note)); return { ok: true }; },
-    },
-  ];
-
-  function liveSystem(g: string): string {
-    return (
-      "You control an OECD-style composite-indicator model through tools. Countries: Sweden, Germany, Spain, France. " +
-      "Each has hidden sub-scores in three pillars - innovation, governance, sustainability. The composite is a " +
-      "weighted sum of the pillars; every weight starts at 1; the ranking is by composite, highest first.\n\n" +
-      "Weights can be any positive number - try a wide range like 0.5, 2, 4, 8, 16, not tiny nudges. " +
-      "Prefer simulate_sweep to test several weights of ONE pillar in a single call. Explore with the " +
-      "simulate_* tools first - they predict a ranking WITHOUT changing the live model. Only call set_weight " +
-      "to apply your FINAL answer (it mutates the live model everyone sees), then call submit_answer. Keep the " +
-      "live model clean - do your searching in simulation.\n\nTask: " + g
-    );
-  }
-
-  async function runLive() {
-    clear();
-    const proxy = (typeof window !== "undefined" && (window as unknown as { __PIMAS_PROXY__?: string }).__PIMAS_PROXY__) || PROXY_URL;
-    if (!proxy) {
-      setNote("Live AI needs the key-holding relay, which isn't wired on this deploy yet - see relay/README in the repo. Meanwhile the you-drive, pimas and ordinary agents above run with zero setup.");
-      addLog("relay not configured", "wrong");
-      return;
-    }
-    addLog(`live LLM · goal: ${goal().slice(0, 48)}${goal().length > 48 ? "…" : ""}`);
-    try {
-      const r = await runLiveAgent({
-        proxyUrl: proxy,
-        system: liveSystem(goal()),
-        tools: liveTools(),
-        stepCap: 12,
-        onStep: (s) => {
-          const a = JSON.stringify(s.args);
-          addLog(`${s.name}(${a.length > 40 ? a.slice(0, 38) + "…}" : a})`, s.name === "set_weight" ? "wrong" : s.name === "submit_answer" ? "ok" : "plain");
-        },
-        onText: (t) => t && setNote(t.slice(0, 240)),
-      });
-      setTokens(r.tokens);
-      setShadow(null);
-      if (r.answer) { if (!note()) setNote(String(r.answer.note ?? "")); setFlash(goalMet() ? "ok" : "none"); setDone(true); }
-      else { addLog("stopped without submitting", "wrong"); }
-    } catch (e) {
-      setNote("Live AI is resting (the relay hit its rate limit or is offline). Try the scripted agents above - they always run.");
-      addLog(`relay: ${String((e as Error).message).slice(0, 60)}`, "wrong");
-    }
-  }
-
   async function run() {
     if (running()) return;
     setRunning(true);
-    try { await (mode() === "pimas" ? runPimas() : mode() === "ordinary" ? runOrdinary() : runLive()); }
+    try { await (mode() === "pimas" ? runPimas() : runOrdinary()); }
     finally { setRunning(false); }
   }
 
@@ -470,24 +355,14 @@ export default function AgentSim(): Child {
     <div style="border:1px solid var(--line); border-radius:4px; background:var(--ground); padding:22px;">
       <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:6px;">
         <div style={`${mono} font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite);`}>Live demo - drive it, or watch an agent</div>
-        <div style="display:flex; gap:7px; flex-wrap:wrap;">{modeBtn("you", "you drive")}{modeBtn("pimas", "pimas agent")}{modeBtn("ordinary", "ordinary agent")}{LIVE_ENABLED ? modeBtn("live", "live AI") : null}</div>
+        <div style="display:flex; gap:7px; flex-wrap:wrap;">{modeBtn("you", "you drive")}{modeBtn("pimas", "pimas agent")}{modeBtn("ordinary", "ordinary agent")}</div>
       </div>
       <p style="font-family:var(--sans); font-size:14px; line-height:1.55; color:var(--granite); margin:0 0 16px; max-width:64ch;">
         {() => mode() === "you"
           ? "You are the agent. Pick a pillar, drag its weight, and watch the predicted ranking move through a real speculate - while the committed model on the left does not. Commit to apply it for real."
-          : mode() === "live"
-          ? "A real language model drives the same tools. Its what-ifs run in a shadow; watch whether it keeps the live model clean."
           : "Goal: get France into the top 2 by re-weighting one pillar. Same task, two agents. Watch the live model on the left."}
       </p>
 
-      {/* goal input (live only) */}
-      {() => mode() === "live" ? (
-        <div style="margin-bottom:16px;">
-          <div style={`${mono} font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin-bottom:6px;`}>the agent&rsquo;s goal (edit it)</div>
-          <input value={goal()} onInput={(e: Event) => setGoal((e.currentTarget as HTMLInputElement).value)}
-            style="width:100%; box-sizing:border-box; font-family:var(--sans); font-size:14px; color:var(--ink); background:var(--ground); border:1px solid var(--granite); border-radius:2px; padding:9px 11px;" />
-        </div>
-      ) : null}
 
       {/* you-drive lever */}
       {() => mode() === "you" ? (
@@ -542,10 +417,10 @@ export default function AgentSim(): Child {
             <div style="display:flex; gap:10px;">
               {stat("tool calls", calls)}
               {stat("live writes", writes)}
-              {/* third stat: wrong states (scripted) or shadow evals (live) */}
+              {/* third stat: wrong states */}
               <div style="flex:1 1 76px;">
-                <div style={() => `${mono} font-size:23px; font-weight:700; font-variant-numeric:tabular-nums; color:${mode() !== "live" && wrong() > 0 ? "var(--falu)" : "var(--ink)"};`}>{() => String(mode() === "live" ? sims() : wrong())}</div>
-                <div style="font-family:var(--sans); font-size:12px; color:var(--granite); margin-top:3px;">{() => mode() === "live" ? "shadow evals" : "wrong live states"}</div>
+                <div style={() => `${mono} font-size:23px; font-weight:700; font-variant-numeric:tabular-nums; color:${wrong() > 0 ? "var(--falu)" : "var(--ink)"};`}>{() => String(wrong())}</div>
+                <div style="font-family:var(--sans); font-size:12px; color:var(--granite); margin-top:3px;">wrong live states</div>
               </div>
             </div>
 
@@ -562,7 +437,7 @@ export default function AgentSim(): Child {
 
             {/* agent log */}
             <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:10px 12px; min-height:90px; flex:1;">
-              <div style={`${mono} font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:6px;`}>agent log {() => (tokens() > 0 ? `· ${tokens()} tokens` : "")}</div>
+              <div style={`${mono} font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:6px;`}>agent log</div>
               {() => log().length === 0
                 ? <div style={`${mono} font-size:12px; color:var(--granite);`}>press Run &rarr;</div>
                 : log().map((l) => <div style={`${mono} font-size:11.5px; line-height:1.5; color:${l.tone === "ok" ? "var(--laurel)" : l.tone === "wrong" ? "var(--falu)" : "var(--ink)"}; word-break:break-word;`}>{l.t}</div>)}
@@ -571,7 +446,7 @@ export default function AgentSim(): Child {
             <button type="button" onClick={run}
               style={() => `${mono} font-size:13px; padding:11px 18px; border-radius:2px; border:1px solid var(--laurel); ` +
                 (running() ? "background:var(--granite); border-color:var(--granite); color:var(--ground); cursor:default;" : "background:var(--laurel); color:var(--ground); cursor:pointer;")}>
-              {() => running() ? (mode() === "live" ? "the model is thinking…" : "running…") : done() ? "run again" : mode() === "live" ? "run the live AI agent" : `run the ${mode()} agent`}
+              {() => running() ? "running…" : done() ? "run again" : `run the ${mode()} agent`}
             </button>
           </div>
         )}
@@ -580,8 +455,6 @@ export default function AgentSim(): Child {
       {/* the model's dependency graph, lit from real recompute counts */}
       {graph()}
 
-      {/* note / result line */}
-      {() => note() ? <p style="font-family:var(--sans); font-size:13px; line-height:1.55; color:var(--ink); margin:14px 0 0; padding:11px 13px; background:var(--surface); border-radius:3px; border-left:2px solid var(--ocean);">{note()}</p> : null}
 
       {/* L2: the real explain() trace of the last commit */}
       {() => { const c = explain(); return c ? (
@@ -629,8 +502,6 @@ export default function AgentSim(): Child {
       <p style="font-family:var(--sans); font-size:12px; line-height:1.55; color:var(--granite); margin:14px 0 0;">
         {() => mode() === "you"
           ? "The predicted panel is bridge.speculatePlan run in a copy-on-write shadow in your browser; the live panel is the committed graph, untouched until you commit. Commit calls commitPlan; the explain() trace and the subscribe() stream above are the real bridge output, not a recording."
-          : mode() === "live"
-          ? "The model runs remotely through a key-holding relay; its tools execute here against the real pimas graph - the speculation never leaves your browser."
           : "This runs pimas in your browser - the same speculate the framework ships. The scripted policy is fixed; the shadow evaluation is real (nothing commits until the final commit)."}
       </p>
     </div>
