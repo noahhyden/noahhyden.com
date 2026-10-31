@@ -34,7 +34,6 @@ export default function AgentSim(): Child {
   const instrument = <T,>(id: NodeId, fn: () => T): (() => T) =>
     createMemo(() => { const v = fn(); if (isSpeculating()) sc[id]++; else rc[id]++; return v; });
 
-  // Model graph: three weight signals -> scores -> ranking -> exposed outputs.
   const scores = instrument("scores", () =>
     DATA.map((c) => ({ name: c.name, score: c.innovation * w.innovation + c.governance * w.governance + c.sustainability * w.sustainability })));
   const ranking = instrument("ranking", () => {
@@ -48,7 +47,6 @@ export default function AgentSim(): Child {
 
   const order = () => ranking().map((x) => x.name);
   const topUnit = () => leaderMemo();
-  // Goal is "France into the top 2" - met when the goal unit's rank is <= 2.
   const goalRank = () => franceRankMemo();
   const goalMet = () => goalRank() <= 2;
   const orderMeetsGoal = (units: string[]) => units.slice(0, 2).includes(GOAL_UNIT);
@@ -71,7 +69,6 @@ export default function AgentSim(): Child {
     });
   });
 
-  // Machine-readable contract, read once from the real bridge.
   const descriptor = bridge.descriptor();
 
   type Mode = "you" | "pimas" | "ordinary";
@@ -85,10 +82,8 @@ export default function AgentSim(): Child {
   const [log, setLog] = createSignal<Array<{ t: string; tone: "plain" | "ok" | "wrong" }>>([]);
   const [shadow, setShadow] = createSignal<{ label: string; ok: boolean } | null>(null);
   const [flash, setFlash] = createSignal<"none" | "wrong" | "ok">("none");
-  // visitor-driven ("you be the agent") draft lever
   const [draftPillar, setDraftPillar] = createSignal<string>("sustainability");
   const [draftWeight, setDraftWeight] = createSignal<number>(1);
-  // L2 causal record of the last real commit, and the live L1 delta stream
   const [explain, setExplain] = createSignal<CauseRecord | null>(null);
   const [deltas, setDeltas] = createSignal<Array<{ t: string; tone: "state" | "cause" }>>([]);
 
@@ -117,7 +112,6 @@ export default function AgentSim(): Child {
     });
   }
 
-  // ── L3 visitor-driven: predicted after-state via a real shadow, nothing committed ──
   const predicted = createMemo<ExposedRow[]>(() => {
     const p = draftPillar();
     const wt = draftWeight();
@@ -190,7 +184,6 @@ export default function AgentSim(): Child {
     setFlash("none");
   }
 
-  // ── scripted: pimas (one shadow sweep) ──
   async function runPimas() {
     clear();
     const cands = candidates();
@@ -215,7 +208,6 @@ export default function AgentSim(): Child {
     setDone(true);
   }
 
-  // ── scripted: ordinary (commit each probe) ──
   async function runOrdinary() {
     clear();
     let answer: [string, number] | null = null;
@@ -239,7 +231,6 @@ export default function AgentSim(): Child {
     finally { setRunning(false); }
   }
 
-  // ── render ──
   const modeBtn = (m: Mode, labelTxt: string) => (
     <button type="button" onClick={() => { if (!running()) { setMode(m); clear(); } }}
       style={() => `${mono} font-size:12px; padding:8px 13px; border-radius:2px; cursor:pointer; ` +
@@ -297,7 +288,6 @@ export default function AgentSim(): Child {
     ["scores", "ranking"], ["ranking", "maxScore"], ["ranking", "leader"], ["ranking", "franceRank"],
   ];
   const gById = (id: string) => G_NODES.find((n) => n.id === id)!;
-  // In you-drive mode with a pending (uncommitted) draft, the speculate overlay is live.
   const specMode = () => mode() === "you" && dirty();
   type Lit = "spec" | "comm" | "none";
   const nodeLit = (n: GNode): Lit => {
@@ -364,7 +354,6 @@ export default function AgentSim(): Child {
       </p>
 
 
-      {/* you-drive lever */}
       {() => mode() === "you" ? (
         <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:14px 16px; margin-bottom:16px;">
           <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
@@ -381,7 +370,6 @@ export default function AgentSim(): Child {
       ) : null}
 
       <div style="display:flex; gap:18px; align-items:stretch; flex-wrap:wrap;">
-        {/* live model */}
         <div style={() => "flex:1 1 300px; border-radius:3px; padding:16px; transition:background .2s, border-color .2s; border:1.5px solid " +
           (flash() === "wrong" ? "var(--falu); background:rgba(128,24,24,.06);" : flash() === "ok" ? "var(--laurel); background:rgba(59,91,71,.07);" : "var(--line); background:var(--ground);")}>
           <div style={`${mono} font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin-bottom:10px;`}>
@@ -390,7 +378,6 @@ export default function AgentSim(): Child {
           {() => ranking().map((r) => rankRow(r, maxScore(), "live"))}
         </div>
 
-        {/* right column: predicted (you) or agent side (scripted/live) */}
         {() => mode() === "you" ? (
           <div style="flex:1 1 300px; display:flex; flex-direction:column; gap:13px;">
             <div style={() => "flex:1; border-radius:3px; padding:16px; border:1.5px dashed " +
@@ -417,14 +404,12 @@ export default function AgentSim(): Child {
             <div style="display:flex; gap:10px;">
               {stat("tool calls", calls)}
               {stat("live writes", writes)}
-              {/* third stat: wrong states */}
               <div style="flex:1 1 76px;">
                 <div style={() => `${mono} font-size:23px; font-weight:700; font-variant-numeric:tabular-nums; color:${wrong() > 0 ? "var(--falu)" : "var(--ink)"};`}>{() => String(wrong())}</div>
                 <div style="font-family:var(--sans); font-size:12px; color:var(--granite); margin-top:3px;">wrong live states</div>
               </div>
             </div>
 
-            {/* shadow panel */}
             {() => {
               const s = shadow();
               return (
@@ -435,7 +420,6 @@ export default function AgentSim(): Child {
               );
             }}
 
-            {/* agent log */}
             <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:10px 12px; min-height:90px; flex:1;">
               <div style={`${mono} font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:6px;`}>agent log</div>
               {() => log().length === 0
@@ -452,11 +436,9 @@ export default function AgentSim(): Child {
         )}
       </div>
 
-      {/* the model's dependency graph, lit from real recompute counts */}
       {graph()}
 
 
-      {/* L2: the real explain() trace of the last commit */}
       {() => { const c = explain(); return c ? (
         <div style="margin:14px 0 0; padding:11px 13px; background:var(--surface); border-radius:3px; border-left:2px solid var(--laurel);">
           <span style={`${mono} font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--laurel);`}>explain() &middot; L2 causal record</span>
@@ -467,9 +449,7 @@ export default function AgentSim(): Child {
         </div>
       ) : null; }}
 
-      {/* L1 + descriptor: the same bridge as a machine-readable artifact */}
       <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin-top:16px;">
-        {/* descriptor() - the machine-readable contract */}
         <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:12px 14px;">
           <div style={`${mono} font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:8px;`}>descriptor() &middot; machine-readable model of this page</div>
           {Object.entries(descriptor.state).map(([name, s]) => (
@@ -486,7 +466,6 @@ export default function AgentSim(): Child {
             </div>
           ))}
         </div>
-        {/* subscribe() - the live L1 delta stream */}
         <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:12px 14px;">
           <div style={`${mono} font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:8px;`}>subscribe() &middot; live delta stream</div>
           {() => deltas().length === 0
