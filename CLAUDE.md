@@ -44,7 +44,6 @@ consecutive `//` lines, against a shrink-only baseline that is currently 0.
   - [`030-shapes-a-comment-sweep-must-not-touch.md`](AGENTS.d/030-shapes-a-comment-sweep-must-not-touch.md) - Three shapes a one-line-comment sweep must not touch
   - [`120-island-modules-are-pure.md`](AGENTS.d/120-island-modules-are-pure.md) - Island modules are pure
   - [`121-graph-highlights-come-from-real-ledgers.md`](AGENTS.d/121-graph-highlights-come-from-real-ledgers.md) - Graph highlights come from real recompute ledgers
-  - [`122-live-ai-tools-run-client-side.md`](AGENTS.d/122-live-ai-tools-run-client-side.md) - Live AI tools run client-side
   - [`140-the-metrics-band-reports-only-defensible-numbers.md`](AGENTS.d/140-the-metrics-band-reports-only-defensible-numbers.md) - The metrics band reports only defensible numbers
   - [`141-azulejo-pattern-defined-once-per-document.md`](AGENTS.d/141-azulejo-pattern-defined-once-per-document.md) - Azulejo pattern is defined once per document
 

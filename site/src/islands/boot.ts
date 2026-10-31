@@ -1,13 +1,12 @@
 /** Island boot: the only client entry; schedules, imports and claims each `<is-land>` (shared kernel chunk, no dual kernel). */
 import { claim } from "pimas-ui/hydrate";
 
-type IslandModule = { default: (props: unknown) => unknown };
+type IslandModule = { default: () => unknown };
 
 function mountInto(el: HTMLElement): void {
   const src = `/islands/${el.dataset.island}.js`;
-  const props = el.dataset.props ? JSON.parse(el.dataset.props) : {};
   import(src).then((mod: IslandModule) => {
-    claim(() => mod.default(props) as never, el);
+    claim(() => mod.default() as never, el);
   });
 }
 
