@@ -1,7 +1,7 @@
 /** Build: esbuild each page, render via pimas/server, write one static HTML file per route. */
 import { build as esbuild } from "esbuild";
 import { gzipSync } from "node:zlib";
-import { mkdir, writeFile, rm, readFile, readdir, cp, access } from "node:fs/promises";
+import { mkdir, writeFile, rm, readFile, readdir, cp } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import { createRequire } from "node:module";
@@ -17,7 +17,6 @@ const ROUTES = [
   { url: "/", page: "index" },
   { url: "/projects/", page: "projects" },
   { url: "/papers/", page: "papers" },
-  { url: "/design-language/", page: "design-language" },
   { url: "/pimas/", page: "pimas" },
 ];
 
@@ -26,8 +25,6 @@ const pimasVersion = require("pimas-ui/package.json").version || "0.0.0";
 // Islands: lazy client bundles; keep each slug in sync with the `<Island slug=...>` in a page.
 const ISLAND_BOOT = "src/islands/boot.ts";
 const ISLANDS = [
-  { slug: "accordion", entry: "src/islands/accordion.tsx" },
-  { slug: "primitives-demo", entry: "src/islands/primitives-demo.tsx" },
   { slug: "agent-sim", entry: "src/islands/agent-sim.tsx" },
 ];
 
@@ -148,7 +145,7 @@ function sitemap(routes) {
   const urls = routes
     .map((r) => `  <url><loc>https://noahhyden.com${r.url}</loc></url>`)
     .join("\n");
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.w3.org/2000/sitemap/0.9">\n${urls}\n</urlset>\n`;
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.w3.org/www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
 
 async function main() {
@@ -201,8 +198,7 @@ async function main() {
       .replaceAll(TOKENS.jsBytes, jsKb)
       .replaceAll(TOKENS.htmlKb, htmlKb)
       .replaceAll(TOKENS.pimasVer, pimasVersion)
-      .replaceAll(TOKENS.themeJs, THEME_KB)
-      .replaceAll(TOKENS.builtAt, new Date().toISOString().slice(0, 10));
+      .replaceAll(TOKENS.themeJs, THEME_KB);
 
     const file = join(OUT, route.url === "/" ? "index.html" : `${route.url}index.html`);
     await mkdir(dirname(file), { recursive: true });
@@ -216,12 +212,6 @@ async function main() {
   await writeFile(join(OUT, "robots.txt"), "Sitemap: https://noahhyden.com/sitemap.xml\n");
   await writeFile(join(OUT, ".nojekyll"), "");
   await writeFile(join(OUT, "CNAME"), "noahhyden.com\n");
-  for (const asset of ["uploads", "screenshots"]) {
-    const src = resolve(ROOT, "..", asset);
-    if (await access(src).then(() => true, () => false)) {
-      await cp(src, join(OUT, asset), { recursive: true });
-    }
-  }
 
   console.log(`\nbuilt ${ROUTES.length} route(s) -> dist/  (pimas v${pimasVersion}, 0 KB JS shipped)`);
 }

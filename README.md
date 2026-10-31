@@ -25,7 +25,7 @@ serves.
 
 ```sh
 cd site
-npm install            # links the local pimas-ui package (file:../../pimas)
+npm install
 npm run build          # esbuild -> pimas-ui/server renderToString -> ../dist/*.html
 ```
 
@@ -48,7 +48,6 @@ extensionless URL.
 | `/projects/` | `src/pages/projects.tsx` (repos pulled from the GitHub API at build time) |
 | `/papers/` | `src/pages/papers.tsx` |
 | `/pimas/` | `src/pages/pimas.tsx` |
-| `/design-language/` | `src/pages/design-language.tsx` (design-system reference) |
 
 ## Layout
 
