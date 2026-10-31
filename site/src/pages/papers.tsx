@@ -49,10 +49,8 @@ function clean(s: string): string {
     .trim();
 }
 
-/** Runs at build time (Node). Reads every paper from the von-neumann repo. */
 export async function getData(): Promise<{ papers: Paper[]; error: boolean }> {
   try {
-    // 1. List papers/<slug>/ directories in the repo.
     const listRes = await fetch(
       "https://api.github.com/repos/noahhyden/von-neumann/contents/papers",
       { headers: GH_HEADERS },
@@ -63,7 +61,6 @@ export async function getData(): Promise<{ papers: Paper[]; error: boolean }> {
       .filter((e) => e.type === "dir" && e.name !== "scripts" && e.name !== "node_modules")
       .map((e) => e.name);
 
-    // 2. Read each paper's paper.json (raw), in parallel.
     const papers = (
       await Promise.all(
         slugs.map(async (slug) => {
@@ -94,7 +91,6 @@ export async function getData(): Promise<{ papers: Paper[]; error: boolean }> {
       )
     ).filter((p): p is Paper => p !== null);
 
-    // Newest first.
     papers.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
     return { papers, error: false };
   } catch {

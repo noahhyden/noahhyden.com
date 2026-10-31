@@ -206,7 +206,6 @@ async function main() {
     console.log(`  ${route.url.padEnd(18)} ${htmlKb} KB gz · ${renderMs} ms · ${jsKb} KB JS`);
   }
 
-  // Self-hosted fonts + generated/passthrough files.
   await copyFonts();
   await writeFile(join(OUT, "sitemap.xml"), sitemap(ROUTES));
   await writeFile(join(OUT, "robots.txt"), "Sitemap: https://noahhyden.com/sitemap.xml\n");
