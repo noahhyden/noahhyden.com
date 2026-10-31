@@ -10,8 +10,7 @@
     "postbuild": "rm -rf ../islands && cp -R ../dist/. ../",
     "serve": "node --watch-path=src build.mjs",
     "check:comments": "node scripts/check-comments.mjs",
-    "check:rules": "node scripts/check-rules.mjs",
-    "check:comments:update": "node scripts/check-comments.mjs --update"
+    "check:rules": "node scripts/check-rules.mjs"
   },
   "dependencies": {
     "pimas-ui": "0.1.2"

@@ -37,7 +37,7 @@ Explanation in code is capped at ONE line; the rest belongs in `AGENTS.d/`,
 one rule per file, each a single line of at most 255 characters.
 `site/scripts/check-comments.mjs` enforces it and runs on every `npm run
 build` (as `prebuild`); it fails any multi-line block comment or run of
-consecutive `//` lines, against a shrink-only baseline that is currently 0.
+consecutive `//` lines, and there is no baseline.
 `site/scripts/check-rules.mjs` runs beside it and holds the rules
 themselves to the same cap: one body line of at most 255 characters, every
 `applies_to:` pathspec matching a real file, and every rule listed below.
