@@ -2,6 +2,7 @@ import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
 import { ArrowIcon } from "../components/icons.js";
+import { BuildFetchError } from "../components/primitives.js";
 
 export const meta: PageMeta = {
   path: "/papers/",
@@ -168,19 +169,6 @@ function PaperArticle(props: { p: Paper }) {
   );
 }
 
-function ErrorBlock() {
-  return (
-    <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:28px; display:flex; gap:14px; align-items:flex-start;">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--falu)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none; margin-top:1px;"><circle cx="12" cy="12" r="9" /><line x1="12" y1="8" x2="12" y2="13" /><line x1="12" y1="16" x2="12" y2="16.5" /></svg>
-      <div>
-        <div style="font-family:var(--serif); font-weight:600; font-size:19px; margin-bottom:6px;">Couldn&rsquo;t reach the von-neumann repo at build time</div>
-        <p style="font-family:var(--sans); font-size:15px; line-height:1.55; color:var(--granite); margin:0 0 14px;">The paper list usually bakes in at build. The papers themselves are always live on the project site.</p>
-        <a className="btn" href={`${VN_SITE}/#/papers`} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--sans); font-weight:500; font-size:14px; padding:10px 18px; border-radius:2px; background:var(--falu); color:var(--ground);">Open the papers on vn.noahhyden.com &rarr;</a>
-      </div>
-    </div>
-  );
-}
-
 export default function Papers(props: { papers?: Paper[]; error?: boolean }) {
   const papers = props.papers ?? [];
   const error = props.error ?? false;
@@ -204,7 +192,7 @@ export default function Papers(props: { papers?: Paper[]; error?: boolean }) {
       </header>
 
       <main style="max-width:1080px; margin:0 auto; padding:8px clamp(20px,5vw,40px) 40px;">
-        {error ? <ErrorBlock /> : null}
+        {error ? <BuildFetchError title="Couldn&rsquo;t reach the von-neumann repo at build time" body="The paper list usually bakes in at build. The papers themselves are always live on the project site." href={`${VN_SITE}/#/papers`} cta="Open the papers on vn.noahhyden.com" /> : null}
         {hasPapers ? (
           <div>
             <div style="font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--granite); margin:0 0 4px;">

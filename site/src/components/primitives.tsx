@@ -1,7 +1,4 @@
 import type { Child } from "pimas-ui/dom";
-import { Shell } from "./Shell.js";
-
-type Section = "about" | "pimas" | "projects" | "papers" | null;
 
 /** Full-width section. Content is not padded here - callers pad. */
 export function Band(props: { bordered?: boolean; tint?: boolean; labelledBy?: string; id?: string; children?: Child }) {
@@ -38,16 +35,6 @@ export function SectionTitle(props: { style?: string; children?: Child }) {
   );
 }
 
-export function Block(props: { label?: string; title?: string; children?: Child }) {
-  return (
-    <section style="margin-bottom:56px;">
-      {props.label ? <div style="margin-bottom:12px;"><Eyebrow>{props.label}</Eyebrow></div> : null}
-      {props.title ? <SectionTitle>{props.title}</SectionTitle> : null}
-      {props.children}
-    </section>
-  );
-}
-
 export function Card(props: { tone?: "surface" | "panel"; href?: string; style?: string; children?: Child }) {
   const panel = props.tone === "panel";
   const base = panel
@@ -63,16 +50,13 @@ export function Card(props: { tone?: "surface" | "panel"; href?: string; style?:
 
 const VARIANT = {
   accent: "background:var(--laurel); color:var(--ground); border:1px solid var(--laurel);",
-  foreground: "background:var(--ink); color:var(--ground); border:1px solid var(--ink);",
   outline: "background:transparent; color:var(--ink); border:1px solid var(--granite);",
 };
 const SIZE = {
-  sm: "font-size:13px; padding:8px 14px;",
   md: "font-size:14px; padding:11px 18px;",
-  lg: "font-size:16px; padding:14px 24px;",
 };
 
-export function Button(props: { href: string; variant?: "accent" | "foreground" | "outline"; size?: "sm" | "md" | "lg"; external?: boolean; children?: Child }) {
+export function Button(props: { href: string; variant?: "accent" | "outline"; size?: "md"; external?: boolean; children?: Child }) {
   const style = `display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; border-radius:2px; ${VARIANT[props.variant ?? "accent"]} ${SIZE[props.size ?? "md"]}`;
   return props.external ? (
     <a href={props.href} target="_blank" rel="noopener" className="btn" style={style}>{props.children}</a>
@@ -81,22 +65,15 @@ export function Button(props: { href: string; variant?: "accent" | "foreground" 
   );
 }
 
-export function PageShell(props: { title: string; sub?: string; standfirst?: string; active?: Section; width?: number; children?: Child }) {
-  const w = props.width ?? 1080;
+export function BuildFetchError(props: { title: string; body: string; href: string; cta: string }) {
   return (
-    <Shell active={props.active ?? null}>
-      <header style="border-bottom:1px solid var(--line);">
-        <div style={`max-width:${w}px; margin:0 auto; padding:72px clamp(20px,5vw,40px) 56px;`}>
-          {props.sub ? <div style="margin-bottom:16px;"><Eyebrow>{props.sub}</Eyebrow></div> : null}
-          <PageTitle style="font-size:clamp(36px,8vw,56px);">{props.title}</PageTitle>
-          {props.standfirst ? (
-            <p style="font-family:var(--sans); font-size:18px; line-height:1.6; color:var(--granite); margin:0; max-width:60ch;">{props.standfirst}</p>
-          ) : null}
-        </div>
-      </header>
-      <main style={`max-width:${w}px; margin:0 auto; padding:56px clamp(20px,5vw,40px) 96px;`}>
-        {props.children}
-      </main>
-    </Shell>
+    <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:28px; display:flex; gap:14px; align-items:flex-start;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--falu)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none; margin-top:1px;"><circle cx="12" cy="12" r="9" /><line x1="12" y1="8" x2="12" y2="13" /><line x1="12" y1="16" x2="12" y2="16.5" /></svg>
+      <div>
+        <div style="font-family:var(--serif); font-weight:600; font-size:19px; margin-bottom:6px;">{props.title}</div>
+        <p style="font-family:var(--sans); font-size:15px; line-height:1.55; color:var(--granite); margin:0 0 14px;">{props.body}</p>
+        <a className="btn" href={props.href} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--sans); font-weight:500; font-size:14px; padding:10px 18px; border-radius:2px; background:var(--falu); color:var(--ground);">{props.cta} &rarr;</a>
+      </div>
+    </div>
   );
 }

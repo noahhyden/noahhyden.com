@@ -6,7 +6,6 @@ export const TOKENS = {
   jsBytes: "__BUILD_JS_BYTES__",
   htmlKb: "__BUILD_HTML_KB__",
   pimasVer: "__BUILD_PIMAS_VER__",
-  builtAt: "__BUILD_AT__",
   themeJs: "__BUILD_THEME_JS__",
 } as const;
 
