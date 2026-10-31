@@ -38,7 +38,6 @@ function relDate(iso: string): string {
   return RTF.format(-Math.floor(days / 365), "year");
 }
 
-/** Runs at build time (Node). Fetches + shapes the repo list. */
 export async function getData(): Promise<{ repos: Repo[]; error: boolean }> {
   try {
     const res = await fetch(
@@ -49,7 +48,6 @@ export async function getData(): Promise<{ repos: Repo[]; error: boolean }> {
     const raw = await res.json();
     const repos: Repo[] = (Array.isArray(raw) ? raw : [])
       .filter((r) => !r.fork && !r.archived)
-      // Most recently pushed first.
       .sort((a, b) => new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime())
       .map((r) => ({
         name: r.name,
@@ -138,7 +136,6 @@ export default function Projects(props: { repos?: Repo[]; error?: boolean }) {
   const hasRepos = !error && repos.length > 0;
   const isEmpty = !error && repos.length === 0;
 
-  // Pinned repos in PINNED order; the rest keep recency order.
   const pinned = PINNED.map((name) => repos.find((r) => r.name === name)).filter(
     (r): r is Repo => r !== undefined,
   );

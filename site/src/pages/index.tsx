@@ -89,7 +89,6 @@ function Fact(props: { k: string; v: string; accent?: string; last?: boolean }) 
 export default function Home() {
   return (
     <Shell active={null}>
-      {/* HERO */}
       <Band bordered>
         <div style="position:relative; overflow:hidden; padding:96px clamp(20px,5vw,40px) 88px;">
           <HeroRosette />
@@ -105,7 +104,6 @@ export default function Home() {
         </div>
       </Band>
 
-      {/* ABOUT */}
       <Band bordered tint id="about" labelledBy="about-title">
         <div className="about-grid" style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px); display:grid; grid-template-columns:1fr 296px; gap:64px; align-items:start;">
           <article>
@@ -134,7 +132,6 @@ export default function Home() {
         </div>
       </Band>
 
-      {/* DESTINATIONS */}
       <Band>
         <div style="max-width:1080px; margin:0 auto; padding:64px clamp(20px,5vw,40px) 96px;">
           <div style="margin:0 0 22px;"><Eyebrow>Explore</Eyebrow></div>

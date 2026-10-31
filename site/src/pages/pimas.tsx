@@ -99,7 +99,6 @@ export default function Pimas() {
 
       <main style="max-width:900px; margin:0 auto; padding:0 40px;">
 
-        {/* live demo island */}
         <section style="margin:44px 0 8px;">
           <div style={eyebrow}>A live demo, running in your browser</div>
           <p style="font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--granite); margin:0 0 18px; max-width:72ch;">
@@ -110,7 +109,6 @@ export default function Pimas() {
           <Island slug="agent-sim" component={AgentSim} client="visible" />
         </section>
 
-        {/* the problem */}
         <section style="margin:52px 0;">
           <div style={eyebrow}>The problem it solves</div>
           <h2 style={h2s}>Observation shouldn&rsquo;t require mutation.</h2>
@@ -127,7 +125,6 @@ export default function Pimas() {
           </p>
         </section>
 
-        {/* how it works */}
         <section style="margin:52px 0;">
           <div style={eyebrow}>How it works</div>
           <h2 style={h2s}>One mechanism, three surfaces.</h2>
@@ -190,7 +187,6 @@ export default function Pimas() {
           </ul>
         </section>
 
-        {/* how a what-if runs */}
         <section style="margin:52px 0;">
           <div style={eyebrow}>The mechanism</div>
           <h2 style={h2s}>How a what-if actually runs.</h2>
@@ -227,7 +223,6 @@ export default function Pimas() {
           </div>
         </section>
 
-        {/* why an ordinary stack can't */}
         <section style="margin:52px 0;">
           <div style={eyebrow}>Why an ordinary stack can&rsquo;t</div>
           <h2 style={h2s}>It needs a graph that exists before the question is asked.</h2>
@@ -243,7 +238,6 @@ export default function Pimas() {
           </div>
         </section>
 
-        {/* benchmark */}
         <section style="margin:52px 0;">
           <div style={eyebrow}>Measured, with a real agent in the loop</div>
           <h2 style={h2s}>Same policy, same answers, a fraction of the footprint.</h2>
@@ -285,7 +279,6 @@ export default function Pimas() {
           </p>
         </section>
 
-        {/* isn't this just */}
         <section style="margin:52px 0;">
           <div style={eyebrow}>&ldquo;Isn&rsquo;t this just&hellip;?&rdquo;</div>
           <h2 style={h2s}>Non-committal what-if isn&rsquo;t new. This combination is.</h2>
@@ -306,7 +299,6 @@ export default function Pimas() {
           </div>
         </section>
 
-        {/* fit */}
         <section style="margin:52px 0;">
           <div style={eyebrow}>Where it fits</div>
           <h2 style={h2s}>Sharpest where a wrong commit costs something, and the logic is pure.</h2>
@@ -332,7 +324,6 @@ export default function Pimas() {
           </div>
         </section>
 
-        {/* code */}
         <section style="margin:52px 0 72px; border-top:1px solid var(--line); padding-top:28px; display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:14px;">
           <p style="font-family:var(--sans); font-size:16px; line-height:1.6; color:var(--granite); margin:0; max-width:52ch;">
             The code, the decisions log, and the benchmark harness are on GitHub. It is published to npm as{" "}
