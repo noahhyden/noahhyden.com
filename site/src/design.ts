@@ -55,7 +55,6 @@ export interface PageMeta {
 /** The full <head> for a page; build.mjs injects font preloads and @font-face ahead of it. */
 export function headHTML(meta: PageMeta): string {
   const url = SITE + meta.path;
-  // Home is just the name; inner pages get the suffix.
   const title = meta.path === "/" ? meta.title : `${meta.title} - Noah Hyden`;
   // <meta charset> is emitted first by build.mjs to stay within the first 1024 bytes; don't add it here.
   return [

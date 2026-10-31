@@ -39,7 +39,6 @@ export function Footer() {
         </div>
       </div>
 
-      {/* ── honest pimas metrics band ───────────────────────────────────── */}
       <div style="position:relative; border-top:1px solid var(--line); background:var(--footer-tint);">
         <div style="max-width:1080px; margin:0 auto; padding:22px 40px; font-family:var(--mono); font-size:11px; line-height:1.7; color:var(--granite);">
           <div style="letter-spacing:.14em; text-transform:uppercase; color:var(--laurel); margin-bottom:8px;">
