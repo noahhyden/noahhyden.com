@@ -18,8 +18,8 @@ const BASE_CSS = `
   --ground:#e5e4db; --surface:#dbd9ce; --line:#ccc9bb; --ink:#171e1a;
   --laurel:#3b5b47; --ocean:#3b5669; --falu:#801818; --granite:#5f5d53; --tile:#6e7d87;
   --nav-bg:rgba(229,228,219,.86); --footer-tint:rgba(23,30,26,.025);
-  --t-2xs:12px; --t-xs:15px; --t-sm:18px; --t-md:20px;
-  --t-lg:24px; --t-xl:30px; --t-2xl:40px; --t-3xl:56px;
+  --t-2xs:14px; --t-xs:17px; --t-sm:20px; --t-md:24px;
+  --t-lg:28px; --t-xl:34px; --t-2xl:48px; --t-3xl:76px;
   --serif:'Spectral', Georgia, 'Times New Roman', serif;
   --sans:'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
