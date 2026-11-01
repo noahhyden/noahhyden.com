@@ -80,9 +80,10 @@ const SIZE = {
   lg: "font-size:var(--t-sm); padding:13px 24px;",
 };
 
-/** Action; every toggle is an explicit prop with a default, and `outline` draws a currentColor edge so it tracks the text. */
+/** Action; every toggle is an explicit prop with a default, `outline` draws a currentColor edge, and `labelFor` binds the button to a checkbox for CSS-only disclosure. */
 export function Button(props: {
   href?: string;
+  labelFor?: string;
   external?: boolean;
   fill?: "solid" | "tonal" | "none";
   accent?: "laurel" | "falu" | "ocean";
@@ -98,6 +99,7 @@ export function Button(props: {
   }[props.fill ?? "solid"];
   const edge = (props.outline ?? false) ? " border:1px solid currentColor;" : "";
   const style = `display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; border-radius:2px; ${paint}${edge} ${SIZE[props.size ?? "md"]}`;
+  if (props.labelFor) return <label className="btn" for={props.labelFor} style={`${style} cursor:pointer;`}>{props.children}</label>;
   if (!props.href) return <button type="button" className="btn" style={style}>{props.children}</button>;
   return (props.external ?? false) ? (
     <a href={props.href} target="_blank" rel="noopener" className="btn" style={style}>{props.children}</a>

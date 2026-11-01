@@ -33,6 +33,14 @@ a{color:inherit;text-decoration:none;}
 .lift:hover{transform:translateY(-2px);}
 .btn{transition:filter .18s ease;}
 .btn:hover{filter:brightness(.93);}
+/* Fold: a hidden checkbox expands a clamped abstract in place, zero JS. */
+.fold-x{position:absolute; width:1px; height:1px; opacity:0; margin:0;}
+.fold-full,.fold-less{display:none;}
+.fold-x:checked~.fold-cut{display:none;}
+.fold-x:checked~.fold-full{display:block;}
+.fold-x:checked~.fold-row .fold-more{display:none;}
+.fold-x:checked~.fold-row .fold-less{display:inline;}
+.fold-x:focus-visible~.fold-row label{outline:2px solid var(--laurel); outline-offset:2px;}
 .ln{transition:color .15s ease;}
 .ln:hover{color:var(--falu);}
 a:focus-visible,button:focus-visible{outline:2px solid var(--laurel); outline-offset:2px; border-radius:2px;}
