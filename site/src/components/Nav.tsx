@@ -1,6 +1,6 @@
 import { GitHubIcon, LinkedInIcon, Mark } from "./icons.js";
 
-type Section = "about" | "pimas" | "projects" | "papers" | null;
+type Section = "about" | "pimas" | "papers" | null;
 
 function link(href: string, label: string, active: boolean) {
   const color = active ? "var(--ink)" : "var(--granite)";
@@ -25,7 +25,7 @@ export function Nav(props: { active?: Section } = {}) {
         <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px 28px;">
           {link("/#about", "About", false)}
           {link("/pimas/", "pimas", active === "pimas")}
-          {link("/projects/", "Projects", active === "projects")}
+          {link("/#projects", "Projects", false)}
           {link("/papers/", "Papers", active === "papers")}
         </div>
         <div style="display:flex; align-items:center; gap:18px;">
