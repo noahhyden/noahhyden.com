@@ -54,10 +54,10 @@ const SIZE = {
   lg: "font-size:15px; padding:13px 24px;",
 };
 
-export function Button(props: { href?: string; variant?: "solid" | "tonal" | "plain"; accent?: "laurel" | "falu" | "ocean"; size?: "sm" | "md" | "lg"; external?: boolean; children?: Child }) {
+export function Button(props: { href?: string; fill?: "solid" | "tonal" | "none"; accent?: "laurel" | "falu" | "ocean"; size?: "sm" | "md" | "lg"; external?: boolean; children?: Child }) {
   const c = `var(--${props.accent ?? "laurel"})`;
-  const fill = { solid: `background:${c}; color:var(--ground);`, tonal: "background:var(--surface); color:var(--ink);", plain: `background:transparent; color:${c};` }[props.variant ?? "solid"];
-  const style = `display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; border-radius:2px; ${fill} ${SIZE[props.size ?? "md"]}`;
+  const paint = { solid: `background:${c}; color:var(--ground);`, tonal: "background:var(--surface); color:var(--ink);", none: `background:transparent; color:${c};` }[props.fill ?? "solid"];
+  const style = `display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; border-radius:2px; ${paint} ${SIZE[props.size ?? "md"]}`;
   if (!props.href) return <button type="button" className="btn" style={style}>{props.children}</button>;
   return props.external ? (
     <a href={props.href} target="_blank" rel="noopener" className="btn" style={style}>{props.children}</a>

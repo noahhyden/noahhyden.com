@@ -28,10 +28,10 @@ export default function VonNeumann() {
           runnable and tested, and every number traces to a cited source.
         </p>
         <div style="display:flex; flex-wrap:wrap; gap:14px; margin:30px 0 0;">
-          <Button href="https://vn.noahhyden.com" external variant="solid" accent="falu" size="lg">
+          <Button href="https://vn.noahhyden.com" external fill="solid" accent="falu" size="lg">
             vn.noahhyden.com &rarr;
           </Button>
-          <Button href="https://github.com/noahhyden/von-neumann" external variant="tonal" size="lg">
+          <Button href="https://github.com/noahhyden/von-neumann" external fill="tonal" size="lg">
             Source on GitHub &rarr;
           </Button>
         </div>
