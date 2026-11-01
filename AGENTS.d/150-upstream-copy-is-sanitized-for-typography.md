@@ -1,6 +1,5 @@
 ---
 applies_to:
-  - "site/src/pages/papers.tsx"
   - "site/src/pages/index.tsx"
 ---
 ## Upstream copy is sanitized for typography
