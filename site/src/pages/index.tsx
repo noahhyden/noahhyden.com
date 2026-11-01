@@ -221,7 +221,6 @@ export default function Home(props: { repos?: Repo[]; error?: boolean }) {
             <PageTitle style="margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></PageTitle>
             <p style="font-family:var(--sans); font-size:19px; line-height:1.6; color:var(--ink); margin:0 0 36px; max-width:56ch;">I work on airframes and software.</p>
             <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
-              <Button href="#about" variant="accent" size="md">More about me</Button>
               <Button href="#projects" variant="outline" size="md">Projects</Button>
             </div>
           </div>
@@ -259,10 +258,8 @@ export default function Home(props: { repos?: Repo[]; error?: boolean }) {
       <Band bordered id="projects" labelledBy="projects-title">
         <div style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px);">
           <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-            <Eyebrow>Projects - baked in from GitHub</Eyebrow>
-            <a href="https://github.com/noahhyden" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px; color:var(--falu); border-bottom:1px solid var(--falu); padding-bottom:2px;">@noahhyden on GitHub &rarr;</a>
           </div>
-          <SectionTitle style="margin:18px 0 0;"><span id="projects-title">What I&rsquo;ve been building.</span></SectionTitle>
+          <SectionTitle style="margin:18px 0 0;"><span id="projects-title"> Projects</span></SectionTitle>
           <p style="font-family:var(--sans); font-size:17px; line-height:1.6; color:var(--granite); margin:24px 0 40px; max-width:58ch;">Pulled from my public repositories at build time. A few pinned highlights first, then everything else, most recently pushed first. Some are finished, some are experiments.</p>
 
           {error ? <BuildFetchError title="Couldn&rsquo;t reach GitHub at build time" body="The repository list usually bakes in at build. If it&rsquo;s being stubborn, the projects are all on my profile directly." href="https://github.com/noahhyden?tab=repositories" cta="Open my repositories" /> : null}
@@ -290,7 +287,7 @@ export default function Home(props: { repos?: Repo[]; error?: boolean }) {
 
           {isEmpty ? (
             <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:40px; text-align:center;">
-              <p style="font-family:var(--sans); font-size:16px; color:var(--granite); margin:0;">No public repositories to show yet - check back soon.</p>
+              <p style="font-family:var(--sans); font-size:16px; color:var(--granite); margin:0;">Something went wrong, please notify me via any one of my channels.</p>
             </div>
           ) : null}
         </div>
