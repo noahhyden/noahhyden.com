@@ -2,7 +2,7 @@ import type { Child } from "pimas-ui/dom";
 
 /** Full-width section. Content is not padded here - callers pad. */
 export function Band(props: { bordered?: boolean; tint?: boolean; labelledBy?: string; id?: string; children?: Child }) {
-  const bg = props.tint ? "var(--surface)" : "var(--ground)";
+  const bg = props.tint ? "var(--surface)" : "transparent";
   const border = props.bordered ? " border-bottom:1px solid var(--line);" : "";
   return (
     <section id={props.id} aria-labelledby={props.labelledBy} style={`background:${bg};${border}`}>

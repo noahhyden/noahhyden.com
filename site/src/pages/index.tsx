@@ -292,9 +292,9 @@ function SectionLabel(props: { children: string }) {
 function HeroRosette() {
   // Full-bleed rosette net at true tile scale, densest top-right, fading before the headline.
   return (
-    <svg width="100%" height="100%" style="position:absolute; inset:0; width:100%; height:100%; opacity:.5; pointer-events:none;" aria-hidden="true">
+    <svg width="100%" style="position:absolute; inset:0 0 -420px 0; width:100%; height:calc(100% + 420px); opacity:.5; pointer-events:none;" aria-hidden="true">
       <defs>
-        <radialGradient id="fade" cx="100%" cy="0%" r="75%">
+        <radialGradient id="fade" cx="100%" cy="0%" r="70%">
           <stop offset="0%" stop-color="#fff" stop-opacity="1" />
           <stop offset="100%" stop-color="#fff" stop-opacity="0" />
         </radialGradient>
@@ -356,8 +356,8 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
 
   return (
     <Shell active={null}>
-      <Band bordered>
-        <div style="position:relative; overflow:hidden; padding:96px clamp(20px,5vw,40px) 88px;">
+      <Band>
+        <div style="position:relative; padding:96px clamp(20px,5vw,40px) 88px;">
           <HeroRosette />
           <div style="position:relative; max-width:1080px; margin:0 auto;">
             <PageTitle style="margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></PageTitle>
