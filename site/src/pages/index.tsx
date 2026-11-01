@@ -335,7 +335,7 @@ const PlanetIcon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="4.5" />
     <path d="M3.5 15.5 C1.5 12 6 8.5 12 7.5 C18 6.5 22.5 8 20.5 11" />
-    <circle cx="19" cy="5" r="1.5" />
+    <circle cx="19.25" cy="7.75" r="1.5" />
   </svg>
 );
 
