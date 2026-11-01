@@ -1,4 +1,4 @@
-/** An AGENTS.d rule is ONE line of at most 255 chars, listed in CLAUDE.md, governing files that still exist; see AGENTS.d/020 and AGENTS.d/021. */
+/** An AGENTS.d rule is ONE line of at most 255 chars, listed in CLAUDE.md, governing files that still exist; see AGENTS.d/020. */
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";

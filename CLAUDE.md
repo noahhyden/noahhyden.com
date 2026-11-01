@@ -43,10 +43,7 @@ themselves to the same cap: one body line of at most 255 characters, every
 `applies_to:` pathspec matching a real file, and every rule listed below.
 Neither guard may pass over an empty file list.
 
-  - [`010-explanation-in-code-is-one-line.md`](AGENTS.d/010-explanation-in-code-is-one-line.md) - Explanation in code is capped at ONE line; the rest belongs in AGENTS.d
   - [`020-a-rule-is-one-line-of-255-characters.md`](AGENTS.d/020-a-rule-is-one-line-of-255-characters.md) - A rule is one line of 255 characters
-  - [`021-a-guard-that-scans-nothing-fails.md`](AGENTS.d/021-a-guard-that-scans-nothing-fails.md) - A guard that scans nothing fails
-  - [`022-a-rules-applies-to-must-match-tracked-files.md`](AGENTS.d/022-a-rules-applies-to-must-match-tracked-files.md) - A rule's applies_to must match tracked files
   - [`030-shapes-a-comment-sweep-must-not-touch.md`](AGENTS.d/030-shapes-a-comment-sweep-must-not-touch.md) - Three shapes a one-line-comment sweep must not touch
   - [`120-island-modules-are-pure.md`](AGENTS.d/120-island-modules-are-pure.md) - Island modules are pure
   - [`121-graph-highlights-come-from-real-ledgers.md`](AGENTS.d/121-graph-highlights-come-from-real-ledgers.md) - Graph highlights come from real recompute ledgers
