@@ -2,6 +2,7 @@ import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
 import { ArrowIcon, GitHubIcon, LinkedInIcon } from "../components/icons.js";
+import { AzulejoAccent } from "../components/Azulejo.js";
 import { Band, Eyebrow, PageTitle, SectionTitle, Card, Button, BuildFetchError } from "../components/primitives.js";
 import { ghHeaders } from "../gh.js";
 
@@ -167,7 +168,7 @@ function Authors(props: { authors: Author[] }) {
     parts.push(<span>{label}</span>);
     if (a.orcid) {
       parts.push(
-        <a className="ln" href={`https://orcid.org/${a.orcid}`} target="_blank" rel="noopener" style="color:var(--ocean); border-bottom:1px solid var(--line); margin-left:6px;">
+        <a className="ln" href={`https://orcid.org/${a.orcid}`} target="_blank" rel="noopener" style="color:var(--ocean); margin-left:6px;">
           ORCID {a.orcid}
         </a>,
       );
@@ -179,7 +180,7 @@ function Authors(props: { authors: Author[] }) {
 function PaperArticle(props: { p: Paper }) {
   const p = props.p;
   return (
-    <article style="border-top:1px solid var(--line); padding:36px 0 40px;">
+    <article style=" padding:36px 0 40px;">
       <div style="font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--granite); margin:0 0 14px;">
         <span style="color:var(--falu);">{p.date}</span>
         <span style="margin:0 10px; color:var(--line);">/</span>
@@ -207,7 +208,7 @@ function PaperArticle(props: { p: Paper }) {
       {p.keywords.length > 0 ? (
         <div style="display:flex; flex-wrap:wrap; gap:8px; margin:0 0 24px;">
           {p.keywords.map((k) => (
-            <span style="font-family:var(--mono); font-size:11px; letter-spacing:.02em; color:var(--granite); background:var(--surface); border:1px solid var(--line); border-radius:2px; padding:4px 9px;">
+            <span style="font-family:var(--mono); font-size:11px; letter-spacing:.02em; color:var(--granite); background:var(--surface); border-radius:2px; padding:4px 9px;">
               {k}
             </span>
           ))}
@@ -218,7 +219,7 @@ function PaperArticle(props: { p: Paper }) {
         <a className="btn" href={p.pdf} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:14px; padding:11px 20px; border-radius:2px; background:var(--laurel); color:var(--ground);">
           Read the typeset PDF <ArrowIcon size={15} />
         </a>
-        <a className="ln" href={p.source} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px; color:var(--ocean); border-bottom:1px solid var(--line); padding-bottom:2px;">
+        <a className="ln" href={p.source} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px; color:var(--ocean); padding-bottom:2px;">
           Source on GitHub
         </a>
       </div>
@@ -252,7 +253,7 @@ function RepoLink(props: { r: Repo; card?: boolean }) {
   const nameStyle = `font-family:var(--serif); font-weight:600; font-size:${c ? 19 : 18}px; line-height:1.2; letter-spacing:-.01em; color:var(--ink); word-break:break-word;`;
   if (!c) {
     return (
-      <a className="lift" href={r.url} target="_blank" rel="noopener" style="display:flex; align-items:flex-start; justify-content:space-between; gap:28px; border-top:1px solid var(--line); padding:22px 4px 22px; flex-wrap:wrap;">
+      <a className="lift" href={r.url} target="_blank" rel="noopener" style="display:flex; align-items:flex-start; justify-content:space-between; gap:28px; padding:22px 4px 22px; flex-wrap:wrap;">
         <div style="flex:1 1 320px; min-width:0;">
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">{icon}<span style={nameStyle}>{r.name}</span></div>
           <p style="font-family:var(--sans); font-size:14.5px; line-height:1.55; color:var(--granite); margin:0; max-width:64ch;">{r.desc}</p>
@@ -265,15 +266,15 @@ function RepoLink(props: { r: Repo; card?: boolean }) {
     );
   }
   return (
-    <a className="lift" href={r.url} target="_blank" rel="noopener" style="display:flex; flex-direction:column; border:1px solid var(--line); border-radius:3px; background:var(--ground); padding:24px 24px 20px; min-height:168px;">
+    <a className="lift" href={r.url} target="_blank" rel="noopener" style="display:flex; flex-direction:column; border-radius:3px; background:var(--ground); padding:24px 24px 20px; min-height:168px;">
       <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px;">
         <div style="display:flex; align-items:center; gap:10px; min-width:0;">{icon}<span style={nameStyle}>{r.name}</span></div>
         {r.pinned ? (
-          <span style="flex:none; font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--falu); border:1px solid var(--falu); border-radius:2px; padding:3px 7px;">pinned</span>
+          <span style="flex:none; font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--falu); border-radius:2px; padding:3px 7px;">pinned</span>
         ) : null}
       </div>
       <p style="font-family:var(--sans); font-size:14.5px; line-height:1.55; color:var(--granite); margin:0 0 auto; padding-bottom:18px;">{r.desc}</p>
-      <div style="display:flex; align-items:center; gap:18px; font-family:var(--mono); font-size:12px; color:var(--granite); border-top:1px solid var(--line); padding-top:14px;">
+      <div style="display:flex; align-items:center; gap:18px; font-family:var(--mono); font-size:12px; color:var(--granite); padding-top:14px;">
         {meta}
         <span style="margin-left:auto; color:var(--granite);">{r.updated}</span>
       </div>
@@ -370,7 +371,8 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
         </div>
       </Band>
 
-      <Band bordered id="projects" labelledBy="projects-title">
+      <Band id="projects" labelledBy="projects-title">
+        <AzulejoAccent id="projects" pos="bottom:0; left:0;" />
         <div style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px);">
           <SectionTitle style="margin:18px 0 64px;"><span id="projects-title">Projects</span></SectionTitle>
 
@@ -387,24 +389,25 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
           {hasRepos && rest.length > 0 ? (
             <section>
               <SectionLabel>{`All projects (${rest.length})`}</SectionLabel>
-              <div style="border-bottom:1px solid var(--line);">
+              <div style="">
                 {rest.map((r) => <RepoLink r={r} />)}
               </div>
               <div style="margin-top:28px; text-align:center;">
-                <a href="https://github.com/noahhyden?tab=repositories" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; border:1px solid var(--granite); color:var(--ink);">See all repositories on GitHub <ArrowIcon size={16} /></a>
+                <a href="https://github.com/noahhyden?tab=repositories" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; color:var(--ink);">See all repositories on GitHub <ArrowIcon size={16} /></a>
               </div>
             </section>
           ) : null}
 
           {isEmpty ? (
-            <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:40px; text-align:center;">
+            <div style=" border-radius:3px; background:var(--surface); padding:40px; text-align:center;">
               <p style="font-family:var(--sans); font-size:16px; color:var(--granite); margin:0;">Something went wrong, please notify me via any one of my channels.</p>
             </div>
           ) : null}
         </div>
       </Band>
 
-      <Band bordered id="papers" labelledBy="papers-title">
+      <Band id="papers" labelledBy="papers-title">
+        <AzulejoAccent id="papers" pos="top:50%; margin-top:-180px; right:0;" />
         <div style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px);">
           <SectionTitle style="margin:0 0 64px;"><span id="papers-title">Papers</span></SectionTitle>
           {papersError ? <BuildFetchError title="Couldn&rsquo;t reach the von-neumann repo at build time" body="The paper list usually bakes in at build. The papers themselves are always live on the project site." href={`${VN_SITE}/#/papers`} cta="Open the papers on vn.noahhyden.com" /> : null}
@@ -414,15 +417,15 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
                 {papers.length === 1 ? "1 paper" : `${papers.length} papers`}
               </div>
               {papers.map((p) => <PaperArticle p={p} />)}
-              <div style="border-top:1px solid var(--line); padding-top:24px; margin-top:4px;">
-                <a href={`${VN_SITE}/#/papers`} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; border:1px solid var(--granite); color:var(--ink);">
+              <div style=" padding-top:24px; margin-top:4px;">
+                <a href={`${VN_SITE}/#/papers`} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; color:var(--ink);">
                   See the papers on vn.noahhyden.com <ArrowIcon size={16} />
                 </a>
               </div>
             </div>
           ) : null}
           {papersEmpty ? (
-            <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:40px; text-align:center;">
+            <div style=" border-radius:3px; background:var(--surface); padding:40px; text-align:center;">
               <p style="font-family:var(--sans); font-size:16px; color:var(--granite); margin:0;">No papers published yet - check back soon.</p>
             </div>
           ) : null}
@@ -430,6 +433,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
       </Band>
 
       <Band>
+        <AzulejoAccent id="explore" pos="top:50%; margin-top:-180px; left:0;" />
         <div style="max-width:1080px; margin:0 auto; padding:64px clamp(20px,5vw,40px) 96px;">
           <div style="margin:0 0 22px;"><Eyebrow>Explore</Eyebrow></div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px;">

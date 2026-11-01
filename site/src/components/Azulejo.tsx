@@ -53,3 +53,21 @@ export function AzulejoBand(props: { height?: number; opacity?: number; pattern?
     </svg>
   );
 }
+
+/** Faint quatrefoil patch with a radial fade on every side; `pos` places it inside a position:relative section. */
+export function AzulejoAccent(props: { id: string; pos: string }) {
+  return (
+    <svg width="360" height="360" style={`position:absolute; z-index:-1; max-width:100%; opacity:.3; pointer-events:none; ${props.pos}`} aria-hidden="true">
+      <defs>
+        <radialGradient id={`fade-${props.id}`} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fff" stop-opacity="1" />
+          <stop offset="100%" stop-color="#fff" stop-opacity="0" />
+        </radialGradient>
+        <mask id={`fademask-${props.id}`}>
+          <rect width="100%" height="100%" fill={`url(#fade-${props.id})`} />
+        </mask>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#quatrefoil)" mask={`url(#fademask-${props.id})`} />
+    </svg>
+  );
+}
