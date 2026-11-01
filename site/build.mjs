@@ -194,10 +194,8 @@ async function main() {
     const jsKb = hasIsland ? islandKb : "0";
     const htmlKb = (gzipSync(Buffer.from(html)).length / 1024).toFixed(1);
     html = html
-      .replaceAll(TOKENS.renderMs, renderMs)
       .replaceAll(TOKENS.jsBytes, jsKb)
       .replaceAll(TOKENS.htmlKb, htmlKb)
-      .replaceAll(TOKENS.pimasVer, pimasVersion)
       .replaceAll(TOKENS.themeJs, THEME_KB);
 
     const file = join(OUT, route.url === "/" ? "index.html" : `${route.url}index.html`);
