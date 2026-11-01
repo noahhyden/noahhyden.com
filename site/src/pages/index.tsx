@@ -45,6 +45,10 @@ function relDate(iso: string): string {
 const VN_SITE = "https://vn.noahhyden.com";
 const VN_REPO = "https://github.com/noahhyden/von-neumann";
 
+/** The abstract is folded to this many characters; the last ten fade out. */
+const FOLD = 255;
+const FADE_AT = FOLD - 10;
+
 interface Author {
   name: string;
   affiliation: string;
@@ -176,23 +180,28 @@ function Authors(props: { authors: Author[] }) {
   return <span>{parts}</span>;
 }
 
+const ABSTRACT = "font-family:var(--sans); font-size:var(--t-sm); line-height:1.7; color:var(--ink); margin:0 0 20px; max-width:74ch;";
+
+/** The folded abstract: 255 characters with the last ten fading out, hidden once the disclosure checkbox is checked. */
+function FoldedAbstract(props: { text: string }) {
+  const cut = props.text.slice(0, FOLD);
+  return (
+    <p className="fold-cut" style={ABSTRACT}>
+      {cut.slice(0, FADE_AT)}
+      <span style="white-space:nowrap; background:linear-gradient(90deg, var(--ink), rgba(0,0,0,0)); -webkit-background-clip:text; background-clip:text; color:rgba(0,0,0,0); -webkit-text-fill-color:transparent;">
+        {cut.slice(FADE_AT)}
+      </span>
+    </p>
+  );
+}
+
 function PaperArticle(props: { p: Paper }) {
   const p = props.p;
+  const folded = p.abstract.length > FOLD;
+  const foldId = `abstract-${p.slug}`;
   return (
-    <article style="border-top:1px solid var(--line); padding:36px 0 40px;">
+    <article style="padding:36px 0 40px;">
       <Scrim spread="lg" style="max-width:860px; padding:16px 28px; margin:-16px -28px;">
-      <div style="font-family:var(--mono); font-size:var(--t-2xs); letter-spacing:.06em; color:var(--granite); margin:0 0 14px;">
-        <span style="color:var(--falu);">{p.date}</span>
-        <span style="margin:0 10px; color:var(--line);">/</span>
-        paper
-        {p.citeCount > 0 ? (
-          <span>
-            <span style="margin:0 10px; color:var(--line);">/</span>
-            {String(p.citeCount)} references
-          </span>
-        ) : null}
-      </div>
-
       <h2 style="font-family:var(--serif); font-weight:600; font-size:var(--t-xl); line-height:1.18; letter-spacing:-.015em; color:var(--ink); margin:0 0 12px; max-width:34ch;">
         {p.title}
       </h2>
@@ -201,7 +210,9 @@ function PaperArticle(props: { p: Paper }) {
         <Authors authors={p.authors} />
       </p>
 
-      <p style="font-family:var(--sans); font-size:var(--t-sm); line-height:1.7; color:var(--ink); margin:0 0 20px; max-width:74ch;">
+      {folded ? <input type="checkbox" id={foldId} className="fold-x" /> : null}
+      {folded ? <FoldedAbstract text={p.abstract} /> : null}
+      <p className={folded ? "fold-full" : ""} style={ABSTRACT}>
         {p.abstract}
       </p>
 
@@ -215,13 +226,19 @@ function PaperArticle(props: { p: Paper }) {
         </div>
       ) : null}
 
-      <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
-        <Button href={p.pdf} external>
-          Read the typeset PDF <ArrowIcon size={15} />
+      <div className="fold-row" style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+        {folded ? (
+          <Button labelFor={foldId}>
+            <span className="fold-more">Read more</span>
+            <span className="fold-less">Show less</span>
+          </Button>
+        ) : null}
+        <Button href={p.pdf} external fill="tonal">
+          Read full PDF <ArrowIcon size={15} />
         </Button>
-        <a className="ln" href={p.source} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:var(--t-xs); color:var(--ocean); padding-bottom:2px;">
-          Source on GitHub
-        </a>
+        <Button href={p.source} external fill="none" accent="ocean" outline>
+          Source on GitHub <ArrowIcon size={15} />
+        </Button>
       </div>
       </Scrim>
     </article>
@@ -412,11 +429,6 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
           {papersError ? <BuildFetchError title="Couldn&rsquo;t reach the von-neumann repo at build time" body="The paper list usually bakes in at build. The papers themselves are always live on the project site." href={`${VN_SITE}/#/papers`} cta="Open the papers on vn.noahhyden.com" /> : null}
           {hasPapers ? (
             <div>
-              <Scrim spread="sm" style="width:fit-content; padding:10px 28px; margin:-10px -28px 4px;">
-                <div style="font-family:var(--mono); font-size:var(--t-2xs); letter-spacing:.06em; color:var(--granite);">
-                  {papers.length === 1 ? "1 paper" : `${papers.length} papers`}
-                </div>
-              </Scrim>
               {papers.map((p) => <PaperArticle p={p} />)}
               <div style=" padding-top:24px; margin-top:4px;">
                 <Button href={`${VN_SITE}/#/papers`} external fill="tonal" size="lg">
