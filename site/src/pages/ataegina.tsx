@@ -1,5 +1,6 @@
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
+import { Button } from "../components/primitives.js";
 
 export const meta: PageMeta = {
   path: "/ataegina/",
@@ -28,9 +29,9 @@ export default function Ataegina() {
           and database from a single bash file. No Docker, no daemon, no YAML.
         </p>
         <div style="display:flex; flex-wrap:wrap; gap:14px; margin:30px 0 0;">
-          <a href="https://github.com/noahhyden/ataegina-cli" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; border:1px solid var(--falu); color:var(--falu);">
+          <Button href="https://github.com/noahhyden/ataegina-cli" external={true} fill="none" accent="falu" size="lg" outline={true}>
             Source on GitHub &rarr;
-          </a>
+          </Button>
         </div>
       </header>
 
