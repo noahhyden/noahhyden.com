@@ -65,7 +65,7 @@ export default function Pimas() {
           optional peer.
         </p>
         <p style="font-family:var(--sans); font-size:17px; line-height:1.64; color:var(--granite); margin:18px 0 0; max-width:66ch;">
-          pimas no longer includes a renderer or JSX: the current release (0.3) is the model runtime only. The
+          pimas no longer includes a renderer or JSX: the current release (0.4) is the model runtime only. The
           renderer lives on in <C>pimas-ui@0.1.2</C>, which is what this site is built with.
         </p>
       </header>
@@ -121,8 +121,8 @@ export default function Pimas() {
             </Step>
           </ul>
           <p style={body}>
-            <C>pimas-ui/agent/webmcp</C> projects the bridge onto WebMCP as the actions plus <C>get_*</C> and{" "}
-            <C>simulate_*</C> tools, and <C>pimas-ui/agent/page</C> puts the same surface on <C>window</C> where
+            <C>toWebMCP</C>, also from <C>pimas-ui/agent</C>, projects the bridge onto WebMCP as the actions plus <C>get_*</C> and{" "}
+            <C>simulate_*</C> tools, and <C>installPageAgent</C> puts the same surface on <C>window.__pimas</C> where
             WebMCP is not available. A preview UI and an agent call the same function, so they cannot disagree
             about the answer.
           </p>
