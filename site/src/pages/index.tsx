@@ -2,7 +2,7 @@ import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
 import { ArrowIcon, GitHubIcon, LinkedInIcon } from "../components/icons.js";
-import { Band, Eyebrow, PageTitle, SectionTitle, Card, Button, BuildFetchError } from "../components/primitives.js";
+import { Band, Scrim, Eyebrow, PageTitle, SectionTitle, Card, Button, BuildFetchError } from "../components/primitives.js";
 import { ghHeaders } from "../gh.js";
 
 export const meta: PageMeta = {
@@ -180,6 +180,7 @@ function PaperArticle(props: { p: Paper }) {
   const p = props.p;
   return (
     <article style="border-top:1px solid var(--line); padding:36px 0 40px;">
+      <Scrim spread="lg" style="max-width:860px; padding:16px 28px; margin:-16px -28px;">
       <div style="font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--granite); margin:0 0 14px;">
         <span style="color:var(--falu);">{p.date}</span>
         <span style="margin:0 10px; color:var(--line);">/</span>
@@ -222,6 +223,7 @@ function PaperArticle(props: { p: Paper }) {
           Source on GitHub
         </a>
       </div>
+      </Scrim>
     </article>
   );
 }
@@ -253,14 +255,16 @@ function RepoLink(props: { r: Repo; card?: boolean }) {
   if (!c) {
     return (
       <a className="lift" href={r.url} target="_blank" rel="noopener" style="display:flex; align-items:flex-start; justify-content:space-between; gap:28px; padding:22px 4px 22px; flex-wrap:wrap; border-top:1px solid var(--line);">
-        <div style="flex:1 1 320px; min-width:0;">
+        <Scrim spread="md" style="flex:0 1 640px; min-width:0; padding:10px 24px; margin:-10px -24px;">
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">{icon}<span style={nameStyle}>{r.name}</span></div>
           <p style="font-family:var(--sans); font-size:14.5px; line-height:1.55; color:var(--granite); margin:0; max-width:64ch;">{r.desc}</p>
-        </div>
-        <div style="flex:none; display:flex; align-items:center; gap:18px; font-family:var(--mono); font-size:12px; color:var(--granite); padding-top:2px;">
-          {meta}
-          <span>{r.updated}</span>
-        </div>
+        </Scrim>
+        <Scrim spread="sm" style="flex:none; padding:8px 20px; margin:-6px -20px -8px 0;">
+          <div style="display:flex; align-items:center; gap:18px; font-family:var(--mono); font-size:12px; color:var(--granite);">
+            {meta}
+            <span>{r.updated}</span>
+          </div>
+        </Scrim>
       </a>
     );
   }
@@ -283,9 +287,11 @@ function RepoLink(props: { r: Repo; card?: boolean }) {
 
 function SectionLabel(props: { children: string }) {
   return (
-    <div style="font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin:0 0 20px;">
-      {props.children}
-    </div>
+    <Scrim spread="sm" style="width:fit-content; max-width:100%; padding:12px 32px; margin:-12px -32px 8px;">
+      <div style="font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin:0;">
+        {props.children}
+      </div>
+    </Scrim>
   );
 }
 
@@ -359,19 +365,21 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
       <Band id="hero">
         <div style="position:relative; padding:96px clamp(20px,5vw,40px) 88px;">
           <div style="position:relative; max-width:1080px; margin:0 auto;">
+            <Scrim spread="lg" style="width:fit-content; max-width:100%; padding:28px 48px; margin:-28px -48px;">
             <PageTitle style="margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></PageTitle>
             <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
               <Button href="#projects" fill="tonal">Projects</Button>
               <a href="https://github.com/noahhyden" target="_blank" rel="noopener" aria-label="GitHub" style="display:inline-flex; color:var(--granite);"><GitHubIcon size={26} /></a>
               <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" aria-label="LinkedIn" style="display:inline-flex; color:var(--granite);"><LinkedInIcon size={26} /></a>
             </div>
+            </Scrim>
           </div>
         </div>
       </Band>
 
       <Band id="projects" labelledBy="projects-title">
         <div style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px);">
-          <SectionTitle style="margin:18px 0 64px;"><span id="projects-title">Projects</span></SectionTitle>
+          <Scrim spread="md" style="width:fit-content; max-width:100%; padding:16px 40px; margin:2px -40px 48px;"><SectionTitle style="margin:0;"><span id="projects-title">Projects</span></SectionTitle></Scrim>
 
           {error ? <BuildFetchError title="Couldn&rsquo;t reach GitHub at build time" body="The repository list usually bakes in at build. If it&rsquo;s being stubborn, the projects are all on my profile directly." href="https://github.com/noahhyden?tab=repositories" cta="Open my repositories" /> : null}
 
@@ -405,13 +413,15 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
 
       <Band id="papers" labelledBy="papers-title">
         <div style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px);">
-          <SectionTitle style="margin:0 0 64px;"><span id="papers-title">Papers</span></SectionTitle>
+          <Scrim spread="md" style="width:fit-content; max-width:100%; padding:16px 40px; margin:-16px -40px 48px;"><SectionTitle style="margin:0;"><span id="papers-title">Papers</span></SectionTitle></Scrim>
           {papersError ? <BuildFetchError title="Couldn&rsquo;t reach the von-neumann repo at build time" body="The paper list usually bakes in at build. The papers themselves are always live on the project site." href={`${VN_SITE}/#/papers`} cta="Open the papers on vn.noahhyden.com" /> : null}
           {hasPapers ? (
             <div>
-              <div style="font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--granite); margin:0 0 4px;">
-                {papers.length === 1 ? "1 paper" : `${papers.length} papers`}
-              </div>
+              <Scrim spread="sm" style="width:fit-content; padding:10px 28px; margin:-10px -28px 4px;">
+                <div style="font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--granite);">
+                  {papers.length === 1 ? "1 paper" : `${papers.length} papers`}
+                </div>
+              </Scrim>
               {papers.map((p) => <PaperArticle p={p} />)}
               <div style=" padding-top:24px; margin-top:4px;">
                 <Button href={`${VN_SITE}/#/papers`} external fill="tonal" size="lg">
@@ -430,7 +440,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
 
       <Band id="explore">
         <div style="max-width:1080px; margin:0 auto; padding:64px clamp(20px,5vw,40px) 96px;">
-          <div style="margin:0 0 22px;"><Eyebrow>Explore</Eyebrow></div>
+          <Scrim spread="sm" style="width:fit-content; padding:12px 32px; margin:-12px -32px 10px;"><Eyebrow>Explore</Eyebrow></Scrim>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px;">
             <Dest href="/pimas/" accent="var(--laurel)" title="pimas" note="Exact what-if over a live model" icon={<TrajectoryIcon />} />
             <Dest href="/von-neumann/" accent="var(--ocean)" title="von-neumann" note="Self-replicating space manufacturing" icon={<PlanetIcon />} />
