@@ -7,4 +7,4 @@ applies_to:
 ---
 ## Text sizes come from the eight-step ladder
 
-Every font-size is one of --t-2xs 12, --t-xs 15, --t-sm 18 (base), --t-md 20, --t-lg 24, --t-xl 30, --t-2xl 40, --t-3xl 56; a raw px or em literal reintroduces the near-duplicate steps the ladder replaced.
+Every font-size is one of --t-2xs 14, --t-xs 17, --t-sm 20 (base), --t-md 24, --t-lg 28, --t-xl 34, --t-2xl 48, --t-3xl 76; a raw px or em literal reintroduces the near-duplicate steps the ladder replaced.
