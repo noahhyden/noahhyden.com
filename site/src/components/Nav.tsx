@@ -1,6 +1,6 @@
 import { GitHubIcon, LinkedInIcon, Mark } from "./icons.js";
 
-type Section = "about" | "pimas" | "papers" | null;
+type Section = "pimas" | null;
 
 function link(href: string, label: string, active: boolean) {
   const color = active ? "var(--ink)" : "var(--granite)";
@@ -23,10 +23,9 @@ export function Nav(props: { active?: Section } = {}) {
           <span>Noah Hyden<span style="color:var(--falu);">.</span></span>
         </a>
         <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px 28px;">
-          {link("/#about", "About", false)}
           {link("/pimas/", "pimas", active === "pimas")}
           {link("/#projects", "Projects", false)}
-          {link("/papers/", "Papers", active === "papers")}
+          {link("/#papers", "Papers", false)}
         </div>
         <div style="display:flex; align-items:center; gap:18px;">
           <a href="https://github.com/noahhyden" target="_blank" rel="noopener" aria-label="GitHub" style="display:inline-flex; color:var(--granite);">
