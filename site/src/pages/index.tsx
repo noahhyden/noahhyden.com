@@ -181,7 +181,7 @@ function PaperArticle(props: { p: Paper }) {
   return (
     <article style="border-top:1px solid var(--line); padding:36px 0 40px;">
       <Scrim spread="lg" style="max-width:860px; padding:16px 28px; margin:-16px -28px;">
-      <div style="font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--granite); margin:0 0 14px;">
+      <div style="font-family:var(--mono); font-size:var(--t-2xs); letter-spacing:.06em; color:var(--granite); margin:0 0 14px;">
         <span style="color:var(--falu);">{p.date}</span>
         <span style="margin:0 10px; color:var(--line);">/</span>
         paper
@@ -193,22 +193,22 @@ function PaperArticle(props: { p: Paper }) {
         ) : null}
       </div>
 
-      <h2 style="font-family:var(--serif); font-weight:600; font-size:29px; line-height:1.18; letter-spacing:-.015em; color:var(--ink); margin:0 0 12px; max-width:34ch;">
+      <h2 style="font-family:var(--serif); font-weight:600; font-size:var(--t-xl); line-height:1.18; letter-spacing:-.015em; color:var(--ink); margin:0 0 12px; max-width:34ch;">
         {p.title}
       </h2>
 
-      <p style="font-family:var(--sans); font-size:14px; line-height:1.5; color:var(--granite); margin:0 0 20px;">
+      <p style="font-family:var(--sans); font-size:var(--t-xs); line-height:1.5; color:var(--granite); margin:0 0 20px;">
         <Authors authors={p.authors} />
       </p>
 
-      <p style="font-family:var(--sans); font-size:15.5px; line-height:1.7; color:var(--ink); margin:0 0 20px; max-width:74ch;">
+      <p style="font-family:var(--sans); font-size:var(--t-sm); line-height:1.7; color:var(--ink); margin:0 0 20px; max-width:74ch;">
         {p.abstract}
       </p>
 
       {p.keywords.length > 0 ? (
         <div style="display:flex; flex-wrap:wrap; gap:8px; margin:0 0 24px;">
           {p.keywords.map((k) => (
-            <span style="font-family:var(--mono); font-size:11px; letter-spacing:.02em; color:var(--granite); background:var(--surface); border-radius:2px; padding:4px 9px;">
+            <span style="font-family:var(--mono); font-size:var(--t-2xs); letter-spacing:.02em; color:var(--granite); background:var(--surface); border-radius:2px; padding:4px 9px;">
               {k}
             </span>
           ))}
@@ -219,7 +219,7 @@ function PaperArticle(props: { p: Paper }) {
         <Button href={p.pdf} external>
           Read the typeset PDF <ArrowIcon size={15} />
         </Button>
-        <a className="ln" href={p.source} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px; color:var(--ocean); padding-bottom:2px;">
+        <a className="ln" href={p.source} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:var(--t-xs); color:var(--ocean); padding-bottom:2px;">
           Source on GitHub
         </a>
       </div>
@@ -251,16 +251,16 @@ function RepoLink(props: { r: Repo; card?: boolean }) {
       <path d="M4 5a1 1 0 0 1 1-1h15v12H5a1 1 0 0 0-1 1" />
     </svg>
   );
-  const nameStyle = `font-family:var(--serif); font-weight:600; font-size:${c ? 19 : 18}px; line-height:1.2; letter-spacing:-.01em; color:var(--ink); word-break:break-word;`;
+  const nameStyle = "font-family:var(--serif); font-weight:600; font-size:var(--t-sm); line-height:1.2; letter-spacing:-.01em; color:var(--ink); word-break:break-word;";
   if (!c) {
     return (
       <a className="lift" href={r.url} target="_blank" rel="noopener" style="display:flex; align-items:flex-start; justify-content:space-between; gap:28px; padding:22px 4px 22px; flex-wrap:wrap; border-top:1px solid var(--line);">
         <Scrim spread="md" style="flex:0 1 640px; min-width:0; padding:10px 24px; margin:-10px -24px;">
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">{icon}<span style={nameStyle}>{r.name}</span></div>
-          <p style="font-family:var(--sans); font-size:14.5px; line-height:1.55; color:var(--granite); margin:0; max-width:64ch;">{r.desc}</p>
+          <p style="font-family:var(--sans); font-size:var(--t-xs); line-height:1.55; color:var(--granite); margin:0; max-width:64ch;">{r.desc}</p>
         </Scrim>
         <Scrim spread="sm" style="flex:none; padding:8px 20px; margin:-6px -20px -8px 0;">
-          <div style="display:flex; align-items:center; gap:18px; font-family:var(--mono); font-size:12px; color:var(--granite);">
+          <div style="display:flex; align-items:center; gap:18px; font-family:var(--mono); font-size:var(--t-2xs); color:var(--granite);">
             {meta}
             <span>{r.updated}</span>
           </div>
@@ -273,11 +273,11 @@ function RepoLink(props: { r: Repo; card?: boolean }) {
       <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px;">
         <div style="display:flex; align-items:center; gap:10px; min-width:0;">{icon}<span style={nameStyle}>{r.name}</span></div>
         {r.pinned ? (
-          <span style="flex:none; font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--falu); border-radius:2px; padding:3px 7px;">pinned</span>
+          <span style="flex:none; font-family:var(--mono); font-size:var(--t-2xs); letter-spacing:.08em; text-transform:uppercase; color:var(--falu); border-radius:2px; padding:3px 7px;">pinned</span>
         ) : null}
       </div>
-      <p style="font-family:var(--sans); font-size:14.5px; line-height:1.55; color:var(--granite); margin:0 0 auto; padding-bottom:18px;">{r.desc}</p>
-      <div style="display:flex; align-items:center; gap:18px; font-family:var(--mono); font-size:12px; color:var(--granite); padding-top:14px; border-top:1px solid var(--line);">
+      <p style="font-family:var(--sans); font-size:var(--t-xs); line-height:1.55; color:var(--granite); margin:0 0 auto; padding-bottom:18px;">{r.desc}</p>
+      <div style="display:flex; align-items:center; gap:18px; font-family:var(--mono); font-size:var(--t-2xs); color:var(--granite); padding-top:14px; border-top:1px solid var(--line);">
         {meta}
         <span style="margin-left:auto; color:var(--granite);">{r.updated}</span>
       </div>
@@ -288,7 +288,7 @@ function RepoLink(props: { r: Repo; card?: boolean }) {
 function SectionLabel(props: { children: string }) {
   return (
     <Scrim spread="sm" style="width:fit-content; max-width:100%; padding:12px 32px; margin:-12px -32px 8px;">
-      <div style="font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin:0;">
+      <div style="font-family:var(--mono); font-size:var(--t-2xs); letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin:0;">
         {props.children}
       </div>
     </Scrim>
@@ -303,9 +303,9 @@ function Dest(props: { href: string; accent: string; title: string; note?: strin
           {props.icon}
         </span>
       </div>
-      <div style="font-family:var(--serif); font-weight:600; font-size:23px; letter-spacing:-.01em; margin-bottom:6px;">{props.title}</div>
-      <div style="font-family:var(--sans); font-size:15px; color:var(--granite); margin-bottom:18px;">{props.note}</div>
-      <span style="display:inline-flex; align-items:center; gap:7px; font-family:var(--mono); font-size:12px; color:var(--falu);">Open &rarr;</span>
+      <div style="font-family:var(--serif); font-weight:600; font-size:var(--t-lg); letter-spacing:-.01em; margin-bottom:6px;">{props.title}</div>
+      <div style="font-family:var(--sans); font-size:var(--t-xs); color:var(--granite); margin-bottom:18px;">{props.note}</div>
+      <span style="display:inline-flex; align-items:center; gap:7px; font-family:var(--mono); font-size:var(--t-2xs); color:var(--falu);">Open &rarr;</span>
     </Card>
   );
 }
@@ -400,7 +400,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
 
           {isEmpty ? (
             <Card tone="surface" outline={false} lift={false} pad="lg" style="padding:40px; text-align:center;">
-              <p style="font-family:var(--sans); font-size:16px; color:var(--granite); margin:0;">Something went wrong, please notify me via any one of my channels.</p>
+              <p style="font-family:var(--sans); font-size:var(--t-sm); color:var(--granite); margin:0;">Something went wrong, please notify me via any one of my channels.</p>
             </Card>
           ) : null}
         </div>
@@ -413,7 +413,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
           {hasPapers ? (
             <div>
               <Scrim spread="sm" style="width:fit-content; padding:10px 28px; margin:-10px -28px 4px;">
-                <div style="font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--granite);">
+                <div style="font-family:var(--mono); font-size:var(--t-2xs); letter-spacing:.06em; color:var(--granite);">
                   {papers.length === 1 ? "1 paper" : `${papers.length} papers`}
                 </div>
               </Scrim>
@@ -427,7 +427,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
           ) : null}
           {papersEmpty ? (
             <Card tone="surface" outline={false} lift={false} pad="lg" style="padding:40px; text-align:center;">
-              <p style="font-family:var(--sans); font-size:16px; color:var(--granite); margin:0;">No papers published yet - check back soon.</p>
+              <p style="font-family:var(--sans); font-size:var(--t-sm); color:var(--granite); margin:0;">No papers published yet - check back soon.</p>
             </Card>
           ) : null}
         </div>

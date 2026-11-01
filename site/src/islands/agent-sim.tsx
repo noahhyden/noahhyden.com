@@ -233,7 +233,7 @@ export default function AgentSim(): Child {
 
   const modeBtn = (m: Mode, labelTxt: string) => (
     <button type="button" onClick={() => { if (!running()) { setMode(m); clear(); } }}
-      style={() => `${mono} font-size:12px; padding:8px 13px; border-radius:2px; cursor:pointer; ` +
+      style={() => `${mono} font-size:var(--t-2xs); padding:8px 13px; border-radius:2px; cursor:pointer; ` +
         (mode() === m ? "background:var(--ink); color:var(--ground); border:1px solid var(--ink);" : "background:transparent; color:var(--granite); border:1px solid var(--line);")}>
       {labelTxt}
     </button>
@@ -241,8 +241,8 @@ export default function AgentSim(): Child {
 
   const stat = (labelTxt: string, get: () => number, danger?: boolean) => (
     <div style="flex:1 1 76px;">
-      <div style={() => `${mono} font-size:23px; font-weight:700; font-variant-numeric:tabular-nums; color:${danger && get() > 0 ? "var(--falu)" : "var(--ink)"};`}>{() => String(get())}</div>
-      <div style="font-family:var(--sans); font-size:12px; color:var(--granite); margin-top:3px;">{labelTxt}</div>
+      <div style={() => `${mono} font-size:var(--t-lg); font-weight:700; font-variant-numeric:tabular-nums; color:${danger && get() > 0 ? "var(--falu)" : "var(--ink)"};`}>{() => String(get())}</div>
+      <div style="font-family:var(--sans); font-size:var(--t-2xs); color:var(--granite); margin-top:3px;">{labelTxt}</div>
     </div>
   );
 
@@ -254,17 +254,17 @@ export default function AgentSim(): Child {
     const pct = Math.round((r.score / max) * 100);
     return (
       <div style="display:flex; align-items:center; gap:12px; padding:6px 0;">
-        <span style={`${mono} font-size:12px; width:20px; color:${isTop ? "var(--ink)" : "var(--granite)"}; font-weight:${isTop ? "700" : "400"};`}>#{String(r.rank)}</span>
-        <span style={`font-family:var(--sans); font-size:14px; width:74px; color:var(--ink); font-weight:${isGoal ? "600" : "400"};`}>{r.name}</span>
+        <span style={`${mono} font-size:var(--t-2xs); width:20px; color:${isTop ? "var(--ink)" : "var(--granite)"}; font-weight:${isTop ? "700" : "400"};`}>#{String(r.rank)}</span>
+        <span style={`font-family:var(--sans); font-size:var(--t-xs); width:74px; color:var(--ink); font-weight:${isGoal ? "600" : "400"};`}>{r.name}</span>
         <span style="flex:1; height:10px; background:var(--surface); border-radius:2px; overflow:hidden;"><span style={`display:block; height:100%; width:${pct}%; background:${barColor}; transition:width .28s ease;`} /></span>
-        <span style={`${mono} font-size:11px; width:40px; text-align:right; color:var(--granite); font-variant-numeric:tabular-nums;`}>{String(Math.round(r.score))}</span>
+        <span style={`${mono} font-size:var(--t-2xs); width:40px; text-align:right; color:var(--granite); font-variant-numeric:tabular-nums;`}>{String(Math.round(r.score))}</span>
       </div>
     );
   }
 
   const pillarBtn = (p: string) => (
     <button type="button" onClick={() => { setDraftPillar(p); setDraftWeight(w[p]); }}
-      style={() => `${mono} font-size:11px; padding:6px 10px; border-radius:2px; cursor:pointer; ` +
+      style={() => `${mono} font-size:var(--t-2xs); padding:6px 10px; border-radius:2px; cursor:pointer; ` +
         (draftPillar() === p ? "background:var(--ocean); color:var(--ground); border:1px solid var(--ocean);" : "background:transparent; color:var(--granite); border:1px solid var(--line);")}>
       {p}
     </button>
@@ -310,7 +310,7 @@ export default function AgentSim(): Child {
 
   const graph = () => (
     <div style="margin-top:20px;">
-      <div style={`${mono} font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:8px;`}>dependency graph &middot; this model</div>
+      <div style={`${mono} font-size:var(--t-2xs); letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:8px;`}>dependency graph &middot; this model</div>
       <div style="overflow-x:auto; border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:14px;">
         <svg viewBox="0 0 726 170" style="display:block; width:100%; min-width:660px; height:auto;" role="img" aria-label="dependency graph of the demo model">
           {G_EDGES.map(([from, to]) => {
@@ -326,16 +326,16 @@ export default function AgentSim(): Child {
               <rect x={String(n.x)} y={String(n.y)} width={String(NW)} height={String(NH)} rx="3"
                 style={() => { const s = nodeLit(n); return `fill:var(--ground); stroke:${litStroke(s)}; stroke-width:${s === "none" ? "1" : "2"}px; ${s === "spec" ? "stroke-dasharray:5 3;" : ""}`; }} />
               <text x={String(n.x + NW / 2)} y={String(n.y + 16)} text-anchor="middle"
-                style={() => { const s = nodeLit(n); return `font-family:var(--mono); font-size:11px; fill:${s === "spec" ? "var(--ocean)" : s === "comm" ? "var(--laurel)" : "var(--ink)"};`; }}>{n.label}</text>
+                style={() => { const s = nodeLit(n); return `font-family:var(--mono); font-size:var(--t-2xs); fill:${s === "spec" ? "var(--ocean)" : s === "comm" ? "var(--laurel)" : "var(--ink)"};`; }}>{n.label}</text>
               <text x={String(n.x + NW / 2)} y={String(n.y + 30)} text-anchor="middle"
-                style={() => { const s = nodeLit(n); return `font-family:var(--mono); font-size:9px; fill:${s === "none" ? "var(--granite)" : s === "spec" ? "var(--ocean)" : "var(--laurel)"};`; }}>
+                style={() => { const s = nodeLit(n); return `font-family:var(--mono); font-size:var(--t-2xs); fill:${s === "none" ? "var(--granite)" : s === "spec" ? "var(--ocean)" : "var(--laurel)"};`; }}>
                 {n.input ? (() => `w ${w[n.id].toFixed(1)}`) : (() => `runs ${counts()[n.id as NodeId]}`)}
               </text>
             </g>
           ))}
         </svg>
       </div>
-      <p style="font-family:var(--sans); font-size:12px; line-height:1.55; color:var(--granite); margin:8px 0 0; max-width:70ch;">
+      <p style="font-family:var(--sans); font-size:var(--t-2xs); line-height:1.55; color:var(--granite); margin:8px 0 0; max-width:70ch;">
         This is the dependency graph for this one demo model, hand-wired to match it (not auto-discovered); a node lights <span style="color:var(--laurel);">laurel</span> only when its compute function genuinely re-ran on the last commit (the count is that node&rsquo;s real recompute total), and lights <span style="color:var(--ocean);">ocean, dashed</span> when the current speculate touched it in a shadow with nothing committed.
       </p>
     </div>
@@ -344,10 +344,10 @@ export default function AgentSim(): Child {
   return (
     <div style="border:1px solid var(--line); border-radius:4px; background:var(--ground); padding:22px;">
       <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:6px;">
-        <div style={`${mono} font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite);`}>Live demo - drive it, or watch an agent</div>
+        <div style={`${mono} font-size:var(--t-2xs); letter-spacing:.14em; text-transform:uppercase; color:var(--granite);`}>Live demo - drive it, or watch an agent</div>
         <div style="display:flex; gap:7px; flex-wrap:wrap;">{modeBtn("you", "you drive")}{modeBtn("pimas", "pimas agent")}{modeBtn("ordinary", "ordinary agent")}</div>
       </div>
-      <p style="font-family:var(--sans); font-size:14px; line-height:1.55; color:var(--granite); margin:0 0 16px; max-width:64ch;">
+      <p style="font-family:var(--sans); font-size:var(--t-xs); line-height:1.55; color:var(--granite); margin:0 0 16px; max-width:64ch;">
         {() => mode() === "you"
           ? "You are the agent. Pick a pillar, drag its weight, and watch the predicted ranking move through a real speculate - while the committed model on the left does not. Commit to apply it for real."
           : "Goal: get France into the top 2 by re-weighting one pillar. Same task, two agents. Watch the live model on the left."}
@@ -357,14 +357,14 @@ export default function AgentSim(): Child {
       {() => mode() === "you" ? (
         <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:14px 16px; margin-bottom:16px;">
           <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
-            <span style={`${mono} font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite);`}>weight of</span>
+            <span style={`${mono} font-size:var(--t-2xs); letter-spacing:.12em; text-transform:uppercase; color:var(--granite);`}>weight of</span>
             <div style="display:flex; gap:6px;">{PILLARS.map((p) => pillarBtn(p))}</div>
           </div>
           <div style="display:flex; align-items:center; gap:14px;">
             <input type="range" min="0.5" max="16" step="0.5" value={() => String(draftWeight())}
               onInput={(e: Event) => setDraftWeight(Number((e.currentTarget as HTMLInputElement).value))}
               style="flex:1; accent-color:var(--ocean);" />
-            <span style={`${mono} font-size:15px; font-weight:700; color:var(--ocean); width:56px; text-align:right; font-variant-numeric:tabular-nums;`}>{() => draftWeight().toFixed(1)}&times;</span>
+            <span style={`${mono} font-size:var(--t-xs); font-weight:700; color:var(--ocean); width:56px; text-align:right; font-variant-numeric:tabular-nums;`}>{() => draftWeight().toFixed(1)}&times;</span>
           </div>
         </div>
       ) : null}
@@ -372,7 +372,7 @@ export default function AgentSim(): Child {
       <div style="display:flex; gap:18px; align-items:stretch; flex-wrap:wrap;">
         <div style={() => "flex:1 1 300px; border-radius:3px; padding:16px; transition:background .2s, border-color .2s; border:1.5px solid " +
           (flash() === "wrong" ? "var(--falu); background:rgba(128,24,24,.06);" : flash() === "ok" ? "var(--laurel); background:rgba(59,91,71,.07);" : "var(--line); background:var(--ground);")}>
-          <div style={`${mono} font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin-bottom:10px;`}>
+          <div style={`${mono} font-size:var(--t-2xs); letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin-bottom:10px;`}>
             {() => mode() === "you" ? "live model · committed" : "live model"} {() => (flash() === "ok" ? "· goal met" : flash() === "wrong" ? "· wrong state" : "")}
           </div>
           {() => ranking().map((r) => rankRow(r, maxScore(), "live"))}
@@ -382,19 +382,19 @@ export default function AgentSim(): Child {
           <div style="flex:1 1 300px; display:flex; flex-direction:column; gap:13px;">
             <div style={() => "flex:1; border-radius:3px; padding:16px; border:1.5px dashed " +
               (dirty() ? "var(--ocean); background:rgba(59,86,105,.06);" : "var(--line);")}>
-              <div style={`${mono} font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ocean); margin-bottom:10px;`}>
+              <div style={`${mono} font-size:var(--t-2xs); letter-spacing:.12em; text-transform:uppercase; color:var(--ocean); margin-bottom:10px;`}>
                 predicted · speculate, nothing committed {() => (predGoalRank() <= 2 ? "· goal met" : "")}
               </div>
               {() => predicted().map((r) => rankRow({ name: r.unit, score: r.score, rank: r.rank }, predMax(), "pred"))}
             </div>
             <div style="display:flex; gap:10px;">
               <button type="button" onClick={commitDraft} disabled={() => !dirty()}
-                style={() => `${mono} font-size:13px; padding:11px 18px; border-radius:2px; flex:1; border:1px solid var(--laurel); ` +
+                style={() => `${mono} font-size:var(--t-xs); padding:11px 18px; border-radius:2px; flex:1; border:1px solid var(--laurel); ` +
                   (dirty() ? "background:var(--laurel); color:var(--ground); cursor:pointer;" : "background:var(--surface); border-color:var(--line); color:var(--granite); cursor:default;")}>
                 {() => dirty() ? "commit this for real →" : "drag to speculate"}
               </button>
               <button type="button" onClick={resetYou}
-                style={`${mono} font-size:13px; padding:11px 16px; border-radius:2px; border:1px solid var(--line); background:transparent; color:var(--granite); cursor:pointer;`}>
+                style={`${mono} font-size:var(--t-xs); padding:11px 16px; border-radius:2px; border:1px solid var(--line); background:transparent; color:var(--granite); cursor:pointer;`}>
                 reset
               </button>
             </div>
@@ -405,8 +405,8 @@ export default function AgentSim(): Child {
               {stat("tool calls", calls)}
               {stat("live writes", writes)}
               <div style="flex:1 1 76px;">
-                <div style={() => `${mono} font-size:23px; font-weight:700; font-variant-numeric:tabular-nums; color:${wrong() > 0 ? "var(--falu)" : "var(--ink)"};`}>{() => String(wrong())}</div>
-                <div style="font-family:var(--sans); font-size:12px; color:var(--granite); margin-top:3px;">wrong live states</div>
+                <div style={() => `${mono} font-size:var(--t-lg); font-weight:700; font-variant-numeric:tabular-nums; color:${wrong() > 0 ? "var(--falu)" : "var(--ink)"};`}>{() => String(wrong())}</div>
+                <div style="font-family:var(--sans); font-size:var(--t-2xs); color:var(--granite); margin-top:3px;">wrong live states</div>
               </div>
             </div>
 
@@ -414,21 +414,21 @@ export default function AgentSim(): Child {
               const s = shadow();
               return (
                 <div style={`border:1.5px dashed ${s ? "var(--ocean)" : "var(--line)"}; border-radius:3px; padding:10px 12px; min-height:42px; background:${s ? "rgba(59,86,105,.06)" : "transparent"};`}>
-                  <div style={`${mono} font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--ocean); margin-bottom:4px;`}>shadow &middot; nothing committed</div>
-                  <div style={`${mono} font-size:12px; color:${s ? (s.ok ? "var(--laurel)" : "var(--ocean)") : "var(--granite)"};`}>{() => { const c = shadow(); return c ? c.label + (c.ok ? "  (ok)" : "") : "idle"; }}</div>
+                  <div style={`${mono} font-size:var(--t-2xs); letter-spacing:.14em; text-transform:uppercase; color:var(--ocean); margin-bottom:4px;`}>shadow &middot; nothing committed</div>
+                  <div style={`${mono} font-size:var(--t-2xs); color:${s ? (s.ok ? "var(--laurel)" : "var(--ocean)") : "var(--granite)"};`}>{() => { const c = shadow(); return c ? c.label + (c.ok ? "  (ok)" : "") : "idle"; }}</div>
                 </div>
               );
             }}
 
             <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:10px 12px; min-height:90px; flex:1;">
-              <div style={`${mono} font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:6px;`}>agent log</div>
+              <div style={`${mono} font-size:var(--t-2xs); letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:6px;`}>agent log</div>
               {() => log().length === 0
-                ? <div style={`${mono} font-size:12px; color:var(--granite);`}>press Run &rarr;</div>
-                : log().map((l) => <div style={`${mono} font-size:11.5px; line-height:1.5; color:${l.tone === "ok" ? "var(--laurel)" : l.tone === "wrong" ? "var(--falu)" : "var(--ink)"}; word-break:break-word;`}>{l.t}</div>)}
+                ? <div style={`${mono} font-size:var(--t-2xs); color:var(--granite);`}>press Run &rarr;</div>
+                : log().map((l) => <div style={`${mono} font-size:var(--t-2xs); line-height:1.5; color:${l.tone === "ok" ? "var(--laurel)" : l.tone === "wrong" ? "var(--falu)" : "var(--ink)"}; word-break:break-word;`}>{l.t}</div>)}
             </div>
 
             <button type="button" onClick={run}
-              style={() => `${mono} font-size:13px; padding:11px 18px; border-radius:2px; border:1px solid var(--laurel); ` +
+              style={() => `${mono} font-size:var(--t-xs); padding:11px 18px; border-radius:2px; border:1px solid var(--laurel); ` +
                 (running() ? "background:var(--granite); border-color:var(--granite); color:var(--ground); cursor:default;" : "background:var(--laurel); color:var(--ground); cursor:pointer;")}>
               {() => running() ? "running…" : done() ? "run again" : `run the ${mode()} agent`}
             </button>
@@ -441,8 +441,8 @@ export default function AgentSim(): Child {
 
       {() => { const c = explain(); return c ? (
         <div style="margin:14px 0 0; padding:11px 13px; background:var(--surface); border-radius:3px; border-left:2px solid var(--laurel);">
-          <span style={`${mono} font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--laurel);`}>explain() &middot; L2 causal record</span>
-          <div style={`${mono} font-size:12.5px; line-height:1.55; color:var(--ink); margin-top:4px; word-break:break-word;`}>
+          <span style={`${mono} font-size:var(--t-2xs); letter-spacing:.14em; text-transform:uppercase; color:var(--laurel);`}>explain() &middot; L2 causal record</span>
+          <div style={`${mono} font-size:var(--t-2xs); line-height:1.55; color:var(--ink); margin-top:4px; word-break:break-word;`}>
             {fmtExplain(c)} <span style="color:var(--granite);">changed exposed</span> {c.changed.length ? c.changed.join(", ") : "nothing"}
             {c.writes.length ? <span style="color:var(--granite);"> &middot; wrote {c.writes.join(", ")}</span> : null}
           </div>
@@ -451,34 +451,34 @@ export default function AgentSim(): Child {
 
       <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin-top:16px;">
         <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:12px 14px;">
-          <div style={`${mono} font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:8px;`}>descriptor() &middot; machine-readable model of this page</div>
+          <div style={`${mono} font-size:var(--t-2xs); letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:8px;`}>descriptor() &middot; machine-readable model of this page</div>
           {Object.entries(descriptor.state).map(([name, s]) => (
-            <div style={`${mono} font-size:11.5px; line-height:1.5; margin-bottom:3px; word-break:break-word;`}>
+            <div style={`${mono} font-size:var(--t-2xs); line-height:1.5; margin-bottom:3px; word-break:break-word;`}>
               <span style="color:var(--ocean);">{name}</span>
               <span style="color:var(--granite);"> : {(s.schema as { type?: string } | undefined)?.type ?? "value"}</span>
               {s.description ? <span style="color:var(--granite);"> &middot; {s.description}</span> : null}
             </div>
           ))}
           {Object.entries(descriptor.actions).map(([name, a]) => (
-            <div style={`${mono} font-size:11.5px; line-height:1.5; margin-bottom:3px; word-break:break-word;`}>
+            <div style={`${mono} font-size:var(--t-2xs); line-height:1.5; margin-bottom:3px; word-break:break-word;`}>
               <span style="color:var(--falu);">{name}({(a.params ?? []).join(", ")})</span>
               {a.description ? <span style="color:var(--granite);"> &middot; {a.description}</span> : null}
             </div>
           ))}
         </div>
         <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:12px 14px;">
-          <div style={`${mono} font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:8px;`}>subscribe() &middot; live delta stream</div>
+          <div style={`${mono} font-size:var(--t-2xs); letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:8px;`}>subscribe() &middot; live delta stream</div>
           {() => deltas().length === 0
-            ? <div style={`${mono} font-size:11.5px; color:var(--granite);`}>commit a change to see deltas pushed here</div>
+            ? <div style={`${mono} font-size:var(--t-2xs); color:var(--granite);`}>commit a change to see deltas pushed here</div>
             : deltas().map((d) => (
-              <div style={`${mono} font-size:11.5px; line-height:1.5; margin-bottom:3px; word-break:break-word; color:${d.tone === "cause" ? "var(--falu)" : "var(--ink)"};`}>
+              <div style={`${mono} font-size:var(--t-2xs); line-height:1.5; margin-bottom:3px; word-break:break-word; color:${d.tone === "cause" ? "var(--falu)" : "var(--ink)"};`}>
                 <span style="color:var(--granite);">{d.tone === "cause" ? "cause " : "state "}</span>{d.t}
               </div>
             ))}
         </div>
       </div>
 
-      <p style="font-family:var(--sans); font-size:12px; line-height:1.55; color:var(--granite); margin:14px 0 0;">
+      <p style="font-family:var(--sans); font-size:var(--t-2xs); line-height:1.55; color:var(--granite); margin:14px 0 0;">
         {() => mode() === "you"
           ? "The predicted panel is bridge.speculatePlan run in a copy-on-write shadow in your browser; the live panel is the committed graph, untouched until you commit. Commit calls commitPlan; the explain() trace and the subscribe() stream above are the real bridge output, not a recording."
           : "This runs pimas in your browser - the same speculate the framework ships. The scripted policy is fixed; the shadow evaluation is real (nothing commits until the final commit)."}
