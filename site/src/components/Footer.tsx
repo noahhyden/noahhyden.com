@@ -27,6 +27,7 @@ export function Footer() {
           <div style={HEAD}>Work</div>
           <ul style={LIST}>
             <li><a href="/pimas/" class="ln" style={ITEM}>pimas</a></li>
+            <li><a href="/von-neumann/" class="ln" style={ITEM}>von-neumann</a></li>
             <li><a href="/#projects" class="ln" style={ITEM}>Projects</a></li>
             <li><a href="/#papers" class="ln" style={ITEM}>Papers</a></li>
           </ul>

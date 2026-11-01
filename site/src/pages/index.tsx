@@ -307,14 +307,13 @@ function HeroRosette() {
   );
 }
 
-function Dest(props: { href: string; n: string; accent: string; title: string; note?: string; icon: Child }) {
+function Dest(props: { href: string; accent: string; title: string; note?: string; icon: Child }) {
   return (
     <Card href={props.href} tone="surface" style="padding:30px 28px 28px;">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;">
         <span style={`display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:2px; background:var(--ground); color:${props.accent};`}>
           {props.icon}
         </span>
-        <span style="font-family:var(--mono); font-size:11px; color:var(--granite);">{props.n}</span>
       </div>
       <div style="font-family:var(--serif); font-weight:600; font-size:23px; letter-spacing:-.01em; margin-bottom:6px;">{props.title}</div>
       <div style="font-family:var(--sans); font-size:15px; color:var(--granite); margin-bottom:18px;">{props.note}</div>
@@ -429,7 +428,8 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
         <div style="max-width:1080px; margin:0 auto; padding:64px clamp(20px,5vw,40px) 96px;">
           <div style="margin:0 0 22px;"><Eyebrow>Explore</Eyebrow></div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px;">
-            <Dest href="/pimas/" n="01" accent="var(--laurel)" title="pimas" note="Reactive UI engine" icon={<GraphIcon />} />
+            <Dest href="/pimas/" accent="var(--laurel)" title="pimas" note="Reactive UI engine" icon={<GraphIcon />} />
+            <Dest href="/von-neumann/" accent="var(--ocean)" title="von-neumann" note="Self-replicating space manufacturing" icon={<GraphIcon />} />
           </div>
         </div>
       </Band>
