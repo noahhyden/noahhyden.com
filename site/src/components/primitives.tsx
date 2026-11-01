@@ -25,7 +25,7 @@ export function Scrim(props: { spread?: "sm" | "md" | "lg"; style?: string; chil
 
 export function Eyebrow(props: { children?: Child }) {
   return (
-    <div style="font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite);">
+    <div style="font-family:var(--mono); font-size:var(--t-2xs); letter-spacing:.18em; text-transform:uppercase; color:var(--granite);">
       {props.children}
     </div>
   );
@@ -33,7 +33,7 @@ export function Eyebrow(props: { children?: Child }) {
 
 export function PageTitle(props: { style?: string; children?: Child }) {
   return (
-    <h1 style={`font-family:var(--serif); font-weight:500; font-size:clamp(40px,11vw,76px); line-height:1.0; letter-spacing:-.025em; color:var(--ink); margin:0 0 26px;${props.style ?? ""}`}>
+    <h1 style={`font-family:var(--serif); font-weight:500; font-size:clamp(var(--t-xl),11vw,var(--t-3xl)); line-height:1.0; letter-spacing:-.025em; color:var(--ink); margin:0 0 26px;${props.style ?? ""}`}>
       {props.children}
     </h1>
   );
@@ -41,7 +41,7 @@ export function PageTitle(props: { style?: string; children?: Child }) {
 
 export function SectionTitle(props: { style?: string; children?: Child }) {
   return (
-    <h2 style={`font-family:var(--serif); font-weight:500; font-size:clamp(32px,7vw,44px); line-height:1.06; letter-spacing:-.022em; color:var(--ink); margin:0 0 26px;${props.style ?? ""}`}>
+    <h2 style={`font-family:var(--serif); font-weight:500; font-size:clamp(var(--t-lg),7vw,var(--t-2xl)); line-height:1.06; letter-spacing:-.022em; color:var(--ink); margin:0 0 26px;${props.style ?? ""}`}>
       {props.children}
     </h2>
   );
@@ -75,9 +75,9 @@ export function Card(props: {
 }
 
 const SIZE = {
-  sm: "font-size:13px; padding:8px 14px;",
-  md: "font-size:14px; padding:11px 18px;",
-  lg: "font-size:15px; padding:13px 24px;",
+  sm: "font-size:var(--t-xs); padding:8px 14px;",
+  md: "font-size:var(--t-xs); padding:11px 18px;",
+  lg: "font-size:var(--t-sm); padding:13px 24px;",
 };
 
 /** Action; every toggle is an explicit prop with a default, and `outline` draws a currentColor edge so it tracks the text. */
@@ -111,8 +111,8 @@ export function BuildFetchError(props: { title: string; body: string; href: stri
     <Card tone="surface" outline={false} lift={false} pad="lg" style="display:flex; gap:14px; align-items:flex-start;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--falu)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none; margin-top:1px;"><circle cx="12" cy="12" r="9" /><line x1="12" y1="8" x2="12" y2="13" /><line x1="12" y1="16" x2="12" y2="16.5" /></svg>
       <div>
-        <div style="font-family:var(--serif); font-weight:600; font-size:19px; margin-bottom:6px;">{props.title}</div>
-        <p style="font-family:var(--sans); font-size:15px; line-height:1.55; color:var(--granite); margin:0 0 14px;">{props.body}</p>
+        <div style="font-family:var(--serif); font-weight:600; font-size:var(--t-md); margin-bottom:6px;">{props.title}</div>
+        <p style="font-family:var(--sans); font-size:var(--t-xs); line-height:1.55; color:var(--granite); margin:0 0 14px;">{props.body}</p>
         <Button href={props.href} external accent="falu">{props.cta} &rarr;</Button>
       </div>
     </Card>

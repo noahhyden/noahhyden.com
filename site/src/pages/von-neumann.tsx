@@ -10,19 +10,19 @@ export const meta: PageMeta = {
 };
 
 const h2s =
-  "font-family:var(--serif); font-weight:500; font-size:31px; line-height:1.12; letter-spacing:-.02em; margin:0 0 18px; max-width:26ch;";
+  "font-family:var(--serif); font-weight:500; font-size:var(--t-xl); line-height:1.12; letter-spacing:-.02em; margin:0 0 18px; max-width:26ch;";
 const body =
-  "font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--ink); margin:0 0 18px; max-width:72ch;";
+  "font-family:var(--sans); font-size:var(--t-sm); line-height:1.7; color:var(--ink); margin:0 0 18px; max-width:72ch;";
 const link = "color:var(--ocean);";
 
 export default function VonNeumann() {
   return (
     <Shell active={null}>
       <header style="max-width:900px; margin:0 auto; padding:76px 40px 0;">
-        <h1 style="font-family:var(--serif); font-weight:500; font-size:50px; line-height:1.06; letter-spacing:-.022em; margin:0; max-width:19ch;">
+        <h1 style="font-family:var(--serif); font-weight:500; font-size:var(--t-2xl); line-height:1.06; letter-spacing:-.022em; margin:0; max-width:19ch;">
           The arithmetic of self-replication.
         </h1>
-        <p style="font-family:var(--sans); font-size:17px; line-height:1.64; color:var(--ink); margin:24px 0 0; max-width:66ch;">
+        <p style="font-family:var(--sans); font-size:var(--t-md); line-height:1.64; color:var(--ink); margin:24px 0 0; max-width:66ch;">
           One factory lands on the Moon or an asteroid and builds copies of itself from local material. von-neumann
           models how far that idea holds and where the physics stops it. Each model is small, independently
           runnable and tested, and every number traces to a cited source.
@@ -57,7 +57,7 @@ export default function VonNeumann() {
             self-replication is real, but it is bounded by physical walls that reappear at every scale, and the
             models say which limit binds where. Three of them:
           </p>
-          <ul style="list-style:none; margin:0 0 18px; padding:0; display:grid; gap:12px; font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--ink); max-width:72ch;">
+          <ul style="list-style:none; margin:0 0 18px; padding:0; display:grid; gap:12px; font-family:var(--sans); font-size:var(--t-sm); line-height:1.7; color:var(--ink); max-width:72ch;">
             <li><Card tone="ground" outline={true} lift={false} pad="sm">A lone factory can make its structure but not its electronics. Chips are the wall.</Card></li>
             <li><Card tone="ground" outline={true} lift={false} pad="sm">Installed mass per launched mass is exactly 1/(1 - closure): about 3x at 67% closure, about 33x at 97%.</Card></li>
             <li><Card tone="ground" outline={true} lift={false} pad="sm">Light-speed coordination costs a median of about 30% of exploration time for nearest-slingshot probes, about 50% for max-boost, and about 0% for powered flight.</Card></li>
@@ -71,7 +71,7 @@ export default function VonNeumann() {
         </section>
 
         <section style="margin:52px 0 0; padding-top:28px;">
-          <p style="font-family:var(--sans); font-size:15px; line-height:1.64; color:var(--granite); margin:0 0 10px; max-width:72ch;">
+          <p style="font-family:var(--sans); font-size:var(--t-xs); line-height:1.64; color:var(--granite); margin:0 0 10px; max-width:72ch;">
             Cite it with DOI{" "}
             <a href="https://doi.org/10.5281/zenodo.21249296" target="_blank" rel="noopener" style={link}>10.5281/zenodo.21249296</a>.
             The code is under the PolyForm Strict License 1.0.0 and the written research under CC BY-NC-ND 4.0.

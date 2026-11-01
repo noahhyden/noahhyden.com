@@ -3,9 +3,9 @@ import { TOKENS } from "../design.js";
 import { AzulejoBand } from "./Azulejo.js";
 import { Mark } from "./icons.js";
 
-const HEAD = "font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:14px;";
+const HEAD = "font-family:var(--mono); font-size:var(--t-2xs); letter-spacing:.14em; text-transform:uppercase; color:var(--granite); margin-bottom:14px;";
 const LIST = "list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;";
-const ITEM = "font-family:var(--sans); font-size:14px; color:var(--ink);";
+const ITEM = "font-family:var(--sans); font-size:var(--t-xs); color:var(--ink);";
 
 export function Footer() {
   return (
@@ -14,11 +14,11 @@ export function Footer() {
 
       <div style="position:relative; max-width:1080px; margin:0 auto; padding:40px 40px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:32px 40px;">
         <div style="flex:1 1 280px;">
-          <div style="display:flex; align-items:center; gap:12px; font-family:var(--serif); font-weight:600; font-size:21px; letter-spacing:-.01em; margin-bottom:10px;">
+          <div style="display:flex; align-items:center; gap:12px; font-family:var(--serif); font-weight:600; font-size:var(--t-md); letter-spacing:-.01em; margin-bottom:10px;">
             <Mark size={38} />
             <span>Noah Hyden<span style="color:var(--falu);">.</span></span>
           </div>
-          <p style="font-family:var(--sans); font-size:14px; line-height:1.55; color:var(--granite); margin:0; max-width:42ch;">
+          <p style="font-family:var(--sans); font-size:var(--t-xs); line-height:1.55; color:var(--granite); margin:0; max-width:42ch;">
             Aerospace engineer in Stockholm.
           </p>
         </div>
@@ -43,7 +43,7 @@ export function Footer() {
       </div>
 
       <div style="position:relative; background:var(--footer-tint);">
-        <div style="max-width:1080px; margin:0 auto; padding:22px 40px; font-family:var(--mono); font-size:12px; line-height:1.7; color:var(--granite);">
+        <div style="max-width:1080px; margin:0 auto; padding:22px 40px; font-family:var(--mono); font-size:var(--t-2xs); line-height:1.7; color:var(--granite);">
           <div style="color:var(--granite); margin-bottom:8px;">
             Built with <a href="/pimas/" style="color:var(--granite);">pimas</a> - no React, no virtual DOM, no in-browser transpiler
           </div>

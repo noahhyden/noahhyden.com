@@ -10,20 +10,20 @@ export const meta: PageMeta = {
 };
 
 const h2s =
-  "font-family:var(--serif); font-weight:500; font-size:31px; line-height:1.12; letter-spacing:-.02em; margin:0 0 18px; max-width:26ch;";
+  "font-family:var(--serif); font-weight:500; font-size:var(--t-xl); line-height:1.12; letter-spacing:-.02em; margin:0 0 18px; max-width:26ch;";
 const body =
-  "font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--ink); margin:0 0 18px; max-width:72ch;";
+  "font-family:var(--sans); font-size:var(--t-sm); line-height:1.7; color:var(--ink); margin:0 0 18px; max-width:72ch;";
 const link = "color:var(--ocean); border-bottom:1px solid var(--ocean);";
-const mono = "font-family:var(--mono); font-size:.86em; color:var(--ocean); white-space:nowrap;";
+const mono = "font-family:var(--mono); font-size:var(--t-xs); color:var(--ocean); white-space:nowrap;";
 
 export default function Erbina() {
   return (
     <Shell active={null}>
       <header style="max-width:900px; margin:0 auto; padding:76px 40px 0;">
-        <h1 style="font-family:var(--serif); font-weight:500; font-size:50px; line-height:1.06; letter-spacing:-.022em; margin:0; max-width:19ch;">
+        <h1 style="font-family:var(--serif); font-weight:500; font-size:var(--t-2xl); line-height:1.06; letter-spacing:-.022em; margin:0; max-width:19ch;">
           Install by asking. Proven by running.
         </h1>
-        <p style="font-family:var(--sans); font-size:17px; line-height:1.64; color:var(--ink); margin:24px 0 0; max-width:66ch;">
+        <p style="font-family:var(--sans); font-size:var(--t-md); line-height:1.64; color:var(--ink); margin:24px 0 0; max-width:66ch;">
           erbina is an MCP server for Claude Code. You ask for a tool; it shows you the exact commands first,
           installs through whichever package manager your machine actually has, then proves the tool works by
           running it. The registry is curated YAML, and the server is a single <span style={mono}>server.py</span>.
@@ -80,7 +80,7 @@ export default function Erbina() {
         </section>
 
         <section style="margin:52px 0 0; padding-top:28px;">
-          <p style="font-family:var(--sans); font-size:15px; line-height:1.64; color:var(--granite); margin:0 0 10px; max-width:72ch;">
+          <p style="font-family:var(--sans); font-size:var(--t-xs); line-height:1.64; color:var(--granite); margin:0 0 10px; max-width:72ch;">
             Apache License 2.0, with the name and logos reserved in a{" "}
             <a href="https://github.com/noahhyden/erbina/blob/main/NOTICE" target="_blank" rel="noopener" style={link}>NOTICE</a>
             {" "}file: as free to fork as before, a fork just needs its own name.

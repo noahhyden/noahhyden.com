@@ -13,15 +13,15 @@ export const meta: PageMeta = {
 };
 
 const h2s =
-  "font-family:var(--serif); font-weight:500; font-size:31px; line-height:1.12; letter-spacing:-.02em; margin:0 0 18px; max-width:26ch;";
+  "font-family:var(--serif); font-weight:500; font-size:var(--t-xl); line-height:1.12; letter-spacing:-.02em; margin:0 0 18px; max-width:26ch;";
 const body =
-  "font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--ink); margin:0 0 18px; max-width:72ch;";
+  "font-family:var(--sans); font-size:var(--t-sm); line-height:1.7; color:var(--ink); margin:0 0 18px; max-width:72ch;";
 const ink = "color:var(--ink);";
 
 /** Inline code / identifier. */
 function C(props: { children: Child }) {
   return (
-    <span style="font-family:var(--mono); font-size:.86em; color:var(--ocean); white-space:nowrap;">
+    <span style="font-family:var(--mono); font-size:var(--t-xs); color:var(--ocean); white-space:nowrap;">
       {props.children}
     </span>
   );
@@ -31,10 +31,10 @@ function C(props: { children: Child }) {
 function Step(props: { n: string; children: Child }) {
   return (
     <li style="display:flex; gap:15px; align-items:baseline; margin:0 0 12px;">
-      <span style="flex:none; font-family:var(--mono); font-size:12px; font-weight:600; color:var(--ocean); width:20px;">
+      <span style="flex:none; font-family:var(--mono); font-size:var(--t-2xs); font-weight:600; color:var(--ocean); width:20px;">
         {props.n}
       </span>
-      <span style="font-family:var(--sans); font-size:15.5px; line-height:1.64; color:var(--ink);">
+      <span style="font-family:var(--sans); font-size:var(--t-sm); line-height:1.64; color:var(--ink);">
         {props.children}
       </span>
     </li>
@@ -45,7 +45,7 @@ function FitItem(props: { title: string; body: Child }) {
   return (
     <li style="margin:0;">
       <Card tone="ground" outline={true} lift={false} pad="sm">
-        <div style="display:flex; gap:12px; align-items:baseline; font-family:var(--sans); font-size:15.5px; line-height:1.62; color:var(--granite);">
+        <div style="display:flex; gap:12px; align-items:baseline; font-family:var(--sans); font-size:var(--t-sm); line-height:1.62; color:var(--granite);">
           <span style="flex:none; font-family:var(--mono); color:var(--ocean);">&rarr;</span>
           <span><b style="color:var(--ink); font-weight:600;">{props.title}</b> - {props.body}</span>
         </div>
@@ -58,10 +58,10 @@ export default function Pimas() {
   return (
     <Shell>
       <header style="max-width:900px; margin:0 auto; padding:76px 40px 0;">
-        <h1 style="font-family:var(--serif); font-weight:500; font-size:50px; line-height:1.06; letter-spacing:-.022em; margin:0; max-width:19ch;">
+        <h1 style="font-family:var(--serif); font-weight:500; font-size:var(--t-2xl); line-height:1.06; letter-spacing:-.022em; margin:0; max-width:19ch;">
           Exact what-if over a live reactive model.
         </h1>
-        <p style="font-family:var(--sans); font-size:17px; line-height:1.64; color:var(--ink); margin:24px 0 0; max-width:66ch;">
+        <p style="font-family:var(--sans); font-size:var(--t-md); line-height:1.64; color:var(--ink); margin:24px 0 0; max-width:66ch;">
           pimas is a small reactive model runtime I built from scratch, published on npm as <C>pimas-ui</C>. You
           put derived state in signals, memos and a store. <C>speculate</C> answers &ldquo;what would{" "}
           <em>total</em> be if I set qty to 10?&rdquo; by recomputing those memos against a shadow of the graph:
@@ -69,7 +69,7 @@ export default function Pimas() {
           would produce. An agent or a React preview UI can use it. Zero runtime dependencies; React is an
           optional peer.
         </p>
-        <p style="font-family:var(--sans); font-size:17px; line-height:1.64; color:var(--granite); margin:18px 0 0; max-width:66ch;">
+        <p style="font-family:var(--sans); font-size:var(--t-md); line-height:1.64; color:var(--granite); margin:18px 0 0; max-width:66ch;">
           pimas no longer includes a renderer or JSX: the current release (0.4) is the model runtime only. The
           renderer lives on in <C>pimas-ui@0.1.2</C>, which is what this site is built with.
         </p>
@@ -78,7 +78,7 @@ export default function Pimas() {
       <main style="max-width:900px; margin:0 auto; padding:0 40px;">
 
         <section style="margin:44px 0 8px;">
-          <p style="font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--granite); margin:0 0 18px; max-width:72ch;">
+          <p style="font-family:var(--sans); font-size:var(--t-sm); line-height:1.7; color:var(--granite); margin:0 0 18px; max-width:72ch;">
             Drive the model or watch an agent, then look at the dependency graph below it: the nodes are this
             model&rsquo;s own signals and memos, and one lights only when its compute function actually re-ran.
           </p>
@@ -148,7 +148,7 @@ export default function Pimas() {
             <FitItem title="Tooling for AI agents" body="give an agent a non-committal preview of an action before it fires, as a simulate_* tool." />
           </ul>
           <Card tone="ground" outline={false} lift={false} pad="sm" style="border-left:2px solid var(--falu);">
-            <p style="font-family:var(--sans); font-size:15px; line-height:1.64; color:var(--granite); margin:0; max-width:70ch;">
+            <p style="font-family:var(--sans); font-size:var(--t-xs); line-height:1.64; color:var(--granite); margin:0; max-width:70ch;">
               <b style={ink}>Limit.</b> <C>speculate</C> is exact only if memos are pure. That is assumed, not
               enforced: keep I/O in actions and math in memos.
             </p>
@@ -156,10 +156,10 @@ export default function Pimas() {
         </section>
 
         <section style="margin:52px 0 72px; padding-top:28px; display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:14px;">
-          <p style="font-family:var(--sans); font-size:16px; line-height:1.6; color:var(--granite); margin:0; max-width:52ch;">
+          <p style="font-family:var(--sans); font-size:var(--t-sm); line-height:1.6; color:var(--granite); margin:0; max-width:52ch;">
             The code is on GitHub and published to npm as <C>pimas-ui</C>. Pre-1.0: pin exact versions.
           </p>
-          <a href="https://github.com/noahhyden/pimas" target="_blank" rel="noopener" style="font-family:var(--mono); font-size:13px; letter-spacing:.03em; color:var(--falu); padding-bottom:2px; white-space:nowrap;">
+          <a href="https://github.com/noahhyden/pimas" target="_blank" rel="noopener" style="font-family:var(--mono); font-size:var(--t-xs); letter-spacing:.03em; color:var(--falu); padding-bottom:2px; white-space:nowrap;">
             github.com/noahhyden/pimas &rarr;
           </a>
         </section>
