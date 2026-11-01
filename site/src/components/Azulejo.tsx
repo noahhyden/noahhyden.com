@@ -54,20 +54,25 @@ export function AzulejoBand(props: { height?: number; opacity?: number; pattern?
   );
 }
 
-/** Faint quatrefoil patch with a radial fade on every side; `pos` places it inside a position:relative section. */
-export function AzulejoAccent(props: { id: string; pos: string }) {
+/** Tracery opacity for every full-bleed field; the one place to retune. */
+const FIELD_OPACITY = 0.16;
+
+/** Full-bleed tracery field for a position:relative, isolated band; true tile scale, faded at top and bottom edges. */
+export function AzulejoField(props: { id: string; pattern: "quatrefoil" | "rosette" }) {
   return (
-    <svg width="360" height="360" style={`position:absolute; z-index:-1; max-width:100%; opacity:.3; pointer-events:none; ${props.pos}`} aria-hidden="true">
+    <svg width="100%" height="100%" style={`position:absolute; inset:0; z-index:-1; opacity:${FIELD_OPACITY}; pointer-events:none;`} aria-hidden="true">
       <defs>
-        <radialGradient id={`fade-${props.id}`} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#fff" stop-opacity="1" />
+        <linearGradient id={`fade-${props.id}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fff" stop-opacity="0" />
+          <stop offset="12%" stop-color="#fff" stop-opacity="1" />
+          <stop offset="88%" stop-color="#fff" stop-opacity="1" />
           <stop offset="100%" stop-color="#fff" stop-opacity="0" />
-        </radialGradient>
+        </linearGradient>
         <mask id={`fademask-${props.id}`}>
           <rect width="100%" height="100%" fill={`url(#fade-${props.id})`} />
         </mask>
       </defs>
-      <rect width="100%" height="100%" fill="url(#quatrefoil)" mask={`url(#fademask-${props.id})`} />
+      <rect width="100%" height="100%" fill={`url(#${props.pattern})`} mask={`url(#fademask-${props.id})`} />
     </svg>
   );
 }

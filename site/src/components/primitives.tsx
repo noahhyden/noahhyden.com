@@ -1,12 +1,16 @@
 import type { Child } from "pimas-ui/dom";
+import { AzulejoField } from "./Azulejo.js";
 
 /** Full-width section; `divider` draws a bottom rule and defaults off, because the page-break hairlines were removed on purpose. */
-export function Band(props: { tint?: boolean; divider?: boolean; labelledBy?: string; id?: string; children?: Child }) {
+export function Band(props: { tint?: boolean; divider?: boolean; labelledBy?: string; id: string; pattern?: "none" | "quatrefoil" | "rosette"; scrim?: boolean; children?: Child }) {
   const bg = (props.tint ?? false) ? "var(--surface)" : "transparent";
   const rule = (props.divider ?? false) ? " border-bottom:1px solid var(--line);" : "";
+  const pattern = props.pattern ?? "none";
+  const scrim = props.scrim ?? true;
   return (
     <section id={props.id} aria-labelledby={props.labelledBy} style={`position:relative; isolation:isolate; background:${bg};${rule}`}>
-      {props.children}
+      {pattern !== "none" ? <AzulejoField id={props.id} pattern={pattern} /> : null}
+      {scrim ? <div style="background:linear-gradient(to right, transparent 0%, var(--ground) 12%, var(--ground) 88%, transparent 100%);">{props.children}</div> : props.children}
     </section>
   );
 }
