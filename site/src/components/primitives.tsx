@@ -1,17 +1,25 @@
 import type { Child } from "pimas-ui/dom";
-import { AzulejoField } from "./Azulejo.js";
 
 /** Full-width section; `divider` draws a bottom rule and defaults off, because the page-break hairlines were removed on purpose. */
-export function Band(props: { tint?: boolean; divider?: boolean; labelledBy?: string; id: string; pattern?: "none" | "quatrefoil" | "rosette"; scrim?: boolean; children?: Child }) {
+export function Band(props: { tint?: boolean; divider?: boolean; labelledBy?: string; id: string; children?: Child }) {
   const bg = (props.tint ?? false) ? "var(--surface)" : "transparent";
   const rule = (props.divider ?? false) ? " border-bottom:1px solid var(--line);" : "";
-  const pattern = props.pattern ?? "none";
-  const scrim = props.scrim ?? true;
   return (
     <section id={props.id} aria-labelledby={props.labelledBy} style={`position:relative; isolation:isolate; background:${bg};${rule}`}>
-      {pattern !== "none" ? <AzulejoField id={props.id} pattern={pattern} /> : null}
-      {scrim ? <div style="background:linear-gradient(to right, transparent 0%, var(--ground) 12%, var(--ground) 88%, transparent 100%);">{props.children}</div> : props.children}
+      {props.children}
     </section>
+  );
+}
+
+const SPREAD = { sm: "45%", md: "62%", lg: "80%" };
+
+/** Radial ground halo so a block floats on the page tracery instead of punching a rectangular hole in it. */
+export function Scrim(props: { spread?: "sm" | "md" | "lg"; style?: string; children?: Child }) {
+  const stop = SPREAD[props.spread ?? "md"];
+  return (
+    <div style={`background:radial-gradient(ellipse at 50% 50%, var(--ground) 0%, var(--ground) ${stop}, transparent 100%);${props.style ?? ""}`}>
+      {props.children}
+    </div>
   );
 }
 

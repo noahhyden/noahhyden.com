@@ -54,25 +54,15 @@ export function AzulejoBand(props: { height?: number; opacity?: number; pattern?
   );
 }
 
-/** Tracery opacity for every full-bleed field; the one place to retune. */
+/** Tracery opacity for the page field; the one place to retune. */
 const FIELD_OPACITY = 0.16;
 
-/** Full-bleed tracery field for a position:relative, isolated band; true tile scale, faded at top and bottom edges. */
-export function AzulejoField(props: { id: string; pattern: "quatrefoil" | "rosette" }) {
+/** Page-wide tracery field, fixed to the viewport so every section shares ONE 48px grid and the fill never breaks at a seam. */
+export function AzulejoField(props: { pattern?: "quatrefoil" | "rosette"; opacity?: number }) {
+  const o = props.opacity ?? FIELD_OPACITY;
   return (
-    <svg width="100%" height="100%" style={`position:absolute; inset:0; z-index:-1; opacity:${FIELD_OPACITY}; pointer-events:none;`} aria-hidden="true">
-      <defs>
-        <linearGradient id={`fade-${props.id}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#fff" stop-opacity="0" />
-          <stop offset="12%" stop-color="#fff" stop-opacity="1" />
-          <stop offset="88%" stop-color="#fff" stop-opacity="1" />
-          <stop offset="100%" stop-color="#fff" stop-opacity="0" />
-        </linearGradient>
-        <mask id={`fademask-${props.id}`}>
-          <rect width="100%" height="100%" fill={`url(#fade-${props.id})`} />
-        </mask>
-      </defs>
-      <rect width="100%" height="100%" fill={`url(#${props.pattern})`} mask={`url(#fademask-${props.id})`} />
+    <svg width="100%" height="100%" style={`position:fixed; inset:0; width:100vw; height:100vh; opacity:${o}; pointer-events:none;`} aria-hidden="true">
+      <rect width="100%" height="100%" fill={`url(#${props.pattern ?? "quatrefoil"})`} />
     </svg>
   );
 }

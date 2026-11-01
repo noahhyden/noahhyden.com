@@ -356,7 +356,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
 
   return (
     <Shell active={null}>
-      <Band id="hero" pattern="rosette" scrim={false}>
+      <Band id="hero">
         <div style="position:relative; padding:96px clamp(20px,5vw,40px) 88px;">
           <div style="position:relative; max-width:1080px; margin:0 auto;">
             <PageTitle style="margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></PageTitle>
@@ -369,7 +369,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
         </div>
       </Band>
 
-      <Band id="projects" pattern="quatrefoil" labelledBy="projects-title">
+      <Band id="projects" labelledBy="projects-title">
         <div style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px);">
           <SectionTitle style="margin:18px 0 64px;"><span id="projects-title">Projects</span></SectionTitle>
 
@@ -403,7 +403,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
         </div>
       </Band>
 
-      <Band id="papers" pattern="none" labelledBy="papers-title">
+      <Band id="papers" labelledBy="papers-title">
         <div style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px);">
           <SectionTitle style="margin:0 0 64px;"><span id="papers-title">Papers</span></SectionTitle>
           {papersError ? <BuildFetchError title="Couldn&rsquo;t reach the von-neumann repo at build time" body="The paper list usually bakes in at build. The papers themselves are always live on the project site." href={`${VN_SITE}/#/papers`} cta="Open the papers on vn.noahhyden.com" /> : null}
@@ -428,7 +428,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
         </div>
       </Band>
 
-      <Band id="explore" pattern="quatrefoil">
+      <Band id="explore">
         <div style="max-width:1080px; margin:0 auto; padding:64px clamp(20px,5vw,40px) 96px;">
           <div style="margin:0 0 22px;"><Eyebrow>Explore</Eyebrow></div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px;">
