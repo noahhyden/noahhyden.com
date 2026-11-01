@@ -12,7 +12,7 @@ const h2s =
   "font-family:var(--serif); font-weight:500; font-size:31px; line-height:1.12; letter-spacing:-.02em; margin:0 0 18px; max-width:26ch;";
 const body =
   "font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--ink); margin:0 0 18px; max-width:72ch;";
-const link = "color:var(--ocean); border-bottom:1px solid var(--ocean);";
+const link = "color:var(--ocean);";
 
 export default function VonNeumann() {
   return (
@@ -27,10 +27,10 @@ export default function VonNeumann() {
           runnable and tested, and every number traces to a cited source.
         </p>
         <div style="display:flex; flex-wrap:wrap; gap:14px; margin:30px 0 0;">
-          <a href="https://vn.noahhyden.com" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; border:1px solid var(--falu); color:var(--falu);">
+          <a href="https://vn.noahhyden.com" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; color:var(--falu);">
             vn.noahhyden.com &rarr;
           </a>
-          <a href="https://github.com/noahhyden/von-neumann" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; border:1px solid var(--granite); color:var(--ink);">
+          <a href="https://github.com/noahhyden/von-neumann" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; color:var(--ink);">
             Source on GitHub &rarr;
           </a>
         </div>
@@ -69,7 +69,7 @@ export default function VonNeumann() {
           </p>
         </section>
 
-        <section style="margin:52px 0 0; border-top:1px solid var(--line); padding-top:28px;">
+        <section style="margin:52px 0 0; padding-top:28px;">
           <p style="font-family:var(--sans); font-size:15px; line-height:1.64; color:var(--granite); margin:0 0 10px; max-width:72ch;">
             Cite it with DOI{" "}
             <a href="https://doi.org/10.5281/zenodo.21249296" target="_blank" rel="noopener" style={link}>10.5281/zenodo.21249296</a>.
