@@ -27,8 +27,8 @@ html{scroll-behavior:smooth;}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);min-height:100vh;}
 a{color:inherit;text-decoration:none;}
 ::selection{background:var(--laurel);color:var(--ground);}
-.lift{transition:border-color .18s ease, transform .18s ease;}
-.lift:hover{border-color:var(--granite); transform:translateY(-2px);}
+.lift{transition:transform .18s ease;}
+.lift:hover{transform:translateY(-2px);}
 .btn{transition:filter .18s ease;}
 .btn:hover{filter:brightness(.93);}
 .ln{transition:color .15s ease;}
