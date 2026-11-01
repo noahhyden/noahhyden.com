@@ -15,7 +15,6 @@ const require = createRequire(import.meta.url);
 // The route table is just data - sitemap, etc. fall out of it.
 const ROUTES = [
   { url: "/", page: "index" },
-  { url: "/papers/", page: "papers" },
   { url: "/pimas/", page: "pimas" },
 ];
 
