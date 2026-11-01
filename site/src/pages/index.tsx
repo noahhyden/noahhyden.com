@@ -1,7 +1,6 @@
 import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
-import { AzulejoBand } from "../components/Azulejo.js";
 import { ArrowIcon, GitHubIcon, LinkedInIcon } from "../components/icons.js";
 import { Band, Eyebrow, PageTitle, SectionTitle, Card, Button, BuildFetchError } from "../components/primitives.js";
 import { ghHeaders } from "../gh.js";
@@ -42,7 +41,40 @@ function relDate(iso: string): string {
   return RTF.format(-Math.floor(days / 365), "year");
 }
 
-export async function getData(): Promise<{ repos: Repo[]; error: boolean }> {
+/** The live von-neumann site papers are published beside. */
+const VN_SITE = "https://vn.noahhyden.com";
+const VN_REPO = "https://github.com/noahhyden/von-neumann";
+
+interface Author {
+  name: string;
+  affiliation: string;
+  orcid: string;
+}
+
+interface Paper {
+  slug: string;
+  title: string;
+  authors: Author[];
+  abstract: string;
+  date: string;
+  keywords: string[];
+  citeCount: number;
+  /** The typeset PDF, published beside the live von-neumann site. */
+  pdf: string;
+  /** The paper's source directory in the von-neumann repo. */
+  source: string;
+}
+
+/** Sanitize upstream prose: no em-dash, fold LaTeX `--` to a spaced hyphen. */
+function clean(s: string): string {
+  return String(s)
+    .replace(/\u2014/g, "-")
+    .replace(/\s*--\s*/g, " - ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+async function getRepos(): Promise<{ repos: Repo[]; error: boolean }> {
   try {
     const res = await fetch(
       "https://api.github.com/users/noahhyden/repos?per_page=100&sort=updated",
@@ -67,9 +99,131 @@ export async function getData(): Promise<{ repos: Repo[]; error: boolean }> {
       }));
     return { repos, error: false };
   } catch (e) {
-    console.error("home: GitHub fetch failed -", e instanceof Error ? e.message : e);
+    console.error("home: repos GitHub fetch failed -", e instanceof Error ? e.message : e);
     return { repos: [], error: true };
   }
+}
+
+async function getPapers(): Promise<{ papers: Paper[]; error: boolean }> {
+  try {
+    const listRes = await fetch(
+      "https://api.github.com/repos/noahhyden/von-neumann/contents/papers",
+      { headers: ghHeaders() },
+    );
+    if (!listRes.ok) throw new Error("contents status " + listRes.status);
+    const entries = await listRes.json();
+    const slugs: string[] = (Array.isArray(entries) ? entries : [])
+      .filter((e) => e.type === "dir" && e.name !== "scripts" && e.name !== "node_modules")
+      .map((e) => e.name);
+
+    const papers = (
+      await Promise.all(
+        slugs.map(async (slug) => {
+          const res = await fetch(
+            `https://raw.githubusercontent.com/noahhyden/von-neumann/main/papers/${slug}/paper.json`,
+            { headers: { "User-Agent": "noahhyden.com-build" } },
+          );
+          if (!res.ok) return null;
+          const p = await res.json();
+          if (!p || !p.title) return null; // scaffold-only dir, skip
+          const paper: Paper = {
+            slug: p.slug || slug,
+            title: clean(p.title),
+            authors: (p.authors || []).map((a: Author) => ({
+              name: (a.name || "").trim(),
+              affiliation: (a.affiliation || "").trim(),
+              orcid: (a.orcid || "").trim(),
+            })),
+            abstract: clean(p.abstract || ""),
+            date: p.date || "",
+            keywords: (p.keywords || []).map((k: string) => k.trim()),
+            citeCount: Array.isArray(p.cites) ? p.cites.length : 0,
+            pdf: `${VN_SITE}/papers/${p.slug || slug}.pdf`,
+            source: `${VN_REPO}/tree/main/papers/${p.slug || slug}`,
+          };
+          return paper;
+        }),
+      )
+    ).filter((p): p is Paper => p !== null);
+
+    papers.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+    return { papers, error: false };
+  } catch (e) {
+    console.error("home: papers GitHub fetch failed -", e instanceof Error ? e.message : e);
+    return { papers: [], error: true };
+  }
+}
+
+export async function getData(): Promise<{ repos: Repo[]; reposError: boolean; papers: Paper[]; papersError: boolean }> {
+  const [r, p] = await Promise.all([getRepos(), getPapers()]);
+  return { repos: r.repos, reposError: r.error, papers: p.papers, papersError: p.error };
+}
+
+function Authors(props: { authors: Author[] }) {
+  const parts: Child[] = [];
+  props.authors.forEach((a, i) => {
+    const label = a.affiliation ? `${a.name} (${a.affiliation})` : a.name;
+    parts.push(i > 0 ? <span>, </span> : null);
+    parts.push(<span>{label}</span>);
+    if (a.orcid) {
+      parts.push(
+        <a className="ln" href={`https://orcid.org/${a.orcid}`} target="_blank" rel="noopener" style="color:var(--ocean); border-bottom:1px solid var(--line); margin-left:6px;">
+          ORCID {a.orcid}
+        </a>,
+      );
+    }
+  });
+  return <span>{parts}</span>;
+}
+
+function PaperArticle(props: { p: Paper }) {
+  const p = props.p;
+  return (
+    <article style="border-top:1px solid var(--line); padding:36px 0 40px;">
+      <div style="font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--granite); margin:0 0 14px;">
+        <span style="color:var(--falu);">{p.date}</span>
+        <span style="margin:0 10px; color:var(--line);">/</span>
+        paper
+        {p.citeCount > 0 ? (
+          <span>
+            <span style="margin:0 10px; color:var(--line);">/</span>
+            {String(p.citeCount)} references
+          </span>
+        ) : null}
+      </div>
+
+      <h2 style="font-family:var(--serif); font-weight:600; font-size:29px; line-height:1.18; letter-spacing:-.015em; color:var(--ink); margin:0 0 12px; max-width:34ch;">
+        {p.title}
+      </h2>
+
+      <p style="font-family:var(--sans); font-size:14px; line-height:1.5; color:var(--granite); margin:0 0 20px;">
+        <Authors authors={p.authors} />
+      </p>
+
+      <p style="font-family:var(--sans); font-size:15.5px; line-height:1.7; color:var(--ink); margin:0 0 20px; max-width:74ch;">
+        {p.abstract}
+      </p>
+
+      {p.keywords.length > 0 ? (
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin:0 0 24px;">
+          {p.keywords.map((k) => (
+            <span style="font-family:var(--mono); font-size:11px; letter-spacing:.02em; color:var(--granite); background:var(--surface); border:1px solid var(--line); border-radius:2px; padding:4px 9px;">
+              {k}
+            </span>
+          ))}
+        </div>
+      ) : null}
+
+      <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+        <a className="btn" href={p.pdf} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:14px; padding:11px 20px; border-radius:2px; background:var(--laurel); color:var(--ground);">
+          Read the typeset PDF <ArrowIcon size={15} />
+        </a>
+        <a className="ln" href={p.source} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px; color:var(--ocean); border-bottom:1px solid var(--line); padding-bottom:2px;">
+          Source on GitHub
+        </a>
+      </div>
+    </article>
+  );
 }
 
 /** Repo link: `card` is the pinned tile, otherwise a row in the full list. */
@@ -180,29 +334,13 @@ const GraphIcon = () => (
   </svg>
 );
 
-const PageIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M6 3 h8 l4 4 v14 H6 Z" />
-    <path d="M14 3 v4 h4" />
-    <path d="M9 12 h6" />
-    <path d="M9 15.5 h6" />
-    <path d="M9 8.5 h2.5" />
-  </svg>
-);
-
-function Fact(props: { k: string; v: string; accent?: string; last?: boolean }) {
-  const border = props.last ? "border-top:1px solid var(--line); border-bottom:1px solid var(--line);" : "border-top:1px solid var(--line);";
-  return (
-    <div style={`display:flex; justify-content:space-between; padding:10px 0; ${border}`}>
-      <dt style="font-family:var(--mono); font-size:12px; color:var(--granite);">{props.k}</dt>
-      <dd style={`margin:0; font-family:var(--sans); color:${props.accent ?? "var(--ink)"};`}>{props.v}</dd>
-    </div>
-  );
-}
-
-export default function Home(props: { repos?: Repo[]; error?: boolean }) {
+export default function Home(props: { repos?: Repo[]; reposError?: boolean; papers?: Paper[]; papersError?: boolean }) {
   const repos = props.repos ?? [];
-  const error = props.error ?? false;
+  const error = props.reposError ?? false;
+  const papers = props.papers ?? [];
+  const papersError = props.papersError ?? false;
+  const hasPapers = !papersError && papers.length > 0;
+  const papersEmpty = !papersError && papers.length === 0;
   const hasRepos = !error && repos.length > 0;
   const isEmpty = !error && repos.length === 0;
 
@@ -217,56 +355,26 @@ export default function Home(props: { repos?: Repo[]; error?: boolean }) {
         <div style="position:relative; overflow:hidden; padding:96px clamp(20px,5vw,40px) 88px;">
           <HeroRosette />
           <div style="position:relative; max-width:1080px; margin:0 auto;">
-            <div style="margin:0 0 22px;"><Eyebrow>Aerospace engineer</Eyebrow></div>
             <PageTitle style="margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></PageTitle>
             <p style="font-family:var(--sans); font-size:19px; line-height:1.6; color:var(--ink); margin:0 0 36px; max-width:56ch;">I work on airframes and software.</p>
             <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
               <Button href="#projects" variant="outline" size="md">Projects</Button>
+              <a href="https://github.com/noahhyden" target="_blank" rel="noopener" aria-label="GitHub" style="display:inline-flex; color:var(--granite);"><GitHubIcon size={26} /></a>
+              <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" aria-label="LinkedIn" style="display:inline-flex; color:var(--granite);"><LinkedInIcon size={26} /></a>
             </div>
           </div>
-        </div>
-      </Band>
-
-      <Band bordered tint id="about" labelledBy="about-title">
-        <div className="about-grid" style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px); display:grid; grid-template-columns:1fr 296px; gap:64px; align-items:start;">
-          <article>
-            <div style="margin:0 0 18px;"><Eyebrow>About</Eyebrow></div>
-            <SectionTitle style="margin:0 0 26px;"><span id="about-title">I trained as an aerospace engineer.</span></SectionTitle>
-            <p style="font-family:var(--sans); font-size:18px; line-height:1.6; color:var(--ink); margin:0;">I&rsquo;m building an early-stage company in procurement intelligence.</p>
-          </article>
-
-          <aside style="position:sticky; top:96px; border:1px solid var(--line); border-radius:3px; background:var(--ground); overflow:hidden;">
-            <div style="height:84px; background:var(--surface); position:relative; overflow:hidden; border-bottom:1px solid var(--line);">
-              <AzulejoBand height={84} opacity={0.42} />
-            </div>
-            <div style="padding:22px 24px 24px;">
-              <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:0 0 16px;">At a glance</div>
-              <dl style="margin:0; font-size:14px;">
-                <Fact k="degree" v="B.Sc. Aerospace Eng." />
-                <Fact k="location" v="Stockholm, SE" />
-              </dl>
-              <div style="font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--granite); margin:22px 0 12px;">Find me</div>
-              <div style="display:flex; flex-direction:column; gap:9px;">
-                <a href="https://github.com/noahhyden" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:13px; color:var(--ink);"><span style="color:var(--granite); display:inline-flex;"><GitHubIcon size={16} /></span>github.com/noahhyden</a>
-                <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:13px; color:var(--ink);"><span style="color:var(--granite); display:inline-flex;"><LinkedInIcon size={16} /></span>in/noah-hyden</a>
-              </div>
-            </div>
-          </aside>
         </div>
       </Band>
 
       <Band bordered id="projects" labelledBy="projects-title">
         <div style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px);">
-          <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-          </div>
-          <SectionTitle style="margin:18px 0 0;"><span id="projects-title"> Projects</span></SectionTitle>
+          <SectionTitle style="margin:18px 0 0;"><span id="projects-title">Projects</span></SectionTitle>
           <p style="font-family:var(--sans); font-size:17px; line-height:1.6; color:var(--granite); margin:24px 0 40px; max-width:58ch;">Pulled from my public repositories at build time. A few pinned highlights first, then everything else, most recently pushed first. Some are finished, some are experiments.</p>
 
           {error ? <BuildFetchError title="Couldn&rsquo;t reach GitHub at build time" body="The repository list usually bakes in at build. If it&rsquo;s being stubborn, the projects are all on my profile directly." href="https://github.com/noahhyden?tab=repositories" cta="Open my repositories" /> : null}
 
           {hasRepos && pinned.length > 0 ? (
             <section style="margin-bottom:56px;">
-              <SectionLabel>Pinned</SectionLabel>
               <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:20px;">
                 {pinned.map((r) => <RepoLink card r={r} />)}
               </div>
@@ -293,12 +401,39 @@ export default function Home(props: { repos?: Repo[]; error?: boolean }) {
         </div>
       </Band>
 
+      <Band bordered id="papers" labelledBy="papers-title">
+        <div style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px);">
+          <SectionTitle style="margin:0;"><span id="papers-title">Papers</span></SectionTitle>
+          <p style="font-family:var(--sans); font-size:17px; line-height:1.6; color:var(--granite); margin:24px 0 40px; max-width:64ch;">
+            Longer-form write-ups from <a className="ln" href={VN_SITE} target="_blank" rel="noopener" style="color:var(--ink); border-bottom:1px solid var(--line);">the von-neumann project</a>, each developing a single result in depth. Every paper is typeset in LaTeX and its bibliography is drawn from the same source list that powers the project&rsquo;s live models, so a claim in a paper and a claim on a live surface point at the identical reference. Read straight off that repo at build time, newest first.
+          </p>
+          {papersError ? <BuildFetchError title="Couldn&rsquo;t reach the von-neumann repo at build time" body="The paper list usually bakes in at build. The papers themselves are always live on the project site." href={`${VN_SITE}/#/papers`} cta="Open the papers on vn.noahhyden.com" /> : null}
+          {hasPapers ? (
+            <div>
+              <div style="font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--granite); margin:0 0 4px;">
+                {papers.length === 1 ? "1 paper" : `${papers.length} papers`}
+              </div>
+              {papers.map((p) => <PaperArticle p={p} />)}
+              <div style="border-top:1px solid var(--line); padding-top:24px; margin-top:4px;">
+                <a href={`${VN_SITE}/#/papers`} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; border:1px solid var(--granite); color:var(--ink);">
+                  See the papers on vn.noahhyden.com <ArrowIcon size={16} />
+                </a>
+              </div>
+            </div>
+          ) : null}
+          {papersEmpty ? (
+            <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:40px; text-align:center;">
+              <p style="font-family:var(--sans); font-size:16px; color:var(--granite); margin:0;">No papers published yet - check back soon.</p>
+            </div>
+          ) : null}
+        </div>
+      </Band>
+
       <Band>
         <div style="max-width:1080px; margin:0 auto; padding:64px clamp(20px,5vw,40px) 96px;">
           <div style="margin:0 0 22px;"><Eyebrow>Explore</Eyebrow></div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px;">
             <Dest href="/pimas/" n="01" accent="var(--laurel)" title="pimas" note="Reactive UI engine" icon={<GraphIcon />} />
-            <Dest href="/papers/" n="02" accent="var(--falu)" title="Papers" note="Working papers" icon={<PageIcon />} />
           </div>
         </div>
       </Band>
