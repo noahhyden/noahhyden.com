@@ -1,11 +1,11 @@
 import type { Child } from "pimas-ui/dom";
 
 /** Full-width section. Content is not padded here - callers pad. */
-export function Band(props: { bordered?: boolean; tint?: boolean; labelledBy?: string; id?: string; children?: Child }) {
+export function Band(props: { tint?: boolean; labelledBy?: string; id?: string; children?: Child }) {
   const bg = props.tint ? "var(--surface)" : "transparent";
-  const border = props.bordered ? " border-bottom:1px solid var(--line);" : "";
+  const border = props.bordered ? "" : "";
   return (
-    <section id={props.id} aria-labelledby={props.labelledBy} style={`background:${bg};${border}`}>
+    <section id={props.id} aria-labelledby={props.labelledBy} style={`position:relative; isolation:isolate; background:${bg};`}>
       {props.children}
     </section>
   );
@@ -38,8 +38,8 @@ export function SectionTitle(props: { style?: string; children?: Child }) {
 export function Card(props: { tone?: "surface" | "panel"; href?: string; style?: string; children?: Child }) {
   const panel = props.tone === "panel";
   const base = panel
-    ? "display:block; border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:20px 22px;"
-    : "display:block; border:1px solid var(--line); border-radius:3px; background:var(--ground); padding:24px;";
+    ? "display:block; border-radius:3px; background:var(--surface); padding:20px 22px;"
+    : "display:block; border-radius:3px; background:var(--ground); padding:24px;";
   const style = base + (props.style ?? "");
   return props.href ? (
     <a href={props.href} className="lift" style={style}>{props.children}</a>
@@ -49,8 +49,8 @@ export function Card(props: { tone?: "surface" | "panel"; href?: string; style?:
 }
 
 const VARIANT = {
-  accent: "background:var(--laurel); color:var(--ground); border:1px solid var(--laurel);",
-  outline: "background:transparent; color:var(--ink); border:1px solid var(--granite);",
+  accent: "background:var(--laurel); color:var(--ground);",
+  outline: "background:transparent; color:var(--ink);",
 };
 const SIZE = {
   md: "font-size:14px; padding:11px 18px;",
@@ -67,7 +67,7 @@ export function Button(props: { href: string; variant?: "accent" | "outline"; si
 
 export function BuildFetchError(props: { title: string; body: string; href: string; cta: string }) {
   return (
-    <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:28px; display:flex; gap:14px; align-items:flex-start;">
+    <div style=" border-radius:3px; background:var(--surface); padding:28px; display:flex; gap:14px; align-items:flex-start;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--falu)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none; margin-top:1px;"><circle cx="12" cy="12" r="9" /><line x1="12" y1="8" x2="12" y2="13" /><line x1="12" y1="16" x2="12" y2="16.5" /></svg>
       <div>
         <div style="font-family:var(--serif); font-weight:600; font-size:19px; margin-bottom:6px;">{props.title}</div>
