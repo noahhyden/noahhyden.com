@@ -9,7 +9,7 @@ const ITEM = "font-family:var(--sans); font-size:14px; color:var(--ink);";
 
 export function Footer() {
   return (
-    <footer style="position:relative; overflow:hidden; border-top:1px solid var(--line); background:var(--surface); margin-top:40px;">
+    <footer style="position:relative; overflow:hidden; background:var(--surface); margin-top:40px;">
       <AzulejoBand height={120} opacity={0.15} pattern="quatrefoil" />
 
       <div style="position:relative; max-width:1080px; margin:0 auto; padding:40px 40px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:32px 40px;">
@@ -42,10 +42,10 @@ export function Footer() {
         </div>
       </div>
 
-      <div style="position:relative; border-top:1px solid var(--line); background:var(--footer-tint);">
+      <div style="position:relative; background:var(--footer-tint);">
         <div style="max-width:1080px; margin:0 auto; padding:22px 40px; font-family:var(--mono); font-size:12px; line-height:1.7; color:var(--granite);">
           <div style="color:var(--granite); margin-bottom:8px;">
-            Built with <a href="/pimas/" style="color:var(--granite); border-bottom:1px solid var(--granite);">pimas</a> - no React, no virtual DOM, no in-browser transpiler
+            Built with <a href="/pimas/" style="color:var(--granite);">pimas</a> - no React, no virtual DOM, no in-browser transpiler
           </div>
           <div style="display:flex; flex-wrap:wrap; gap:6px 18px;">
             <span><strong style="color:var(--ink); font-weight:500;">{TOKENS.jsBytes} KB</strong> framework JS</span>

@@ -5,9 +5,8 @@ type Section = "pimas" | null;
 function link(href: string, label: string, active: boolean) {
   const color = active ? "var(--ink)" : "var(--granite)";
   const weight = active ? "font-weight:500;" : "";
-  const underline = active ? "border-bottom:2px solid var(--falu); padding-bottom:2px;" : "";
   return (
-    <a href={href} class="ln" style={`font-family:var(--sans); font-size:14px; color:${color}; ${weight}${underline}`}>
+    <a href={href} class="ln" style={`font-family:var(--sans); font-size:14px; color:${color}; ${weight}`}>
       {label}
     </a>
   );
@@ -16,7 +15,7 @@ function link(href: string, label: string, active: boolean) {
 export function Nav(props: { active?: Section } = {}) {
   const active = props.active ?? null;
   return (
-    <nav style="position:sticky; top:0; z-index:10; background:var(--nav-bg); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);">
+    <nav style="position:sticky; top:0; z-index:10; background:var(--nav-bg); backdrop-filter:blur(8px);">
       <div style="max-width:1080px; margin:0 auto; min-height:64px; padding:8px 40px; box-sizing:border-box; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 28px;">
         <a href="/" style="display:inline-flex; align-items:center; gap:11px; font-family:var(--serif); font-weight:600; font-size:19px; letter-spacing:-.01em; color:var(--ink); white-space:nowrap;">
           <Mark size={34} />
