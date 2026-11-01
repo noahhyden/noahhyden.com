@@ -46,7 +46,7 @@ export function AzulejoBand(props: { height?: number; opacity?: number; pattern?
       width="100%"
       height={h}
       preserveAspectRatio="xMidYMid slice"
-      style={`position:absolute; inset:0; opacity:${o}; pointer-events:none;`}
+      style={`position:absolute; inset:0; opacity:${o}; pointer-events:none; -webkit-mask-image:linear-gradient(to bottom, #000 40%, transparent); mask-image:linear-gradient(to bottom, #000 40%, transparent);`}
       aria-hidden="true"
     >
       <rect width="100%" height={h} fill={`url(#${pattern})`} />
