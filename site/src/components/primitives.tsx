@@ -48,16 +48,17 @@ export function Card(props: { tone?: "surface" | "panel"; href?: string; style?:
   );
 }
 
-const VARIANT = {
-  accent: "background:var(--laurel); color:var(--ground);",
-  outline: "background:transparent; color:var(--ink);",
-};
 const SIZE = {
+  sm: "font-size:13px; padding:8px 14px;",
   md: "font-size:14px; padding:11px 18px;",
+  lg: "font-size:15px; padding:13px 24px;",
 };
 
-export function Button(props: { href: string; variant?: "accent" | "outline"; size?: "md"; external?: boolean; children?: Child }) {
-  const style = `display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; border-radius:2px; ${VARIANT[props.variant ?? "accent"]} ${SIZE[props.size ?? "md"]}`;
+export function Button(props: { href?: string; variant?: "solid" | "tonal" | "plain"; accent?: "laurel" | "falu" | "ocean"; size?: "sm" | "md" | "lg"; external?: boolean; children?: Child }) {
+  const c = `var(--${props.accent ?? "laurel"})`;
+  const fill = { solid: `background:${c}; color:var(--ground);`, tonal: "background:var(--surface); color:var(--ink);", plain: `background:transparent; color:${c};` }[props.variant ?? "solid"];
+  const style = `display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; border-radius:2px; ${fill} ${SIZE[props.size ?? "md"]}`;
+  if (!props.href) return <button type="button" className="btn" style={style}>{props.children}</button>;
   return props.external ? (
     <a href={props.href} target="_blank" rel="noopener" className="btn" style={style}>{props.children}</a>
   ) : (
@@ -72,7 +73,7 @@ export function BuildFetchError(props: { title: string; body: string; href: stri
       <div>
         <div style="font-family:var(--serif); font-weight:600; font-size:19px; margin-bottom:6px;">{props.title}</div>
         <p style="font-family:var(--sans); font-size:15px; line-height:1.55; color:var(--granite); margin:0 0 14px;">{props.body}</p>
-        <a className="btn" href={props.href} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--sans); font-weight:500; font-size:14px; padding:10px 18px; border-radius:2px; background:var(--falu); color:var(--ground);">{props.cta} &rarr;</a>
+        <Button href={props.href} external accent="falu">{props.cta} &rarr;</Button>
       </div>
     </div>
   );
