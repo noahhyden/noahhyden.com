@@ -322,14 +322,20 @@ function Dest(props: { href: string; accent: string; title: string; note?: strin
   );
 }
 
-const GraphIcon = () => (
+const TrajectoryIcon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="6" cy="6" r="2.5" />
-    <circle cx="18" cy="7" r="2.5" />
-    <circle cx="11" cy="18" r="2.5" />
-    <path d="M8.1 7.4 L9 16" />
-    <path d="M8.3 6.2 L15.6 6.7" />
-    <path d="M16.4 9 L12.6 15.9" />
+    <circle cx="4" cy="19" r="1.5" />
+    <path d="M5.2 17.6 C7 11 10 9.5 13 10.5" />
+    <path d="M13 10.5 C16 9 18.5 7 20.5 4" />
+    <path d="M13 10.5 C15 13 18 16 20.5 19" stroke-dasharray="2 3" />
+  </svg>
+);
+
+const PlanetIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4.5" />
+    <path d="M3.5 15.5 C1.5 12 6 8.5 12 7.5 C18 6.5 22.5 8 20.5 11" />
+    <circle cx="19" cy="5" r="1.5" />
   </svg>
 );
 
@@ -355,7 +361,6 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
           <HeroRosette />
           <div style="position:relative; max-width:1080px; margin:0 auto;">
             <PageTitle style="margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></PageTitle>
-            <p style="font-family:var(--sans); font-size:19px; line-height:1.6; color:var(--ink); margin:0 0 36px; max-width:56ch;">I work on airframes and software.</p>
             <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
               <Button href="#projects" variant="outline" size="md">Projects</Button>
               <a href="https://github.com/noahhyden" target="_blank" rel="noopener" aria-label="GitHub" style="display:inline-flex; color:var(--granite);"><GitHubIcon size={26} /></a>
@@ -428,8 +433,8 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
         <div style="max-width:1080px; margin:0 auto; padding:64px clamp(20px,5vw,40px) 96px;">
           <div style="margin:0 0 22px;"><Eyebrow>Explore</Eyebrow></div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px;">
-            <Dest href="/pimas/" accent="var(--laurel)" title="pimas" note="Exact what-if over a live model" icon={<GraphIcon />} />
-            <Dest href="/von-neumann/" accent="var(--ocean)" title="von-neumann" note="Self-replicating space manufacturing" icon={<GraphIcon />} />
+            <Dest href="/pimas/" accent="var(--laurel)" title="pimas" note="Exact what-if over a live model" icon={<TrajectoryIcon />} />
+            <Dest href="/von-neumann/" accent="var(--ocean)" title="von-neumann" note="Self-replicating space manufacturing" icon={<PlanetIcon />} />
           </div>
         </div>
       </Band>
