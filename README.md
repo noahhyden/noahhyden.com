@@ -77,9 +77,3 @@ fails the build rather than publishing an empty page. The workflow sets
 `GH_BUILD_TOKEN` from the job's `GITHUB_TOKEN`, so the unauthenticated rate
 limit is not in play; the build reads only `GH_BUILD_TOKEN`, so a stray ambient
 token cannot break it.
-
-## Conventions
-
-- No em-dashes and no emoji anywhere in source or copy - see `CLAUDE.md`.
-- Write plainly; do not invent biographical facts, posts, papers, or
-  credentials.
