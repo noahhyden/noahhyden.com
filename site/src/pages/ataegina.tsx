@@ -72,7 +72,7 @@ export default function Ataegina() {
           </p>
         </section>
 
-        <section style="margin:52px 0 0; border-top:1px solid var(--line); padding-top:28px;">
+        <section style="margin:52px 0 0; padding-top:28px;">
           <p style="font-family:var(--sans); font-size:15px; line-height:1.64; color:var(--granite); margin:0 0 10px; max-width:72ch;">
             Apache License 2.0, with the name and logos reserved in a{" "}
             <a href="https://github.com/noahhyden/ataegina-cli/blob/main/NOTICE" target="_blank" rel="noopener" style={link}>NOTICE</a>
