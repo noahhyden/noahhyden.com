@@ -310,7 +310,7 @@ function HeroRosette() {
 
 function Dest(props: { href: string; accent: string; title: string; note?: string; icon: Child }) {
   return (
-    <Card href={props.href} tone="surface" style="padding:30px 28px 28px;">
+    <Card href={props.href} tone="ground" style="padding:30px 28px 28px;">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;">
         <span style={`display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:2px; background:var(--ground); color:${props.accent};`}>
           {props.icon}

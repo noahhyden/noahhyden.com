@@ -50,6 +50,7 @@ Neither guard may pass over an empty file list.
   - [`140-the-metrics-band-reports-only-defensible-numbers.md`](AGENTS.d/140-the-metrics-band-reports-only-defensible-numbers.md) - The metrics band reports only defensible numbers
   - [`141-azulejo-pattern-defined-once-per-document.md`](AGENTS.d/141-azulejo-pattern-defined-once-per-document.md) - Azulejo pattern is defined once per document
   - [`150-upstream-copy-is-sanitized-for-typography.md`](AGENTS.d/150-upstream-copy-is-sanitized-for-typography.md) - Upstream copy is sanitized for typography
+  - [`160-component-toggles-are-explicit-props-with-defaults.md`](AGENTS.d/160-component-toggles-are-explicit-props-with-defaults.md) - A component's toggles are explicit props with defaults
   - [`151-the-live-site-is-built-by-ci-never-committed.md`](AGENTS.d/151-the-live-site-is-built-by-ci-never-committed.md) - The live site is built by CI and never committed
 
 ## Build & deploy

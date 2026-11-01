@@ -1,11 +1,11 @@
 import type { Child } from "pimas-ui/dom";
 
-/** Full-width section. Content is not padded here - callers pad. */
-export function Band(props: { tint?: boolean; labelledBy?: string; id?: string; children?: Child }) {
-  const bg = props.tint ? "var(--surface)" : "transparent";
-  const border = props.bordered ? "" : "";
+/** Full-width section; `divider` draws a bottom rule and defaults off, because the page-break hairlines were removed on purpose. */
+export function Band(props: { tint?: boolean; divider?: boolean; labelledBy?: string; id?: string; children?: Child }) {
+  const bg = (props.tint ?? false) ? "var(--surface)" : "transparent";
+  const rule = (props.divider ?? false) ? " border-bottom:1px solid var(--line);" : "";
   return (
-    <section id={props.id} aria-labelledby={props.labelledBy} style={`position:relative; isolation:isolate; background:${bg};`}>
+    <section id={props.id} aria-labelledby={props.labelledBy} style={`position:relative; isolation:isolate; background:${bg};${rule}`}>
       {props.children}
     </section>
   );
@@ -35,16 +35,30 @@ export function SectionTitle(props: { style?: string; children?: Child }) {
   );
 }
 
-export function Card(props: { tone?: "surface" | "panel"; href?: string; style?: string; children?: Child }) {
-  const panel = props.tone === "panel";
-  const base = panel
-    ? "display:block; border-radius:3px; background:var(--surface); padding:20px 22px;"
-    : "display:block; border-radius:3px; background:var(--ground); padding:24px;";
-  const style = base + (props.style ?? "");
-  return props.href ? (
-    <a href={props.href} className="lift" style={style}>{props.children}</a>
+const PAD = { sm: "14px 16px", md: "24px", lg: "28px 30px" };
+
+/** Card surface; every toggle is an explicit prop with a default, and `outline` draws the var(--line) edge. */
+export function Card(props: {
+  href?: string;
+  external?: boolean;
+  tone?: "ground" | "surface";
+  outline?: boolean;
+  lift?: boolean;
+  pad?: "sm" | "md" | "lg";
+  style?: string;
+  children?: Child;
+}) {
+  const edge = (props.outline ?? true) ? " border:1px solid var(--line);" : "";
+  const cls = (props.lift ?? true) ? "lift" : "";
+  const style =
+    `display:block; border-radius:3px; background:var(--${props.tone ?? "ground"}); padding:${PAD[props.pad ?? "md"]};` +
+    edge +
+    (props.style ?? "");
+  if (!props.href) return <div className={cls} style={style}>{props.children}</div>;
+  return (props.external ?? false) ? (
+    <a href={props.href} target="_blank" rel="noopener" className={cls} style={style}>{props.children}</a>
   ) : (
-    <div className="lift" style={style}>{props.children}</div>
+    <a href={props.href} className={cls} style={style}>{props.children}</a>
   );
 }
 
@@ -54,12 +68,26 @@ const SIZE = {
   lg: "font-size:15px; padding:13px 24px;",
 };
 
-export function Button(props: { href?: string; fill?: "solid" | "tonal" | "none"; accent?: "laurel" | "falu" | "ocean"; size?: "sm" | "md" | "lg"; external?: boolean; children?: Child }) {
+/** Action; every toggle is an explicit prop with a default, and `outline` draws a currentColor edge so it tracks the text. */
+export function Button(props: {
+  href?: string;
+  external?: boolean;
+  fill?: "solid" | "tonal" | "none";
+  accent?: "laurel" | "falu" | "ocean";
+  size?: "sm" | "md" | "lg";
+  outline?: boolean;
+  children?: Child;
+}) {
   const c = `var(--${props.accent ?? "laurel"})`;
-  const paint = { solid: `background:${c}; color:var(--ground);`, tonal: "background:var(--surface); color:var(--ink);", none: `background:transparent; color:${c};` }[props.fill ?? "solid"];
-  const style = `display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; border-radius:2px; ${paint} ${SIZE[props.size ?? "md"]}`;
+  const paint = {
+    solid: `background:${c}; color:var(--ground);`,
+    tonal: "background:var(--surface); color:var(--ink);",
+    none: `background:transparent; color:${c};`,
+  }[props.fill ?? "solid"];
+  const edge = (props.outline ?? false) ? " border:1px solid currentColor;" : "";
+  const style = `display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; border-radius:2px; ${paint}${edge} ${SIZE[props.size ?? "md"]}`;
   if (!props.href) return <button type="button" className="btn" style={style}>{props.children}</button>;
-  return props.external ? (
+  return (props.external ?? false) ? (
     <a href={props.href} target="_blank" rel="noopener" className="btn" style={style}>{props.children}</a>
   ) : (
     <a href={props.href} className="btn" style={style}>{props.children}</a>
@@ -68,13 +96,13 @@ export function Button(props: { href?: string; fill?: "solid" | "tonal" | "none"
 
 export function BuildFetchError(props: { title: string; body: string; href: string; cta: string }) {
   return (
-    <div style=" border-radius:3px; background:var(--surface); padding:28px; display:flex; gap:14px; align-items:flex-start;">
+    <Card tone="surface" outline={false} lift={false} pad="lg" style="display:flex; gap:14px; align-items:flex-start;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--falu)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none; margin-top:1px;"><circle cx="12" cy="12" r="9" /><line x1="12" y1="8" x2="12" y2="13" /><line x1="12" y1="16" x2="12" y2="16.5" /></svg>
       <div>
         <div style="font-family:var(--serif); font-weight:600; font-size:19px; margin-bottom:6px;">{props.title}</div>
         <p style="font-family:var(--sans); font-size:15px; line-height:1.55; color:var(--granite); margin:0 0 14px;">{props.body}</p>
         <Button href={props.href} external accent="falu">{props.cta} &rarr;</Button>
       </div>
-    </div>
+    </Card>
   );
 }
