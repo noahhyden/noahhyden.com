@@ -1,7 +1,7 @@
 import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
-import { ArrowIcon, GitHubIcon, LinkedInIcon } from "../components/icons.js";
+import { ArrowIcon } from "../components/icons.js";
 import { Band, Scrim, Eyebrow, PageTitle, SectionTitle, Card, Button, BuildFetchError } from "../components/primitives.js";
 import { ghHeaders } from "../gh.js";
 
@@ -366,12 +366,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
         <div style="position:relative; padding:96px clamp(20px,5vw,40px) 88px;">
           <div style="position:relative; max-width:1080px; margin:0 auto;">
             <Scrim spread="lg" style="width:fit-content; max-width:100%; padding:28px 48px; margin:-28px -48px;">
-            <PageTitle style="margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></PageTitle>
-            <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
-              <Button href="#projects" fill="tonal">Projects</Button>
-              <a href="https://github.com/noahhyden" target="_blank" rel="noopener" aria-label="GitHub" style="display:inline-flex; color:var(--granite);"><GitHubIcon size={26} /></a>
-              <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" aria-label="LinkedIn" style="display:inline-flex; color:var(--granite);"><LinkedInIcon size={26} /></a>
-            </div>
+            <PageTitle style="margin:0;">Noah Hyden<span style="color:var(--falu);">.</span></PageTitle>
             </Scrim>
           </div>
         </div>
