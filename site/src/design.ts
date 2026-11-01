@@ -2,10 +2,8 @@
 
 /** Build-time metric sentinels. `build.mjs` replaces these in the final HTML. */
 export const TOKENS = {
-  renderMs: "__BUILD_RENDER_MS__",
   jsBytes: "__BUILD_JS_BYTES__",
   htmlKb: "__BUILD_HTML_KB__",
-  pimasVer: "__BUILD_PIMAS_VER__",
   themeJs: "__BUILD_THEME_JS__",
 } as const;
 
@@ -18,7 +16,7 @@ const DARK_TOKENS = `
 const BASE_CSS = `
 :root{
   --ground:#e5e4db; --surface:#dbd9ce; --line:#ccc9bb; --ink:#171e1a;
-  --laurel:#3b5b47; --ocean:#3b5669; --falu:#801818; --granite:#716f65; --tile:#6e7d87;
+  --laurel:#3b5b47; --ocean:#3b5669; --falu:#801818; --granite:#5f5d53; --tile:#6e7d87;
   --nav-bg:rgba(229,228,219,.86); --footer-tint:rgba(23,30,26,.025);
   --serif:'Spectral', Georgia, 'Times New Roman', serif;
   --sans:'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -36,7 +34,6 @@ a{color:inherit;text-decoration:none;}
 .ln{transition:color .15s ease;}
 .ln:hover{color:var(--falu);}
 a:focus-visible,button:focus-visible{outline:2px solid var(--laurel); outline-offset:2px; border-radius:2px;}
-@media(max-width:720px){.about-grid{grid-template-columns:1fr !important; gap:40px !important;} .about-grid aside{position:static !important; top:auto !important;}}
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){${DARK_TOKENS}}
 }
