@@ -16,6 +16,7 @@ const require = createRequire(import.meta.url);
 const ROUTES = [
   { url: "/", page: "index" },
   { url: "/pimas/", page: "pimas" },
+  { url: "/von-neumann/", page: "von-neumann" },
 ];
 
 const pimasVersion = require("pimas-ui/package.json").version || "0.0.0";
