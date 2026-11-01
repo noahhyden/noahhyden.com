@@ -135,7 +135,7 @@ export default function Pimas() {
               <>
                 pricing, project economics, risk, physical models. The math is already pure, so exact what-if is
                 cheap. The demo above runs an OECD-style composite indicator, and the{" "}
-                <a href="https://github.com/noahhyden/von-neumann" target="_blank" rel="noopener" style="color:var(--ocean); border-bottom:1px solid var(--ocean); white-space:nowrap;">von-neumann</a>
+                <a href="https://github.com/noahhyden/von-neumann" target="_blank" rel="noopener" style="color:var(--ocean); white-space:nowrap;">von-neumann</a>
                 {" "}lunar-factory model is the other target.
               </>
             } />
@@ -150,11 +150,11 @@ export default function Pimas() {
           </div>
         </section>
 
-        <section style="margin:52px 0 72px; border-top:1px solid var(--line); padding-top:28px; display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:14px;">
+        <section style="margin:52px 0 72px; padding-top:28px; display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:14px;">
           <p style="font-family:var(--sans); font-size:16px; line-height:1.6; color:var(--granite); margin:0; max-width:52ch;">
             The code is on GitHub and published to npm as <C>pimas-ui</C>. Pre-1.0: pin exact versions.
           </p>
-          <a href="https://github.com/noahhyden/pimas" target="_blank" rel="noopener" style="font-family:var(--mono); font-size:13px; letter-spacing:.03em; color:var(--falu); border-bottom:1px solid var(--falu); padding-bottom:2px; white-space:nowrap;">
+          <a href="https://github.com/noahhyden/pimas" target="_blank" rel="noopener" style="font-family:var(--mono); font-size:13px; letter-spacing:.03em; color:var(--falu); padding-bottom:2px; white-space:nowrap;">
             github.com/noahhyden/pimas &rarr;
           </a>
         </section>
