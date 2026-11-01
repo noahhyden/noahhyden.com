@@ -11,8 +11,6 @@ export const meta: PageMeta = {
     "A from-scratch fine-grained reactive UI framework (zero runtime dependencies, no virtual DOM) whose dependency graph an AI agent can subscribe to, get causal explanations from, and simulate against before it commits anything.",
 };
 
-const eyebrow =
-  "font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--granite); margin:0 0 8px;";
 const h2s =
   "font-family:var(--serif); font-weight:500; font-size:31px; line-height:1.12; letter-spacing:-.02em; margin:0 0 18px; max-width:26ch;";
 const h3s =
@@ -77,7 +75,6 @@ export default function Pimas() {
   return (
     <Shell>
       <header style="max-width:900px; margin:0 auto; padding:76px 40px 0;">
-        <div style={eyebrow.replace("11px", "12px")}>A personal project - pimas</div>
         <h1 style="font-family:var(--serif); font-weight:500; font-size:50px; line-height:1.06; letter-spacing:-.022em; margin:0; max-width:19ch;">
           A reactive UI engine an agent can simulate against before it acts.
         </h1>
@@ -100,7 +97,6 @@ export default function Pimas() {
       <main style="max-width:900px; margin:0 auto; padding:0 40px;">
 
         <section style="margin:44px 0 8px;">
-          <div style={eyebrow}>A live demo, running in your browser</div>
           <p style="font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--granite); margin:0 0 18px; max-width:72ch;">
             Drive the model or watch an agent, then look at the dependency graph below it: the nodes are this
             model&rsquo;s own signals and memos, and one lights only when its compute function actually re-ran -
@@ -110,7 +106,6 @@ export default function Pimas() {
         </section>
 
         <section style="margin:52px 0;">
-          <div style={eyebrow}>The problem it solves</div>
           <h2 style={h2s}>Observation shouldn&rsquo;t require mutation.</h2>
           <p style={body}>
             Every existing way an agent touches a UI - WebMCP actions, computer-use, Playwright scraping - shares
@@ -126,7 +121,6 @@ export default function Pimas() {
         </section>
 
         <section style="margin:52px 0;">
-          <div style={eyebrow}>How it works</div>
           <h2 style={h2s}>One mechanism, three surfaces.</h2>
 
           <h3 style={h3s}>The reactive kernel</h3>
@@ -188,7 +182,6 @@ export default function Pimas() {
         </section>
 
         <section style="margin:52px 0;">
-          <div style={eyebrow}>The mechanism</div>
           <h2 style={h2s}>How a what-if actually runs.</h2>
           <p style={body}>
             <C>speculate</C> works because the graph separates two things a virtual DOM keeps tangled: the{" "}
@@ -224,7 +217,6 @@ export default function Pimas() {
         </section>
 
         <section style="margin:52px 0;">
-          <div style={eyebrow}>Why an ordinary stack can&rsquo;t</div>
           <h2 style={h2s}>It needs a graph that exists before the question is asked.</h2>
           <div style="border:1px solid var(--line); border-radius:3px; background:var(--surface); padding:24px 26px;">
             <p style="font-family:var(--sans); font-size:16px; line-height:1.68; color:var(--granite); margin:0;">
@@ -239,7 +231,6 @@ export default function Pimas() {
         </section>
 
         <section style="margin:52px 0;">
-          <div style={eyebrow}>Measured, with a real agent in the loop</div>
           <h2 style={h2s}>Same policy, same answers, a fraction of the footprint.</h2>
           <p style={body}>
             The same grid-search policy drives an OECD-style composite-indicator model through the projected tools
@@ -280,7 +271,6 @@ export default function Pimas() {
         </section>
 
         <section style="margin:52px 0;">
-          <div style={eyebrow}>&ldquo;Isn&rsquo;t this just&hellip;?&rdquo;</div>
           <h2 style={h2s}>Non-committal what-if isn&rsquo;t new. This combination is.</h2>
           <p style="font-family:var(--sans); font-size:16px; line-height:1.62; color:var(--granite); margin:0 0 24px; max-width:66ch;">
             Speculative execution is a well-worn idea. What no one has put in one place is{" "}
@@ -300,7 +290,6 @@ export default function Pimas() {
         </section>
 
         <section style="margin:52px 0;">
-          <div style={eyebrow}>Where it fits</div>
           <h2 style={h2s}>Sharpest where a wrong commit costs something, and the logic is pure.</h2>
           <ul style="list-style:none; padding:0; margin:0 0 26px; display:grid; gap:14px;">
             <FitItem title="Quantitative models (the sharpest fit)" body={
@@ -308,7 +297,7 @@ export default function Pimas() {
                 pricing, project economics, risk, physical models. The math is already pure, so exact what-if is
                 free and what-if is the whole job. Proven on a self-replicating lunar-factory model (
                 <a href="https://github.com/noahhyden/von-neumann" target="_blank" rel="noopener" style="color:var(--ocean); border-bottom:1px solid var(--ocean); white-space:nowrap;">von-neumann</a>
-                , written up in the <a href="/papers/" style="color:var(--ocean); border-bottom:1px solid var(--ocean);">papers</a>) and an OECD-style composite indicator (sector-engines).
+                , written up in the <a href="/#papers" style="color:var(--ocean); border-bottom:1px solid var(--ocean);">papers</a>) and an OECD-style composite indicator (sector-engines).
               </>
             } />
             <FitItem title="Agentic ops & workflows" body="preview the exact resulting state, approve, then commit - instead of mutating live systems to find out what an action does. Run end-to-end against a real HTTP backend." />
