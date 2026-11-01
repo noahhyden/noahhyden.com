@@ -17,6 +17,7 @@ const ROUTES = [
   { url: "/", page: "index" },
   { url: "/pimas/", page: "pimas" },
   { url: "/von-neumann/", page: "von-neumann" },
+  { url: "/erbina/", page: "erbina" },
 ];
 
 const pimasVersion = require("pimas-ui/package.json").version || "0.0.0";
