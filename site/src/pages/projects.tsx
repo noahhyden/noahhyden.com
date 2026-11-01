@@ -2,6 +2,7 @@ import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
 import { ArrowIcon } from "../components/icons.js";
 import { BuildFetchError } from "../components/primitives.js";
+import { ghHeaders } from "../gh.js";
 
 /** Pinned repos shown as cards above the list, in this order. */
 const PINNED = ["von-neumann", "pimas", "ataegina-cli"];
@@ -42,7 +43,7 @@ export async function getData(): Promise<{ repos: Repo[]; error: boolean }> {
   try {
     const res = await fetch(
       "https://api.github.com/users/noahhyden/repos?per_page=100&sort=updated",
-      { headers: { Accept: "application/vnd.github+json", "User-Agent": "noahhyden.com-build" } },
+      { headers: ghHeaders() },
     );
     if (!res.ok) throw new Error("status " + res.status);
     const raw = await res.json();
@@ -62,7 +63,8 @@ export async function getData(): Promise<{ repos: Repo[]; error: boolean }> {
         pinned: PINNED.includes(r.name),
       }));
     return { repos, error: false };
-  } catch {
+  } catch (e) {
+    console.error("projects: GitHub fetch failed -", e instanceof Error ? e.message : e);
     return { repos: [], error: true };
   }
 }

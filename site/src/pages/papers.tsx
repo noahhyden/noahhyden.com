@@ -3,6 +3,7 @@ import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
 import { ArrowIcon } from "../components/icons.js";
 import { BuildFetchError } from "../components/primitives.js";
+import { ghHeaders } from "../gh.js";
 
 export const meta: PageMeta = {
   path: "/papers/",
@@ -35,11 +36,6 @@ interface Paper {
   source: string;
 }
 
-const GH_HEADERS = {
-  Accept: "application/vnd.github+json",
-  "User-Agent": "noahhyden.com-build",
-};
-
 /** Sanitize upstream prose: no em-dash, fold LaTeX `--` to a spaced hyphen. */
 function clean(s: string): string {
   return String(s)
@@ -53,7 +49,7 @@ export async function getData(): Promise<{ papers: Paper[]; error: boolean }> {
   try {
     const listRes = await fetch(
       "https://api.github.com/repos/noahhyden/von-neumann/contents/papers",
-      { headers: GH_HEADERS },
+      { headers: ghHeaders() },
     );
     if (!listRes.ok) throw new Error("contents status " + listRes.status);
     const entries = await listRes.json();
@@ -93,7 +89,8 @@ export async function getData(): Promise<{ papers: Paper[]; error: boolean }> {
 
     papers.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
     return { papers, error: false };
-  } catch {
+  } catch (e) {
+    console.error("papers: GitHub fetch failed -", e instanceof Error ? e.message : e);
     return { papers: [], error: true };
   }
 }

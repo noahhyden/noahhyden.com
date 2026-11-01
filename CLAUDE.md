@@ -2,8 +2,8 @@
 
 Personal site for Noah Hyden. Authored in [pimas](https://github.com/noahhyden/pimas)
 and prerendered to static, zero-JavaScript HTML. Source of truth is `site/src/`;
-`site/build.mjs` renders it to `dist/`, which is promoted to the repo-root HTML
-files that GitHub Pages serves.
+`site/build.mjs` renders it to `dist/`, which CI uploads to GitHub Pages. No
+build output is committed.
 
 ## Typography rules (binding)
 
@@ -53,6 +53,7 @@ Neither guard may pass over an empty file list.
   - [`140-the-metrics-band-reports-only-defensible-numbers.md`](AGENTS.d/140-the-metrics-band-reports-only-defensible-numbers.md) - The metrics band reports only defensible numbers
   - [`141-azulejo-pattern-defined-once-per-document.md`](AGENTS.d/141-azulejo-pattern-defined-once-per-document.md) - Azulejo pattern is defined once per document
   - [`150-upstream-copy-is-sanitized-for-typography.md`](AGENTS.d/150-upstream-copy-is-sanitized-for-typography.md) - Upstream copy is sanitized for typography
+  - [`151-the-live-site-is-built-by-ci-never-committed.md`](AGENTS.d/151-the-live-site-is-built-by-ci-never-committed.md) - The live site is built by CI and never committed
 
 ## Build & deploy
 
@@ -60,16 +61,20 @@ Neither guard may pass over an empty file list.
 cd site
 npm install
 npm run build          # esbuild -> pimas/server renderToString -> ../dist/*.html
-                       # then `postbuild` promotes dist/ to the repo root
 ```
 
-The live site is served from the **repo-root** HTML files (GitHub Pages, root,
-with `CNAME` + `.nojekyll`). `dist/` is gitignored and is promoted
-automatically: the `postbuild` script in `site/package.json` clears `islands/`
-(the chunk filenames are content-hashed, so a plain copy would leave orphans
-behind) and copies `dist/` over the root. There is no manual promote step; a
-build leaves the root ready to commit. Routes are the `ROUTES` table in
+Deploys are automatic. `.github/workflows/deploy.yml` runs on every push to
+`main` (and on `workflow_dispatch`), builds `site/`, and uploads `dist/` to
+GitHub Pages with `actions/deploy-pages`. The Pages source is **GitHub
+Actions**, not a branch, so `dist/` is gitignored and nothing generated is ever
+committed; a build is a local preview only. Routes are the `ROUTES` table in
 `build.mjs`; `sitemap.xml` falls out of it.
+
+The build fetches the GitHub API for `/projects/` and `/papers/`. A failed fetch
+fails the build rather than publishing an empty page. The workflow sets
+`GH_BUILD_TOKEN` from the job's `GITHUB_TOKEN`, so the unauthenticated rate
+limit is not in play; the build reads only `GH_BUILD_TOKEN`, so a stray ambient
+token cannot break it.
 
 ## Git
 
