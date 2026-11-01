@@ -339,6 +339,14 @@ const PlanetIcon = () => (
   </svg>
 );
 
+const InstallIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3.5 V12.5" />
+    <path d="M8.5 9.5 L12 13 L15.5 9.5" />
+    <path d="M4.5 15 V18.5 A1.5 1.5 0 0 0 6 20 H18 A1.5 1.5 0 0 0 19.5 18.5 V15" />
+  </svg>
+);
+
 export default function Home(props: { repos?: Repo[]; reposError?: boolean; papers?: Paper[]; papersError?: boolean }) {
   const repos = props.repos ?? [];
   const error = props.reposError ?? false;
@@ -435,6 +443,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px;">
             <Dest href="/pimas/" accent="var(--laurel)" title="pimas" note="Exact what-if over a live model" icon={<TrajectoryIcon />} />
             <Dest href="/von-neumann/" accent="var(--ocean)" title="von-neumann" note="Self-replicating space manufacturing" icon={<PlanetIcon />} />
+            <Dest href="/erbina/" accent="var(--tile)" title="erbina" note="Verified installs, by conversation" icon={<InstallIcon />} />
           </div>
         </div>
       </Band>
