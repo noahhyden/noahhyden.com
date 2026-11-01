@@ -5,10 +5,10 @@ import { Footer } from "./Footer.js";
 
 type Section = "pimas" | null;
 
-/** One page-wide tracery field sits behind everything; content rides above it on z-index 1 and carries its own radial scrims. */
+/** One document-height tracery field sits behind everything; content rides above it on z-index 1 and carries its own radial scrims. */
 export function Shell(props: { active?: Section; pattern?: "quatrefoil" | "rosette"; children?: Child }) {
   return (
-    <div>
+    <div style="position:relative;">
       <AzulejoDefs />
       <AzulejoField pattern={props.pattern ?? "quatrefoil"} />
       <div style="position:relative; z-index:1;">

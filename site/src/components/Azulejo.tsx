@@ -57,11 +57,24 @@ export function AzulejoBand(props: { height?: number; opacity?: number; pattern?
 /** Tracery opacity for the page field; the one place to retune. */
 const FIELD_OPACITY = 0.16;
 
-/** Page-wide tracery field, fixed to the viewport so every section shares ONE 48px grid and the fill never breaks at a seam. */
-export function AzulejoField(props: { pattern?: "quatrefoil" | "rosette"; opacity?: number }) {
+/** One tile-able period of the mask: opaque OUTSIDE a sine corridor (centre 50 +/-9, half-width 41), blurred; shapes run past the tile so the seam is invisible. */
+function corridorMask(): string {
+  const edge = (y: number, s: number) => 50 + 9 * Math.sin((y / 100) * 2 * Math.PI) + s * 41;
+  const ys: number[] = [];
+  for (let y = -40; y <= 140; y += 4) ys.push(y);
+  const side = (s: number, far: number) => [...ys.map((y) => `${edge(y, s).toFixed(2)},${y}`), `${far},140`, `${far},-40`].join(" ");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><filter id="b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5 2"/></filter><g filter="url(#b)" fill="#000"><polygon points="${side(-1, -60)}"/><polygon points="${side(1, 160)}"/></g></svg>`;
+  return `url(data:image/svg+xml,${encodeURIComponent(svg).replace(/[()']/g, (c) => "%" + c.charCodeAt(0).toString(16))})`;
+}
+
+const CORRIDOR_MASK = corridorMask();
+
+/** Page-wide tracery field: ONE document-height element (one 48px grid); the mask tiles one corridor wave per viewport height. */
+export function AzulejoField(props: { pattern?: "quatrefoil" | "rosette"; opacity?: number; corridor?: boolean }) {
   const o = props.opacity ?? FIELD_OPACITY;
+  const m = (props.corridor ?? true) ? `-webkit-mask-image:${CORRIDOR_MASK}; mask-image:${CORRIDOR_MASK}; -webkit-mask-size:100% 100vh; mask-size:100% 100vh; -webkit-mask-repeat:repeat-y; mask-repeat:repeat-y;` : "";
   return (
-    <svg width="100%" height="100%" style={`position:fixed; inset:0; width:100vw; height:100vh; opacity:${o}; pointer-events:none;`} aria-hidden="true">
+    <svg width="100%" height="100%" style={`position:absolute; inset:0; opacity:${o}; pointer-events:none; ${m}`} aria-hidden="true">
       <rect width="100%" height="100%" fill={`url(#${props.pattern ?? "quatrefoil"})`} />
     </svg>
   );
