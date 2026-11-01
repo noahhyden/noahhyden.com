@@ -1,5 +1,5 @@
 import type { PageMeta } from "../design.js";
-import { Button } from "../components/primitives.js";
+import { Button, Card } from "../components/primitives.js";
 import { Shell } from "../components/Shell.js";
 
 export const meta: PageMeta = {
@@ -57,10 +57,10 @@ export default function VonNeumann() {
             self-replication is real, but it is bounded by physical walls that reappear at every scale, and the
             models say which limit binds where. Three of them:
           </p>
-          <ul style="margin:0 0 18px; padding-left:20px; font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--ink); max-width:72ch;">
-            <li>A lone factory can make its structure but not its electronics. Chips are the wall.</li>
-            <li>Installed mass per launched mass is exactly 1/(1 - closure): about 3x at 67% closure, about 33x at 97%.</li>
-            <li>Light-speed coordination costs a median of about 30% of exploration time for nearest-slingshot probes, about 50% for max-boost, and about 0% for powered flight.</li>
+          <ul style="list-style:none; margin:0 0 18px; padding:0; display:grid; gap:12px; font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--ink); max-width:72ch;">
+            <li><Card tone="ground" outline={true} lift={false} pad="sm">A lone factory can make its structure but not its electronics. Chips are the wall.</Card></li>
+            <li><Card tone="ground" outline={true} lift={false} pad="sm">Installed mass per launched mass is exactly 1/(1 - closure): about 3x at 67% closure, about 33x at 97%.</Card></li>
+            <li><Card tone="ground" outline={true} lift={false} pad="sm">Light-speed coordination costs a median of about 30% of exploration time for nearest-slingshot probes, about 50% for max-boost, and about 0% for powered flight.</Card></li>
           </ul>
           <p style={body}>
             These are order-of-magnitude research results, not forecasts. Where the literature has no value, the

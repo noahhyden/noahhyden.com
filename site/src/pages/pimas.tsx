@@ -1,6 +1,7 @@
 import type { Child } from "pimas-ui/dom";
 import type { PageMeta } from "../design.js";
 import { Shell } from "../components/Shell.js";
+import { Card } from "../components/primitives.js";
 import { Island } from "../components/Island.js";
 import AgentSim from "../islands/agent-sim.js";
 
@@ -42,9 +43,13 @@ function Step(props: { n: string; children: Child }) {
 
 function FitItem(props: { title: string; body: Child }) {
   return (
-    <li style="display:flex; gap:12px; align-items:baseline; font-family:var(--sans); font-size:15.5px; line-height:1.62; color:var(--granite);">
-      <span style="flex:none; font-family:var(--mono); color:var(--ocean);">&rarr;</span>
-      <span><b style="color:var(--ink); font-weight:600;">{props.title}</b> - {props.body}</span>
+    <li style="margin:0;">
+      <Card tone="ground" outline={true} lift={false} pad="sm">
+        <div style="display:flex; gap:12px; align-items:baseline; font-family:var(--sans); font-size:15.5px; line-height:1.62; color:var(--granite);">
+          <span style="flex:none; font-family:var(--mono); color:var(--ocean);">&rarr;</span>
+          <span><b style="color:var(--ink); font-weight:600;">{props.title}</b> - {props.body}</span>
+        </div>
+      </Card>
     </li>
   );
 }
@@ -142,12 +147,12 @@ export default function Pimas() {
             <FitItem title="Preview before commit" body="show the exact resulting state, then commit only what the user or agent approved." />
             <FitItem title="Tooling for AI agents" body="give an agent a non-committal preview of an action before it fires, as a simulate_* tool." />
           </ul>
-          <div style="border-left:2px solid var(--falu); padding:4px 0 4px 16px;">
+          <Card tone="ground" outline={false} lift={false} pad="sm" style="border-left:2px solid var(--falu);">
             <p style="font-family:var(--sans); font-size:15px; line-height:1.64; color:var(--granite); margin:0; max-width:70ch;">
               <b style={ink}>Limit.</b> <C>speculate</C> is exact only if memos are pure. That is assumed, not
               enforced: keep I/O in actions and math in memos.
             </p>
-          </div>
+          </Card>
         </section>
 
         <section style="margin:52px 0 72px; padding-top:28px; display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:14px;">
