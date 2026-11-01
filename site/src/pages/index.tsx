@@ -428,7 +428,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
         <div style="max-width:1080px; margin:0 auto; padding:64px clamp(20px,5vw,40px) 96px;">
           <div style="margin:0 0 22px;"><Eyebrow>Explore</Eyebrow></div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px;">
-            <Dest href="/pimas/" accent="var(--laurel)" title="pimas" note="Reactive UI engine" icon={<GraphIcon />} />
+            <Dest href="/pimas/" accent="var(--laurel)" title="pimas" note="Exact what-if over a live model" icon={<GraphIcon />} />
             <Dest href="/von-neumann/" accent="var(--ocean)" title="von-neumann" note="Self-replicating space manufacturing" icon={<GraphIcon />} />
           </div>
         </div>

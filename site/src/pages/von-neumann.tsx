@@ -59,7 +59,7 @@ export default function VonNeumann() {
           <ul style="margin:0 0 18px; padding-left:20px; font-family:var(--sans); font-size:16px; line-height:1.7; color:var(--ink); max-width:72ch;">
             <li>A lone factory can make its structure but not its electronics. Chips are the wall.</li>
             <li>Installed mass per launched mass is exactly 1/(1 - closure): about 3x at 67% closure, about 33x at 97%.</li>
-            <li>Light-speed coordination costs a median of about 30% of exploration time for nearest-slingshot probes and about 0% for powered flight.</li>
+            <li>Light-speed coordination costs a median of about 30% of exploration time for nearest-slingshot probes, about 50% for max-boost, and about 0% for powered flight.</li>
           </ul>
           <p style={body}>
             These are order-of-magnitude research results, not forecasts. Where the literature has no value, the
