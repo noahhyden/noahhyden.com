@@ -216,9 +216,9 @@ function PaperArticle(props: { p: Paper }) {
       ) : null}
 
       <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
-        <a className="btn" href={p.pdf} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:14px; padding:11px 20px; border-radius:2px; background:var(--laurel); color:var(--ground);">
+        <Button href={p.pdf} external>
           Read the typeset PDF <ArrowIcon size={15} />
-        </a>
+        </Button>
         <a className="ln" href={p.source} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px; color:var(--ocean); padding-bottom:2px;">
           Source on GitHub
         </a>
@@ -363,7 +363,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
           <div style="position:relative; max-width:1080px; margin:0 auto;">
             <PageTitle style="margin:0 0 26px;">Noah Hyden<span style="color:var(--falu);">.</span></PageTitle>
             <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
-              <Button href="#projects" variant="outline" size="md">Projects</Button>
+              <Button href="#projects" variant="tonal">Projects</Button>
               <a href="https://github.com/noahhyden" target="_blank" rel="noopener" aria-label="GitHub" style="display:inline-flex; color:var(--granite);"><GitHubIcon size={26} /></a>
               <a href="https://www.linkedin.com/in/noah-hyden/" target="_blank" rel="noopener" aria-label="LinkedIn" style="display:inline-flex; color:var(--granite);"><LinkedInIcon size={26} /></a>
             </div>
@@ -393,7 +393,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
                 {rest.map((r) => <RepoLink r={r} />)}
               </div>
               <div style="margin-top:28px; text-align:center;">
-                <a href="https://github.com/noahhyden?tab=repositories" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; color:var(--ink);">See all repositories on GitHub <ArrowIcon size={16} /></a>
+                <Button href="https://github.com/noahhyden?tab=repositories" external variant="tonal" size="lg">See all repositories on GitHub <ArrowIcon size={16} /></Button>
               </div>
             </section>
           ) : null}
@@ -418,9 +418,9 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
               </div>
               {papers.map((p) => <PaperArticle p={p} />)}
               <div style=" padding-top:24px; margin-top:4px;">
-                <a href={`${VN_SITE}/#/papers`} target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; color:var(--ink);">
+                <Button href={`${VN_SITE}/#/papers`} external variant="tonal" size="lg">
                   See the papers on vn.noahhyden.com <ArrowIcon size={16} />
-                </a>
+                </Button>
               </div>
             </div>
           ) : null}

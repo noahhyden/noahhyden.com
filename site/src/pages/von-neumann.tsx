@@ -1,4 +1,5 @@
 import type { PageMeta } from "../design.js";
+import { Button } from "../components/primitives.js";
 import { Shell } from "../components/Shell.js";
 
 export const meta: PageMeta = {
@@ -27,12 +28,12 @@ export default function VonNeumann() {
           runnable and tested, and every number traces to a cited source.
         </p>
         <div style="display:flex; flex-wrap:wrap; gap:14px; margin:30px 0 0;">
-          <a href="https://vn.noahhyden.com" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; color:var(--falu);">
+          <Button href="https://vn.noahhyden.com" external variant="solid" accent="falu" size="lg">
             vn.noahhyden.com &rarr;
-          </a>
-          <a href="https://github.com/noahhyden/von-neumann" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-family:var(--sans); font-weight:500; font-size:15px; padding:13px 24px; border-radius:2px; color:var(--ink);">
+          </Button>
+          <Button href="https://github.com/noahhyden/von-neumann" external variant="tonal" size="lg">
             Source on GitHub &rarr;
-          </a>
+          </Button>
         </div>
       </header>
 
