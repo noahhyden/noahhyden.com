@@ -290,19 +290,19 @@ function SectionLabel(props: { children: string }) {
 }
 
 function HeroRosette() {
-  // Home-only variant: the rosette net faded out with a radial mask, top-right.
+  // Full-bleed rosette net at true tile scale, densest top-right, fading before the headline.
   return (
-    <svg width="420" height="420" viewBox="0 0 420 420" style="position:absolute; top:-40px; right:-80px; opacity:.6; pointer-events:none;" aria-hidden="true">
+    <svg width="100%" height="100%" style="position:absolute; inset:0; width:100%; height:100%; opacity:.5; pointer-events:none;" aria-hidden="true">
       <defs>
-        <radialGradient id="fade" cx="70%" cy="30%" r="75%">
+        <radialGradient id="fade" cx="100%" cy="0%" r="75%">
           <stop offset="0%" stop-color="#fff" stop-opacity="1" />
           <stop offset="100%" stop-color="#fff" stop-opacity="0" />
         </radialGradient>
         <mask id="fademask">
-          <rect width="420" height="420" fill="url(#fade)" />
+          <rect width="100%" height="100%" fill="url(#fade)" />
         </mask>
       </defs>
-      <rect width="420" height="420" fill="url(#rosette)" mask="url(#fademask)" />
+      <rect width="100%" height="100%" fill="url(#rosette)" mask="url(#fademask)" />
     </svg>
   );
 }
@@ -368,8 +368,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
 
       <Band bordered id="projects" labelledBy="projects-title">
         <div style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px);">
-          <SectionTitle style="margin:18px 0 0;"><span id="projects-title">Projects</span></SectionTitle>
-          <p style="font-family:var(--sans); font-size:17px; line-height:1.6; color:var(--granite); margin:24px 0 40px; max-width:58ch;">Pulled from my public repositories at build time. A few pinned highlights first, then everything else, most recently pushed first. Some are finished, some are experiments.</p>
+          <SectionTitle style="margin:18px 0 64px;"><span id="projects-title">Projects</span></SectionTitle>
 
           {error ? <BuildFetchError title="Couldn&rsquo;t reach GitHub at build time" body="The repository list usually bakes in at build. If it&rsquo;s being stubborn, the projects are all on my profile directly." href="https://github.com/noahhyden?tab=repositories" cta="Open my repositories" /> : null}
 
@@ -403,10 +402,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
 
       <Band bordered id="papers" labelledBy="papers-title">
         <div style="max-width:1080px; margin:0 auto; padding:80px clamp(20px,5vw,40px);">
-          <SectionTitle style="margin:0;"><span id="papers-title">Papers</span></SectionTitle>
-          <p style="font-family:var(--sans); font-size:17px; line-height:1.6; color:var(--granite); margin:24px 0 40px; max-width:64ch;">
-            Longer-form write-ups from <a className="ln" href={VN_SITE} target="_blank" rel="noopener" style="color:var(--ink); border-bottom:1px solid var(--line);">the von-neumann project</a>, each developing a single result in depth. Every paper is typeset in LaTeX and its bibliography is drawn from the same source list that powers the project&rsquo;s live models, so a claim in a paper and a claim on a live surface point at the identical reference. Read straight off that repo at build time, newest first.
-          </p>
+          <SectionTitle style="margin:0 0 64px;"><span id="papers-title">Papers</span></SectionTitle>
           {papersError ? <BuildFetchError title="Couldn&rsquo;t reach the von-neumann repo at build time" body="The paper list usually bakes in at build. The papers themselves are always live on the project site." href={`${VN_SITE}/#/papers`} cta="Open the papers on vn.noahhyden.com" /> : null}
           {hasPapers ? (
             <div>
