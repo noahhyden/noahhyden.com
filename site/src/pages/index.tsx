@@ -348,6 +348,16 @@ const InstallIcon = () => (
   </svg>
 );
 
+const WorktreeIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3.5 12 H8.5" />
+    <path d="M8.5 12 V6.5 H13 M8.5 12 H13 M8.5 12 V17.5 H13" />
+    <circle cx="15.5" cy="6.5" r="1.7" />
+    <circle cx="15.5" cy="12" r="1.7" />
+    <circle cx="15.5" cy="17.5" r="1.7" />
+  </svg>
+);
+
 export default function Home(props: { repos?: Repo[]; reposError?: boolean; papers?: Paper[]; papersError?: boolean }) {
   const repos = props.repos ?? [];
   const error = props.reposError ?? false;
@@ -448,6 +458,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
             <Dest href="/pimas/" accent="var(--laurel)" title="pimas" note="Exact what-if over a live model" icon={<TrajectoryIcon />} />
             <Dest href="/von-neumann/" accent="var(--ocean)" title="von-neumann" note="Self-replicating space manufacturing" icon={<PlanetIcon />} />
             <Dest href="/erbina/" accent="var(--tile)" title="erbina" note="Verified installs, by conversation" icon={<InstallIcon />} />
+            <Dest href="/ataegina/" accent="var(--falu)" title="ataegina" note="Collision-free parallel worktrees" icon={<WorktreeIcon />} />
           </div>
         </div>
       </Band>
