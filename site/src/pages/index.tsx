@@ -180,7 +180,7 @@ function Authors(props: { authors: Author[] }) {
 function PaperArticle(props: { p: Paper }) {
   const p = props.p;
   return (
-    <article style=" padding:36px 0 40px;">
+    <article style="border-top:1px solid var(--line); padding:36px 0 40px;">
       <div style="font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--granite); margin:0 0 14px;">
         <span style="color:var(--falu);">{p.date}</span>
         <span style="margin:0 10px; color:var(--line);">/</span>
@@ -253,7 +253,7 @@ function RepoLink(props: { r: Repo; card?: boolean }) {
   const nameStyle = `font-family:var(--serif); font-weight:600; font-size:${c ? 19 : 18}px; line-height:1.2; letter-spacing:-.01em; color:var(--ink); word-break:break-word;`;
   if (!c) {
     return (
-      <a className="lift" href={r.url} target="_blank" rel="noopener" style="display:flex; align-items:flex-start; justify-content:space-between; gap:28px; padding:22px 4px 22px; flex-wrap:wrap;">
+      <a className="lift" href={r.url} target="_blank" rel="noopener" style="display:flex; align-items:flex-start; justify-content:space-between; gap:28px; padding:22px 4px 22px; flex-wrap:wrap; border-top:1px solid var(--line);">
         <div style="flex:1 1 320px; min-width:0;">
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">{icon}<span style={nameStyle}>{r.name}</span></div>
           <p style="font-family:var(--sans); font-size:14.5px; line-height:1.55; color:var(--granite); margin:0; max-width:64ch;">{r.desc}</p>
@@ -266,7 +266,7 @@ function RepoLink(props: { r: Repo; card?: boolean }) {
     );
   }
   return (
-    <a className="lift" href={r.url} target="_blank" rel="noopener" style="display:flex; flex-direction:column; border-radius:3px; background:var(--ground); padding:24px 24px 20px; min-height:168px;">
+    <Card href={r.url} external tone="ground" outline lift pad="md" style="display:flex; flex-direction:column; padding:24px 24px 20px; min-height:168px;">
       <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px;">
         <div style="display:flex; align-items:center; gap:10px; min-width:0;">{icon}<span style={nameStyle}>{r.name}</span></div>
         {r.pinned ? (
@@ -274,11 +274,11 @@ function RepoLink(props: { r: Repo; card?: boolean }) {
         ) : null}
       </div>
       <p style="font-family:var(--sans); font-size:14.5px; line-height:1.55; color:var(--granite); margin:0 0 auto; padding-bottom:18px;">{r.desc}</p>
-      <div style="display:flex; align-items:center; gap:18px; font-family:var(--mono); font-size:12px; color:var(--granite); padding-top:14px;">
+      <div style="display:flex; align-items:center; gap:18px; font-family:var(--mono); font-size:12px; color:var(--granite); padding-top:14px; border-top:1px solid var(--line);">
         {meta}
         <span style="margin-left:auto; color:var(--granite);">{r.updated}</span>
       </div>
-    </a>
+    </Card>
   );
 }
 
@@ -407,7 +407,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
           {hasRepos && rest.length > 0 ? (
             <section>
               <SectionLabel>{`All projects (${rest.length})`}</SectionLabel>
-              <div style="">
+              <div style="border-bottom:1px solid var(--line);">
                 {rest.map((r) => <RepoLink r={r} />)}
               </div>
               <div style="margin-top:28px; text-align:center;">
@@ -417,9 +417,9 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
           ) : null}
 
           {isEmpty ? (
-            <div style=" border-radius:3px; background:var(--surface); padding:40px; text-align:center;">
+            <Card tone="surface" outline={false} lift={false} pad="lg" style="padding:40px; text-align:center;">
               <p style="font-family:var(--sans); font-size:16px; color:var(--granite); margin:0;">Something went wrong, please notify me via any one of my channels.</p>
-            </div>
+            </Card>
           ) : null}
         </div>
       </Band>
@@ -443,9 +443,9 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
             </div>
           ) : null}
           {papersEmpty ? (
-            <div style=" border-radius:3px; background:var(--surface); padding:40px; text-align:center;">
+            <Card tone="surface" outline={false} lift={false} pad="lg" style="padding:40px; text-align:center;">
               <p style="font-family:var(--sans); font-size:16px; color:var(--granite); margin:0;">No papers published yet - check back soon.</p>
-            </div>
+            </Card>
           ) : null}
         </div>
       </Band>
