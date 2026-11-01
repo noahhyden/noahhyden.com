@@ -59,7 +59,7 @@ const FIELD_OPACITY = 0.16;
 
 /** One tile-able period of the mask: opaque OUTSIDE a sine corridor (centre 50 +/-9, half-width 41), blurred; shapes run past the tile so the seam is invisible. */
 function corridorMask(): string {
-  const edge = (y: number, s: number) => 50 + 9 * Math.sin((y / 100) * 2 * Math.PI) + s * 41;
+  const edge = (y: number, s: number) => 50 - 9 * Math.sin((y / 100) * 2 * Math.PI) + s * 41;
   const ys: number[] = [];
   for (let y = -40; y <= 140; y += 4) ys.push(y);
   const side = (s: number, far: number) => [...ys.map((y) => `${edge(y, s).toFixed(2)},${y}`), `${far},140`, `${far},-40`].join(" ");
