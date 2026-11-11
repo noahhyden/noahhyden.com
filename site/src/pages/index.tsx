@@ -130,6 +130,7 @@ async function getPapers(): Promise<{ papers: Paper[]; error: boolean }> {
           if (!res.ok) return null;
           const p = await res.json();
           if (!p || !p.title) return null; // scaffold-only dir, skip
+          if (p.draft) return null; // unpublished upstream; its PDF is not on the vn site
           const paper: Paper = {
             slug: p.slug || slug,
             title: clean(p.title),

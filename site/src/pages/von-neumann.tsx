@@ -60,7 +60,7 @@ export default function VonNeumann() {
           <ul style="list-style:none; margin:0 0 18px; padding:0; display:grid; gap:12px; font-family:var(--sans); font-size:var(--t-sm); line-height:1.7; color:var(--ink); max-width:72ch;">
             <li><Card tone="ground" outline={true} lift={false} pad="sm">A lone factory can make its structure but not its electronics. Chips are the wall.</Card></li>
             <li><Card tone="ground" outline={true} lift={false} pad="sm">Installed mass per launched mass is exactly 1/(1 - closure): about 3x at 67% closure, about 33x at 97%.</Card></li>
-            <li><Card tone="ground" outline={true} lift={false} pad="sm">Light-speed coordination costs a median of about 30% of exploration time for nearest-slingshot probes, about 50% for max-boost, and about 0% for powered flight.</Card></li>
+            <li><Card tone="ground" outline={true} lift={false} pad="sm">Light-speed coordination costs redundant travel, not fill time. The tens-of-percent fill-time penalty is a coarse-timestep artifact; the real tax scales as v/c.</Card></li>
           </ul>
           <p style={body}>
             These are order-of-magnitude research results, not forecasts. Where the literature has no value, the
