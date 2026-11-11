@@ -16,7 +16,7 @@ export function Footer() {
         <div style="flex:1 1 280px;">
           <div style="display:flex; align-items:center; gap:12px; font-family:var(--serif); font-weight:600; font-size:var(--t-md); letter-spacing:-.01em; margin-bottom:10px;">
             <Mark size={38} />
-            <span>Noah Hyden<span style="color:var(--falu);">.</span></span>
+            <span>Noah Hyden</span>
           </div>
           <p style="font-family:var(--sans); font-size:var(--t-xs); line-height:1.55; color:var(--granite); margin:0; max-width:42ch;">
             Aerospace engineer in Stockholm.

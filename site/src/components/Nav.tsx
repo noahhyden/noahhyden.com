@@ -19,7 +19,7 @@ export function Nav(props: { active?: Section } = {}) {
       <div style="max-width:1080px; margin:0 auto; min-height:64px; padding:8px 40px; box-sizing:border-box; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 28px;">
         <a href="/" style="display:inline-flex; align-items:center; gap:11px; font-family:var(--serif); font-weight:600; font-size:var(--t-md); letter-spacing:-.01em; color:var(--ink); white-space:nowrap;">
           <Mark size={34} />
-          <span>Noah Hyden<span style="color:var(--falu);">.</span></span>
+          <span>Noah Hyden</span>
         </a>
         <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px 28px;">
           {link("/pimas/", "pimas", active === "pimas")}

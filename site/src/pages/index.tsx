@@ -383,7 +383,7 @@ export default function Home(props: { repos?: Repo[]; reposError?: boolean; pape
         <div style="position:relative; padding:96px clamp(20px,5vw,40px) 88px;">
           <div style="position:relative; max-width:1080px; margin:0 auto;">
             <Scrim spread="lg" style="width:fit-content; max-width:100%; padding:28px 48px; margin:-28px -48px;">
-            <PageTitle style="margin:0;">Noah Hyden<span style="color:var(--falu);">.</span></PageTitle>
+            <PageTitle style="margin:0;">Noah Hyden</PageTitle>
             </Scrim>
           </div>
         </div>
